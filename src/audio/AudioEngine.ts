@@ -2,8 +2,8 @@
 // Logica este portată din DAW: sample-ul cel mai apropiat + transpunere prin playbackRate,
 // buclă pentru note susținute, anvelopă atac/release. Fără sample-uri → sinteză de rezervă.
 //
-// ATENȚIE: semnătura decodeAudioData diferă între versiunile bibliotecii (URI / ArrayBuffer).
-// Este izolată în `decodeAsset` – verificați-o pentru versiunea instalată.
+// Semnătura decodeAudioData diferă între versiunile bibliotecii (cale / ArrayBuffer).
+// `decodeAsset` folosește decodeAudioDataSource(cale) dacă există, altfel citește fișierul ca ArrayBuffer.
 
 import { AudioContext } from 'react-native-audio-api';
 import { Asset } from 'expo-asset';
@@ -30,7 +30,7 @@ export class AudioEngine {
 
   constructor() {
     // limitator pe ieșirea master (ca în DAW v4)
-    const lim = this.ctx.createDynamicsCompressor?.();
+    const lim = (this.ctx as any).createDynamicsCompressor?.(); // nu există în toate versiunile
     if (lim) {
       lim.threshold.value = -10; lim.knee.value = 4; lim.ratio.value = 20;
       lim.attack.value = 0.002; lim.release.value = 0.2;
@@ -47,7 +47,13 @@ export class AudioEngine {
   private async decodeAsset(module: number): Promise<any> {
     const asset = Asset.fromModule(module);
     await asset.downloadAsync();
-    return this.ctx.decodeAudioData(asset.localUri ?? asset.uri); // ← verificați semnătura
+    const uri = asset.localUri ?? asset.uri;
+    const ctx = this.ctx as any;
+    if (typeof ctx.decodeAudioDataSource === 'function') {
+      return ctx.decodeAudioDataSource(uri.replace(/^file:\/\//, ''));
+    }
+    const data = await (await fetch(uri)).arrayBuffer();
+    return this.ctx.decodeAudioData(data);
   }
 
   async loadInstrument(name: string, cfg: InstrumentCfg): Promise<number> {
