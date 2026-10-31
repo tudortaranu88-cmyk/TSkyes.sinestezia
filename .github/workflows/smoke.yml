@@ -51,6 +51,11 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
           script: ./scripts/smoke.sh
 
+      - name: Verificare că aplicația rulează
+        run: |
+          cat smoke/pid.txt
+          if grep -q 'pid=$' smoke/pid.txt; then echo "::error::Aplicația s-a oprit după pornire"; head -40 smoke/crash.txt; exit 1; fi
+
       - name: Publicare rezultate pe ramura smoke-output
         if: always()
         run: |
