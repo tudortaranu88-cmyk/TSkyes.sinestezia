@@ -1,0 +1,384 @@
+<!doctype html><meta charset="utf-8"><body style="margin:0;background:#000"><canvas id="c" width="390" height="844"></canvas><script>(() => {
+  var __defProp = Object.defineProperty;
+  var __getOwnPropNames = Object.getOwnPropertyNames;
+  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+  var __hasOwnProp = Object.prototype.hasOwnProperty;
+  function __accessProp(key) {
+    return this[key];
+  }
+  var __toCommonJS = (from) => {
+    var entry = (__moduleCache ??= new WeakMap).get(from), desc;
+    if (entry)
+      return entry;
+    entry = __defProp({}, "__esModule", { value: true });
+    if (from && typeof from === "object" || typeof from === "function") {
+      for (var key of __getOwnPropNames(from))
+        if (!__hasOwnProp.call(entry, key))
+          __defProp(entry, key, {
+            get: __accessProp.bind(from, key),
+            enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
+          });
+    }
+    __moduleCache.set(from, entry);
+    return entry;
+  };
+  var __moduleCache;
+  var __returnValue = (v) => v;
+  function __exportSetter(name, newValue) {
+    this[name] = __returnValue.bind(null, newValue);
+  }
+  var __export = (target, all) => {
+    for (var name in all)
+      __defProp(target, name, {
+        get: all[name],
+        enumerable: true,
+        configurable: true,
+        set: __exportSetter.bind(all, name)
+      });
+  };
+
+  // test/preview.ts
+  var exports_preview = {};
+  __export(exports_preview, {
+    demo: () => demo
+  });
+
+  // src/core/spiral.ts
+  var PHI = (1 + Math.sqrt(5)) / 2;
+  var QUARTER = Math.PI / 2;
+  var B = 2 * Math.log(PHI) / Math.PI;
+  var SQ = Math.sqrt(1 + B * B);
+  function radiusAt(theta, a) {
+    "worklet";
+    return a * Math.exp(B * theta);
+  }
+  function arcLength(theta0, theta1, a) {
+    "worklet";
+    return a * SQ / B * (Math.exp(B * theta1) - Math.exp(B * theta0));
+  }
+  function curvatureAt(theta, a) {
+    "worklet";
+    return 1 / (radiusAt(theta, a) * SQ);
+  }
+  function pointAt(theta, cfg) {
+    "worklet";
+    const r = radiusAt(theta, cfg.a);
+    const ang = cfg.startAngle + cfg.turn * theta;
+    return { x: cfg.cx + r * Math.cos(ang), y: cfg.cy + r * Math.sin(ang) };
+  }
+  function noteSegment(u, cfg, samples = 24) {
+    "worklet";
+    const theta0 = u * QUARTER;
+    const theta1 = (u + 1) * QUARTER;
+    const points = [];
+    for (let i = 0;i <= samples; i++) {
+      points.push(pointAt(theta0 + (theta1 - theta0) * i / samples, cfg));
+    }
+    const r0 = radiusAt(theta0, cfg.a);
+    const p0 = points[0];
+    return {
+      u,
+      theta0,
+      theta1,
+      r0,
+      r1: radiusAt(theta1, cfg.a),
+      length: arcLength(theta0, theta1, cfg.a),
+      curvature: curvatureAt(theta0, cfg.a),
+      strokeWidth: cfg.strokeRatio * r0,
+      node: { x: p0.x, y: p0.y, radius: cfg.nodeRatio * r0 },
+      points
+    };
+  }
+  function visibleCount(cfg, maxRadius) {
+    "worklet";
+    return Math.max(1, Math.ceil(Math.log(maxRadius / cfg.a) / Math.log(PHI)));
+  }
+  function fitSpiral(width, height, notesVisible = 9) {
+    "worklet";
+    const maxR = Math.min(width, height) / 2;
+    return {
+      cx: width / 2,
+      cy: height / 2,
+      a: maxR / Math.pow(PHI, notesVisible),
+      startAngle: -Math.PI / 2,
+      turn: -1,
+      strokeRatio: 0.12,
+      nodeRatio: 0.16
+    };
+  }
+
+  // src/core/staff.ts
+  var STEP_OF_PC = [0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6];
+  var SHARP_PC = [false, true, false, true, false, false, true, false, true, false, true, false];
+  var BOTTOM_LINE_STEP = 7 * Math.floor(64 / 12) + STEP_OF_PC[64 % 12];
+  var TOP_LINE_STEP = BOTTOM_LINE_STEP + 8;
+  function midiToStaff(midiFloat) {
+    "worklet";
+    const m = Math.round(midiFloat);
+    const pc = (m % 12 + 12) % 12;
+    return {
+      step: 7 * Math.floor(m / 12) + STEP_OF_PC[pc],
+      sharp: SHARP_PC[pc],
+      cents: Math.round((midiFloat - m) * 100)
+    };
+  }
+  function staffY(step, bottomLineY, lineGap) {
+    "worklet";
+    return bottomLineY - (step - BOTTOM_LINE_STEP) * lineGap / 2;
+  }
+  function ledgerSteps(step) {
+    "worklet";
+    const out = [];
+    for (let s = BOTTOM_LINE_STEP - 2;s >= step; s -= 2)
+      out.push(s);
+    for (let s = TOP_LINE_STEP + 2;s <= step; s += 2)
+      out.push(s);
+    return out;
+  }
+
+  // src/core/scene.ts
+  function durationAlpha(durationMs) {
+    "worklet";
+    if (durationMs === null)
+      return 1;
+    return 0.45 + 0.55 * Math.min(1, durationMs / 2000);
+  }
+  function buildScene(inp) {
+    "worklet";
+    const { width, height, events, nowMs, insertPhase, pxPerSec } = inp;
+    const notesVisible = inp.notesVisible ?? 6;
+    const zoomExp = Math.min(notesVisible, Math.max(1, events.length - 1 + insertPhase));
+    const spiral = fitSpiral(width, height, zoomExp);
+    const maxR = Math.min(width, height) / 2;
+    const limit = visibleCount(spiral, Math.hypot(width, height) / 2) + 1;
+    const lineGap = height / 14;
+    const bottomY = height / 2 + 2 * lineGap;
+    const staffLines = [];
+    for (let i = 0;i < 5; i++)
+      staffLines.push(bottomY - i * lineGap);
+    const staffNotes = [];
+    const ledgers = [];
+    for (let i = events.length - 1;i >= 0; i--) {
+      const e = events[i];
+      const held = e.durationMs === null ? nowMs - e.startMs : e.durationMs;
+      const x = spiral.cx - (nowMs - e.startMs) / 1000 * pxPerSec;
+      const w = Math.max(lineGap, held / 1000 * pxPerSec);
+      if (x + w < 0)
+        break;
+      const pos = midiToStaff(e.midiFloat);
+      const y = staffY(pos.step, bottomY, lineGap);
+      staffNotes.push({ x, y, w, h: lineGap * 0.9, color: e.color, alpha: durationAlpha(e.durationMs), sharp: pos.sharp });
+      const ls = ledgerSteps(pos.step);
+      for (let k = 0;k < ls.length; k++)
+        ledgers.push({ x1: x - lineGap * 0.4, x2: x + Math.min(w, lineGap * 1.4) + lineGap * 0.4, y: staffY(ls[k], bottomY, lineGap) });
+    }
+    const arcs = [];
+    const nodes = [];
+    const shift = insertPhase - 1;
+    const count = Math.min(events.length, limit);
+    for (let k = count - 1;k >= 0; k--) {
+      const e = events[events.length - 1 - k];
+      const u = k + shift;
+      const seg = noteSegment(u, spiral, 28);
+      let alpha = durationAlpha(e.durationMs);
+      if (seg.r0 > maxR)
+        alpha *= Math.max(0, 1 - (seg.r0 - maxR) / maxR);
+      if (k === 0)
+        alpha *= Math.min(1, insertPhase * 1.5);
+      arcs.push({ points: seg.points, strokeWidth: seg.strokeWidth, color: e.color, alpha });
+      nodes.push({ x: seg.node.x, y: seg.node.y, radius: seg.node.radius, color: e.color, alpha });
+    }
+    const guide = [];
+    const steps = (limit + 1) * 16;
+    for (let i = 0;i <= steps; i++)
+      guide.push(pointAt(-2 * QUARTER + i / 16 * QUARTER, spiral));
+    return { spiral, staffLines, ledgers, staffNotes, guide, arcs, nodes };
+  }
+
+  // src/core/golden.ts
+  var NOTES = ["Do3", "Re3", "Mi3", "Fa3", "Sol3", "La3", "Si3", "Do4"];
+  var BASE_FREQS = [261.63, 293.66, 329.63, 349.23, 392, 440, 493.88, 523.25];
+  var BASE_MIDI = [60, 62, 64, 65, 67, 69, 71, 72];
+  var BASE_COLORS = [
+    [204, 17, 0],
+    [226, 91, 1],
+    [247, 181, 0],
+    [0, 66, 37],
+    [0, 32, 96],
+    [41, 18, 54],
+    [74, 25, 66],
+    [244, 244, 240]
+  ];
+  var GOLDEN_RATE = 0.01618;
+  var MAJOR_PCS = [0, 2, 4, 5, 7, 9, 11];
+  function midiToFreq(m) {
+    return 440 * Math.pow(2, (m - 69) / 12);
+  }
+  function freqToMidi(f) {
+    return 69 + 12 * Math.log2(f / 440);
+  }
+  function goldenFactor(r) {
+    return r >= 0 ? Math.pow(1 + GOLDEN_RATE, r) : Math.pow(1 - GOLDEN_RATE, Math.abs(r));
+  }
+  function cellPitch(c, r, tuning) {
+    const factor = goldenFactor(r);
+    if (tuning === "golden")
+      return { freq: BASE_FREQS[c] * factor, midi: null };
+    const x = BASE_MIDI[c] + 12 * Math.log2(factor);
+    let k = Math.round(x);
+    if (tuning === "diatonic") {
+      let bestK = k;
+      let bestD = Infinity;
+      for (let t = Math.floor(x) - 2;t <= Math.ceil(x) + 2; t++) {
+        if (!MAJOR_PCS.includes((t % 12 + 12) % 12))
+          continue;
+        const d = Math.abs(t - x);
+        if (d < bestD) {
+          bestD = d;
+          bestK = t;
+        }
+      }
+      k = bestK;
+    }
+    return { freq: midiToFreq(k), midi: k };
+  }
+  function cellColor(c, r) {
+    let [R, G, B] = BASE_COLORS[c];
+    if (r > 0) {
+      const w = Math.pow(r / 10, 0.85) * 0.7;
+      R = Math.round(R + (255 - R) * w);
+      G = Math.round(G + (255 - G) * w);
+      B = Math.round(B + (255 - B) * w);
+    } else if (r < 0) {
+      const w = Math.pow(Math.abs(r) / 10, 0.85) * 0.7;
+      R = Math.round(R * (1 - w));
+      G = Math.round(G * (1 - w));
+      B = Math.round(B * (1 - w));
+    }
+    return [R, G, B];
+  }
+  function rgbToCss([r, g, b], alpha = 1) {
+    return alpha >= 1 ? `rgb(${r},${g},${b})` : `rgba(${r},${g},${b},${alpha})`;
+  }
+  function textColorFor([r, g, b]) {
+    return 0.299 * r + 0.587 * g + 0.114 * b > 140 ? "#111" : "#fff";
+  }
+
+  // test/preview.ts
+  var rgba = (c, a) => rgbToCss(c, a);
+  function draw(ctx, s, w, h) {
+    ctx.fillStyle = "#0e0e12";
+    ctx.fillRect(0, 0, w, h);
+    ctx.strokeStyle = "rgba(255,255,255,0.22)";
+    ctx.lineWidth = 1;
+    for (const y of s.staffLines) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(w, y);
+      ctx.stroke();
+    }
+    for (const l of s.ledgers) {
+      ctx.beginPath();
+      ctx.moveTo(l.x1, l.y);
+      ctx.lineTo(l.x2, l.y);
+      ctx.stroke();
+    }
+    for (const n of s.staffNotes) {
+      ctx.fillStyle = rgba(n.color, n.alpha);
+      ctx.beginPath();
+      ctx.roundRect(n.x, n.y - n.h / 2, n.w, n.h, n.h / 2);
+      ctx.fill();
+      if (n.sharp) {
+        ctx.fillStyle = "rgba(255,255,255,0.7)";
+        ctx.font = `${n.h}px sans-serif`;
+        ctx.fillText("♯", n.x - n.h, n.y + n.h / 3);
+      }
+    }
+    ctx.strokeStyle = "rgba(255,215,0,0.12)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    s.guide.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
+    ctx.stroke();
+    ctx.lineCap = "round";
+    for (const a of s.arcs) {
+      ctx.strokeStyle = `rgba(255,255,255,${0.18 * a.alpha})`;
+      ctx.lineWidth = a.strokeWidth * 1.35;
+      ctx.beginPath();
+      a.points.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
+      ctx.stroke();
+    }
+    for (const a of s.arcs) {
+      ctx.strokeStyle = rgba(a.color, a.alpha);
+      ctx.lineWidth = a.strokeWidth;
+      ctx.beginPath();
+      a.points.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
+      ctx.stroke();
+    }
+    for (const n of s.nodes) {
+      ctx.fillStyle = rgba(n.color, n.alpha);
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = `rgba(255,255,255,${0.5 * n.alpha})`;
+      ctx.lineWidth = Math.max(0.5, n.radius * 0.12);
+      ctx.stroke();
+    }
+  }
+  function drawKeyboard(ctx, x0, y0, w, h, row) {
+    ctx.fillStyle = "#181822";
+    ctx.fillRect(x0, y0, w, h);
+    const pad = 10, cols = 4, rows = 2, top = 56;
+    const bw = (w - pad * (cols + 1)) / cols, bh = (h - top - pad * (rows + 1)) / rows;
+    ctx.fillStyle = "#ffd700";
+    ctx.font = "bold 16px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(`−   Rând ${row > 0 ? "+" + row : row}   +`, x0 + w / 2, y0 + 34);
+    for (let c = 0;c < 8; c++) {
+      const col = c % cols, r = Math.floor(c / cols);
+      const bx = x0 + pad + col * (bw + pad), by = y0 + top + pad + r * (bh + pad);
+      const color = cellColor(c, row);
+      ctx.fillStyle = rgbToCss(color);
+      ctx.beginPath();
+      ctx.roundRect(bx, by, bw, bh, 14);
+      ctx.fill();
+      ctx.fillStyle = textColorFor(color);
+      ctx.font = "bold 15px sans-serif";
+      ctx.fillText(NOTES[c], bx + bw / 2, by + bh / 2 + 5);
+    }
+    ctx.textAlign = "start";
+  }
+  function demo(canvas, nowMs, insertPhase, n) {
+    const { width: W, height: H } = canvas, top = H / 2;
+    const ctx = canvas.getContext("2d");
+    const melody = [[0, 0], [2, 1], [4, 0], [5, 2], [7, 3], [6, -2], [4, -4], [3, 5], [1, 7], [5, -6], [7, 10], [0, -10]];
+    const events = [];
+    let t = nowMs - n * 700;
+    for (let i = 0;i < n; i++) {
+      const [c, r] = melody[i % melody.length];
+      const { freq } = cellPitch(c, r, "golden");
+      events.push({
+        id: i,
+        col: c,
+        row: r,
+        label: NOTES[c],
+        freq,
+        midiFloat: freqToMidi(freq),
+        color: cellColor(c, r),
+        startMs: t,
+        durationMs: i === n - 1 ? null : 200 + i * 373 % 1800
+      });
+      t += 700;
+    }
+    const scene = buildScene({ width: W, height: top, events, nowMs, insertPhase, pxPerSec: 60 });
+    draw(ctx, scene, W, top);
+    drawKeyboard(ctx, 0, top, W, H - top, 0);
+    ctx.strokeStyle = "#333";
+    ctx.beginPath();
+    ctx.moveTo(0, top);
+    ctx.lineTo(W, top);
+    ctx.stroke();
+    return scene;
+  }
+  globalThis.demo = demo;
+})();
+</script></body>
