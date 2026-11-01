@@ -53,6 +53,9 @@ for i in $(seq 1 60); do adb logcat -d | grep -q "SELFTEST done" && break; sleep
 shot 7-autotest
 adb shell ls -l /sdcard/Pictures /sdcard/DCIM /sdcard/Music > $OUT/fisiere-telefon.txt 2>&1
 
+echo "== sonda audio" >> $OUT/pasi.txt
+adb shell am start -a android.intent.action.VIEW -d "musiccolor://audioprobe" $PKG >> $OUT/start.txt 2>&1
+for i in $(seq 1 40); do adb logcat -d | grep -q "AUDIOPROBE done" && break; sleep 2; done
 echo "== nivelul 2" >> $OUT/pasi.txt
 adb shell am start -a android.intent.action.VIEW -d "musiccolor://selftest2" $PKG >> $OUT/start.txt 2>&1
 for i in $(seq 1 60); do adb logcat -d | grep -q "SELFTEST2 done" && break; sleep 2; done
@@ -73,6 +76,7 @@ echo "pid=$PID" > $OUT/pid.txt
 adb logcat -d -v threadtime > $OUT/logcat.txt
 adb logcat -d -b crash > $OUT/crash.txt
 grep -oE "SELFTEST.*" $OUT/logcat.txt > $OUT/selftest.txt
+grep -oE "AUDIOPROBE.*" $OUT/logcat.txt > $OUT/audioprobe.txt
 grep -E "AndroidRuntime|ReactNativeJS|FATAL|libc|DEBUG" $OUT/logcat.txt > $OUT/filtrat.txt
 rm -f $OUT/ui.xml
 exit 0

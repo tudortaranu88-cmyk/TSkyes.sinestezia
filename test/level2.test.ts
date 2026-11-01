@@ -5,6 +5,9 @@ import { spiralCells, continuousSpiralCells, sampleColors, nearestCell, buildMel
 import { layoutScore, PAGE_W, PAGE_H } from '../src/core/scoreLayout';
 import { cellColor, type RGB } from '../src/core/golden';
 import { PHI } from '../src/core/spiral';
+import { DRUM_PATTERNS, renderDrums, drumPattern } from '../src/core/drums';
+import { melodyToNotes } from '../src/core/imageMelody';
+import { renderLevel2Mix } from '../src/core/level2Mix';
 
 test('unghiul de aur = 2π/φ² ≈ 137,5°', () => {
   assert.ok(Math.abs((GOLDEN_ANGLE * 180) / Math.PI - 137.5077640500378) < 1e-9);
@@ -69,4 +72,43 @@ test('partitura: toate notele apar o singură dată, totul în pagină', () => {
       for (const v of ys) assert.ok(v >= 0 && v <= PAGE_H, `y ${v} (${x.k})`);
     }
   }
+});
+
+test('ritmuri: tiparele au pași valizi; tresillo-ul dembow e 3+3+2', () => {
+  for (const p of DRUM_PATTERNS) for (const h of p.hits) assert.ok(h.step >= 0 && h.step < 16, `${p.id} pas ${h.step}`);
+  const kicks = (id: string) => drumPattern(id as any).hits.filter(h => h.piece === 'k').map(h => h.step).sort((a, b) => a - b);
+  assert.deepEqual(kicks('fourfloor'), [0, 4, 8, 12]);
+  assert.deepEqual(kicks('backbeat'), [0, 8]);
+  const d = kicks('dembow'), gaps = d.map((x, i) => ((d[i + 1] ?? 16) - x) / 2); // în optimi
+  assert.deepEqual(gaps, [3, 3, 2]);
+});
+
+test('ritmuri: tobele se aud în mix, aliniate la tempo (fără ritm → mix mai liniștit)', () => {
+  const sr = 22050, n = sr * 4;
+  const silent = new Float32Array(n), withDrums = new Float32Array(n);
+  renderDrums(withDrums, sr, 'fourfloor', 120, 0, 4);
+  const energy = (x: Float32Array) => x.reduce((a, v) => a + v * v, 0);
+  assert.ok(energy(withDrums) > 10, 'ritmul produce sunet');
+  // kick-ul cade pe timpi: la 120 BPM, timpul 2 = 0,5 s → energie mare în [0.5, 0.6] s
+  const seg = (a: number, b: number) => energy(withDrums.slice(Math.floor(a * sr), Math.floor(b * sr)));
+  assert.ok(seg(0.5, 0.6) > seg(0.6, 0.7) * 2, 'kick pe timp');
+  assert.equal(energy(silent), 0);
+});
+
+test('melodie → note: timpi în secunde, monotoni, la tempo-ul ales', () => {
+  const colors: RGB[] = [cellColor(0, 0), cellColor(1, 0), cellColor(2, 0), cellColor(3, 0)];
+  const m = buildMelody(colors);
+  const notes = melodyToNotes(m, 120, 'pian');
+  assert.ok(Math.abs(notes[1].startSec - notes[0].startSec - 0.5) < 1e-9); // o pătrime la 120 BPM = 0,5 s
+  for (let i = 1; i < notes.length; i++) assert.ok(notes[i].startSec > notes[i - 1].startSec);
+});
+
+test('mix Nivelul 2: cu ritm se obține un fragment mai lung/energic decât fără', () => {
+  const colors: RGB[] = Array.from({ length: 16 }, (_, i) => cellColor(i % 8, 0));
+  const m = buildMelody(colors);
+  const a = renderLevel2Mix(m, 105, 'pian', null, 22050);
+  const b = renderLevel2Mix(m, 105, 'pian', 'backbeat', 22050);
+  assert.equal(a.length, b.length);
+  const e = (x: Float32Array) => x.reduce((s, v) => s + v * v, 0);
+  assert.ok(e(b) > e(a));
 });

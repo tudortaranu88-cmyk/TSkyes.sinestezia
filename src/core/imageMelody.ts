@@ -12,6 +12,7 @@
 
 import { NOTES, ROW_MAX, ROW_MIN, cellColor, cellPitch, freqToMidi, type RGB, type Tuning } from './golden';
 import { PHI } from './spiral';
+import type { RenderNote } from './audioRender';
 import type { NoteEvent } from './types';
 
 export const GOLDEN_ANGLE = (2 * Math.PI) / (PHI * PHI);
@@ -158,3 +159,14 @@ export function melodyToEvents(m: MelodyNote[], bpm: number, instrument: string,
   }));
 }
 
+
+/** Notele melodiei pentru randare (timp în secunde, începând la 0,1 s, ca la celelalte exporturi). */
+export function melodyToNotes(m: MelodyNote[], bpm: number, instrument: string): RenderNote[] {
+  const beat = 60 / bpm;
+  return m.map(n => ({
+    startSec: 0.1 + n.startBeat * beat,
+    durSec: Math.max(0.05, n.beats * beat * 0.92),
+    freq: n.freq,
+    instrument,
+  }));
+}

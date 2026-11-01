@@ -29,6 +29,7 @@ export class AudioEngine {
   private bank: Record<string, { cfg: InstrumentCfg; list: Loaded }> = {};
   private voices = new Map<number, { src: any; gain: any; release: number }>();
   private nextId = 1;
+  private analyser: any = null;
 
   constructor() {
     // limitator pe ieșirea master (ca în DAW v4)
@@ -44,6 +45,11 @@ export class AudioEngine {
       this.master.gain.value = 0.7;
       this.master.connect(this.ctx.destination);
     }
+    // analizor pe ieșirea master: permite verificarea că există semnal (diagnostic)
+    try {
+      this.analyser = (this.ctx as any).createAnalyser?.() ?? null;
+      if (this.analyser) { this.analyser.fftSize = 2048; this.master.connect(this.analyser); }
+    } catch { this.analyser = null; }
   }
 
   private async decodeAsset(module: number): Promise<any> {
@@ -71,6 +77,40 @@ export class AudioEngine {
     }
     this.bank[name] = { cfg, list };
     return list.length;
+  }
+
+  get sampleRate(): number { return (this.ctx as any).sampleRate ?? 44100; }
+
+  /** Pornește contextul audio dacă e suspendat. Întoarce starea lui. */
+  async ensureRunning(): Promise<string> {
+    const c = this.ctx as any;
+    try {
+      if (c.state === 'suspended' && typeof c.resume === 'function') await c.resume();
+    } catch (e) { console.warn('AudioContext.resume', e); }
+    return String(c.state ?? 'necunoscut');
+  }
+
+  /** Redă un fragment mono (float32) prin ieșirea master. Întoarce funcția de oprire. */
+  playPCM(data: Float32Array, sr: number): () => void {
+    const c = this.ctx as any;
+    const buf = c.createBuffer(1, data.length, sr);
+    buf.getChannelData(0).set(data);
+    const src = c.createBufferSource();
+    src.buffer = buf;
+    src.connect(this.master);
+    src.start(0);
+    this.ensureRunning();
+    return () => { try { src.stop(); } catch { /* deja oprit */ } };
+  }
+
+  /** Nivelul maxim recent la ieșirea master (0..1); -1 dacă biblioteca nu oferă analizor. */
+  peak(): number {
+    if (!this.analyser) return -1;
+    const arr = new Float32Array(this.analyser.fftSize);
+    this.analyser.getFloatTimeDomainData(arr);
+    let m = 0;
+    for (let i = 0; i < arr.length; i++) { const a = Math.abs(arr[i]); if (a > m) m = a; }
+    return m;
   }
 
   /** Sample-urile decodate, pentru randarea offline (export audio). */

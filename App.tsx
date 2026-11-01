@@ -15,7 +15,7 @@ import { Header, type Level } from './src/components/Header';
 import { SaveSheet } from './src/components/SaveSheet';
 import { exportImageFile, exportAudioFile } from './src/io/exportComposition';
 import type { ImageKind } from './src/render/exportImage';
-import { demoComposition, runSelfTest, runSelfTest2 } from './src/io/selfTest';
+import { demoComposition, runSelfTest, runSelfTest2, runAudioProbe } from './src/io/selfTest';
 import { Level2 } from './src/screens/Level2';
 import { demoPixels, sourceFromPixels, type ImageSource } from './src/io/imageSource';
 import { AudioEngine } from './src/audio/AudioEngine';
@@ -48,7 +48,8 @@ export default function App() {
   // autotest pentru verificarea automată (musiccolor://selftest)
   useEffect(() => {
     const handle = (url: string | null) => {
-      if (!url || !url.includes('selftest')) return;
+      if (!url || !(url.includes('selftest') || url.includes('audioprobe'))) return;
+      if (url.includes('audioprobe')) { runAudioProbe(engine.current); return; }
       if (url.includes('selftest2')) {
         const src = sourceFromPixels(demoPixels(), 360, 270, 'test');
         setLevel(2);

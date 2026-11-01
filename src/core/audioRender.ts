@@ -3,6 +3,7 @@
 // gain master 0,7, apoi normalizare dacă vârful depășește 0,98.
 
 import { instrumentById } from './instruments';
+import { renderDrums, type DrumId } from './drums';
 
 export interface RenderNote { startSec: number; durSec: number; freq: number; instrument: string }
 
@@ -16,6 +17,7 @@ export interface RenderOptions {
   sampleRate?: number;
   samples?: Record<string, SampleSet>;
   tailSec?: number;
+  drums?: { pattern: DrumId; bpm: number };   // ritm de tobe, aliniat la melodie
 }
 
 const SYNTH_RELEASE = 0.15;
@@ -99,6 +101,11 @@ export function renderMix(notes: RenderNote[], opts: RenderOptions = {}): Float3
     const set = opts.samples?.[n.instrument];
     if (set && set.list.length) renderSample(out, sr, n, set);
     else renderSynth(out, sr, n);
+  }
+  if (opts.drums && notes.length) {
+    const t0 = notes.reduce((m, n) => Math.min(m, n.startSec), Infinity);
+    const t1 = notes.reduce((m, n) => Math.max(m, n.startSec + n.durSec), 0);
+    renderDrums(out, sr, opts.drums.pattern, opts.drums.bpm, t0, t1 - t0);
   }
   let peak = 0;
   for (let i = 0; i < out.length; i++) { out[i] *= 0.7; const a = Math.abs(out[i]); if (a > peak) peak = a; }

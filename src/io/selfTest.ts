@@ -71,3 +71,28 @@ export async function runSelfTest2(src: ImageSource, instrument: string, samples
   }
   log('done');
 }
+
+// ---------- Sondă audio (musiccolor://audioprobe) ----------
+// Nu poate auzi, dar confirmă că există semnal în lanțul de ieșire: un ton live și un fragment PCM.
+const sleepMs = (ms: number) => new Promise(r => setTimeout(r, ms));
+
+export async function runAudioProbe(eng: { ensureRunning(): Promise<string>; sampleRate: number; noteOn(i: string, f: number): number; noteOff(id: number): void; playPCM(d: Float32Array, sr: number): () => void; peak(): number } | null): Promise<void> {
+  const log = (s: string) => console.log(`AUDIOPROBE ${s}`);
+  if (!eng) { log('FAIL nu există motor audio'); log('done'); return; }
+  try {
+    log(`state=${await eng.ensureRunning()} sr=${eng.sampleRate}`);
+    const v = eng.noteOn('pian', 440);
+    await sleepMs(500);
+    log(`live peak=${eng.peak().toFixed(4)}`);
+    eng.noteOff(v);
+    await sleepMs(300);
+    const sr = eng.sampleRate;
+    const tone = new Float32Array(sr).map((_, i) => 0.5 * Math.sin((2 * Math.PI * 440 * i) / sr));
+    eng.playPCM(tone, sr);
+    await sleepMs(500);
+    log(`pcm peak=${eng.peak().toFixed(4)}`);
+  } catch (e: any) {
+    log(`FAIL ${e?.message ?? e}`);
+  }
+  log('done');
+}

@@ -1,24 +1,29 @@
 // NIVEL 2 – încarci o imagine (JPEG / PNG); aplicația o citește pe spirală, din centru spre margini,
-// transformă culorile în melodie (cu instrumentul ales din dreapta), o redă și generează partitura A4.
+// transformă culorile în melodie (cu instrumentul ales din dreapta), o redă – opțional cu un ritm
+// de tobe – și generează partitura A4 și fișierul audio.
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { View, Text, Pressable, StyleSheet, ActivityIndicator, LayoutChangeEvent } from 'react-native';
+import { View, Text, Pressable, StyleSheet, ActivityIndicator, ScrollView, LayoutChangeEvent } from 'react-native';
 import { Canvas, Image as SkiaImage, Path, Circle, Skia } from '@shopify/react-native-skia';
 import { InstrumentBar } from '../components/InstrumentBar';
 import { SaveSheet, type ExportedFile } from '../components/SaveSheet';
-import { readingCells, sampleColors, buildMelody, melodyBeats, melodyToEvents, type ReadPath } from '../core/imageMelody';
+import { readingCells, sampleColors, buildMelody, melodyBeats, type ReadPath, type MelodyNote } from '../core/imageMelody';
 import { layoutScore } from '../core/scoreLayout';
 import { midiName, rgbToCss } from '../core/golden';
 import { instrumentById } from '../core/instruments';
+import { DRUM_PATTERNS, type DrumId } from '../core/drums';
+import { renderLevel2Mix } from '../core/level2Mix';
 import { renderScorePage, type ScoreKind } from '../render/scoreImage';
-import { exportAudioFile, type AudioKind } from '../io/exportComposition';
+import { exportMixFile, type AudioKind } from '../io/exportComposition';
 import { stampName, writeBase64 } from '../io/files';
 import { pickImage, type ImageSource } from '../io/imageSource';
 import type { AudioEngine } from '../audio/AudioEngine';
 
-export const LEVEL2_BPM = 96;
+const TEMPOS = [85, 105, 158, 160];
+const DEFAULT_TEMPO = 105;
 const DENSITIES = [128, 256, 512];
 const SCORE_KINDS = [{ id: 'png', label: 'PNG' }, { id: 'jpeg', label: 'JPEG' }];
+const LEAD_IN = 0.1; // secunde înainte de prima notă (ca în mix)
 
 interface Props {
   engine: React.RefObject<AudioEngine | null>;
@@ -31,46 +36,66 @@ export function Level2({ engine, instrument, onInstrumentChange, injected }: Pro
   const [src, setSrc] = useState<ImageSource | null>(null);
   const [path, setPath] = useState<ReadPath>('spirala');
   const [density, setDensity] = useState(256);
+  const [tempo, setTempo] = useState(DEFAULT_TEMPO);
+  const [drum, setDrum] = useState<DrumId | null>(null);
   const [loading, setLoading] = useState(false);
+  const [preparing, setPreparing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [playIdx, setPlayIdx] = useState(-1);
+  const [playing, setPlaying] = useState(false);
   const [saveOpen, setSaveOpen] = useState(false);
   const [box, setBox] = useState({ w: 0, h: 0 });
+  const stopper = useRef<(() => void) | null>(null);
   const timer = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => { if (injected) setSrc(injected); }, [injected]);
 
   const cells = useMemo(() => (src ? readingCells(src.width, src.height, density, path) : []), [src, density, path]);
   const melody = useMemo(() => (src ? buildMelody(sampleColors(src.rgba, src.width, src.height, cells)) : []), [src, cells]);
-  const seconds = (melodyBeats(melody) * 60) / LEVEL2_BPM;
+  const seconds = (melodyBeats(melody) * 60) / tempo;
 
-  // ----- redare -----
+  // ----- redare: fragmentul întreg se randează o dată și se redă; indicatorul urmărește timpul -----
   const stop = useCallback(() => {
     if (timer.current) clearInterval(timer.current);
     timer.current = null;
+    stopper.current?.();
+    stopper.current = null;
+    setPlaying(false);
     setPlayIdx(-1);
   }, []);
   useEffect(() => stop, [stop]);
-  useEffect(() => { stop(); }, [melody, instrument, stop]);
+  useEffect(() => { stop(); }, [melody, instrument, tempo, drum, stop]);
 
-  const play = useCallback(() => {
+  const play = useCallback(async () => {
     const eng = engine.current;
-    if (!eng || !melody.length) return;
+    if (!eng || !melody.length || preparing) return;
     stop();
-    const evs = melodyToEvents(melody, LEVEL2_BPM, instrument, Date.now() + 150);
-    const voices: { id: number; end: number }[] = [];
-    let i = 0;
-    timer.current = setInterval(() => {
-      const now = Date.now();
-      while (i < evs.length && evs[i].startMs <= now) {
-        voices.push({ id: eng.noteOn(instrument, evs[i].freq), end: evs[i].startMs + (evs[i].durationMs ?? 300) });
-        setPlayIdx(i);
-        i++;
-      }
-      for (let k = voices.length - 1; k >= 0; k--) if (voices[k].end <= now) { eng.noteOff(voices[k].id); voices.splice(k, 1); }
-      if (i >= evs.length && !voices.length) stop();
-    }, 20);
-  }, [engine, melody, instrument, stop]);
+    setPreparing(true);
+    try {
+      const state = await eng.ensureRunning();
+      const sr = eng.sampleRate;
+      const mix = renderLevel2Mix(melody, tempo, instrument, drum, sr, eng.getSampleSets());
+      const totalSec = mix.length / sr;
+      const beat = 60 / tempo;
+      const t0 = Date.now();
+      stopper.current = eng.playPCM(mix, sr);
+      setPlaying(true);
+      console.log(`AUDIOPROBE l2 state=${state} sr=${sr} secunde=${totalSec.toFixed(1)} ritm=${drum ?? 'fara'}`);
+      setTimeout(() => console.log(`AUDIOPROBE l2 peak=${eng.peak().toFixed(4)}`), 700);
+      let cur = 0;
+      timer.current = setInterval(() => {
+        const el = (Date.now() - t0) / 1000;
+        if (el > totalSec) { stop(); return; }
+        while (cur + 1 < melody.length && LEAD_IN + melody[cur + 1].startBeat * beat <= el) cur++;
+        setPlayIdx(cur);
+      }, 50);
+    } catch (e: any) {
+      setError(`Redarea nu a pornit: ${e?.message ?? e}`);
+      stop();
+    } finally {
+      setPreparing(false);
+    }
+  }, [engine, melody, preparing, stop, tempo, instrument, drum]);
 
   const choose = useCallback(async () => {
     stop();
@@ -86,12 +111,12 @@ export function Level2({ engine, instrument, onInstrumentChange, injected }: Pro
     }
   }, [stop]);
 
-  // ----- export -----
+  // ----- export: partitura și audio, din același mix ca redarea -----
   const meta = () => ({
     title: 'Music&Color',
     subtitle: `Melodie din imagine · ${new Date().toLocaleDateString('ro-RO')}`,
-    instrument: instrumentById(instrument).label,
-    bpm: LEVEL2_BPM,
+    instrument: instrumentById(instrument).label + (drum ? ` · ritm ${DRUM_PATTERNS.find(p => p.id === drum)?.label}` : ''),
+    bpm: tempo,
   });
   const exportScore = async (kind: string): Promise<ExportedFile[]> => {
     const pages = layoutScore(melody, meta());
@@ -103,8 +128,8 @@ export function Level2({ engine, instrument, onInstrumentChange, injected }: Pro
     }
     return out;
   };
-  const exportAudio = (kind: AudioKind, onProgress?: (p: number) => void) =>
-    exportAudioFile(melodyToEvents(melody, LEVEL2_BPM, instrument), kind, engine.current?.getSampleSets(), onProgress);
+  const exportAudio = async (kind: AudioKind, onProgress?: (p: number) => void) =>
+    exportMixFile(renderLevel2Mix(melody, tempo, instrument, drum, 44100, engine.current?.getSampleSets()), kind, onProgress);
 
   // ----- desen -----
   const fit = useMemo(() => {
@@ -120,8 +145,9 @@ export function Level2({ engine, instrument, onInstrumentChange, injected }: Pro
     return p;
   }, [cells, fit]);
 
-  const current = playIdx >= 0 ? melody[playIdx] : null;
+  const current = playing && playIdx >= 0 ? melody[playIdx] : null;
   const onLayout = (e: LayoutChangeEvent) => setBox({ w: e.nativeEvent.layout.width, h: e.nativeEvent.layout.height });
+  const drumLabel = drum ? DRUM_PATTERNS.find(p => p.id === drum)?.label : null;
 
   return (
     <>
@@ -158,10 +184,15 @@ export function Level2({ engine, instrument, onInstrumentChange, injected }: Pro
       </View>
       <View style={styles.divider} />
       <View style={styles.controls}>
-        <View style={styles.panel}>
+        <ScrollView style={styles.panelScroll} contentContainerStyle={styles.panel} showsVerticalScrollIndicator={false}>
           <View style={styles.row}>
             <Btn label={src ? 'Altă imagine' : 'Alege imagine'} onPress={choose} disabled={loading} />
-            <Btn label={playIdx >= 0 ? '■ Oprește' : '▶ Ascultă'} onPress={playIdx >= 0 ? stop : play} disabled={!melody.length} main />
+            <Btn
+              label={playing ? '■ Oprește' : preparing ? 'Se pregătește…' : '▶ Ascultă'}
+              onPress={playing ? stop : play}
+              disabled={!melody.length || preparing}
+              main
+            />
             <Btn label="Salvează" onPress={() => { stop(); setSaveOpen(true); }} disabled={!melody.length} />
           </View>
 
@@ -171,6 +202,18 @@ export function Level2({ engine, instrument, onInstrumentChange, injected }: Pro
             <Chip label="Floarea-soarelui (φ)" on={path === 'floare'} onPress={() => setPath('floare')} />
           </View>
 
+          <Text style={styles.label}>Ritm (se aude la redare și la export)</Text>
+          <View style={styles.row}>
+            {DRUM_PATTERNS.map(p => (
+              <Chip key={p.id} label={p.label} on={drum === p.id} onPress={() => setDrum(drum === p.id ? null : p.id)} />
+            ))}
+          </View>
+
+          <Text style={styles.label}>Tempo (♩ = bătăi pe minut)</Text>
+          <View style={styles.row}>
+            {TEMPOS.map(t => <Chip key={t} label={String(t)} on={tempo === t} onPress={() => setTempo(t)} />)}
+          </View>
+
           <Text style={styles.label}>Celule (cât de fină e citirea)</Text>
           <View style={styles.row}>
             {DENSITIES.map(d => <Chip key={d} label={String(d)} on={density === d} onPress={() => setDensity(d)} />)}
@@ -178,18 +221,18 @@ export function Level2({ engine, instrument, onInstrumentChange, injected }: Pro
 
           <Text style={styles.info}>
             {melody.length
-              ? `${melody.length} note · ${Math.floor(seconds / 60)}:${String(Math.round(seconds % 60)).padStart(2, '0')} min · ♩ = ${LEVEL2_BPM} · ${instrumentById(instrument).label}`
+              ? `${melody.length} note · ${Math.floor(seconds / 60)}:${String(Math.round(seconds % 60)).padStart(2, '0')} min · ♩ = ${tempo} · ${instrumentById(instrument).label}${drumLabel ? ' · ' + drumLabel : ''}`
               : 'Alege o imagine pentru a genera melodia.'}
           </Text>
           {error && <Text style={styles.error}>{error}</Text>}
-        </View>
+        </ScrollView>
         <InstrumentBar selected={instrument} onSelect={onInstrumentChange} />
       </View>
 
       <SaveSheet
         visible={saveOpen}
         title="Salvează melodia din imagine"
-        subtitle={`${melody.length} note · ${instrumentById(instrument).label}`}
+        subtitle={`${melody.length} note · ♩ = ${tempo} · ${instrumentById(instrument).label}${drumLabel ? ' · ' + drumLabel : ''}`}
         imageLabel="Partitura (A4)"
         imageKinds={SCORE_KINDS}
         exportImage={exportScore}
@@ -219,18 +262,19 @@ function Chip({ label, on, onPress }: { label: string; on: boolean; onPress: () 
 const styles = StyleSheet.create({
   top: { flex: 1, backgroundColor: '#0e0e12' },
   divider: { height: StyleSheet.hairlineWidth, backgroundColor: '#333' },
-  controls: { flex: 1, flexDirection: 'row', backgroundColor: '#181822', paddingVertical: 10, paddingLeft: 12 },
-  panel: { flex: 1, paddingRight: 8, gap: 6 },
+  controls: { flex: 1, flexDirection: 'row', backgroundColor: '#181822', paddingLeft: 12 },
+  panelScroll: { flex: 1 },
+  panel: { paddingVertical: 10, paddingRight: 8, gap: 6 },
   row: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },
   label: { color: '#8a8a99', fontSize: 11, fontWeight: '700', marginTop: 8 },
   info: { color: '#c9c9d6', fontSize: 12, marginTop: 10 },
   error: { color: '#ff7a6b', fontSize: 12 },
-  btn: { flex: 1, paddingVertical: 10, borderRadius: 10, borderWidth: 1, borderColor: '#ffd700', alignItems: 'center', paddingHorizontal: 4 },
+  btn: { flex: 1, minWidth: 80, paddingVertical: 10, borderRadius: 10, borderWidth: 1, borderColor: '#ffd700', alignItems: 'center', paddingHorizontal: 4 },
   btnMain: { backgroundColor: '#ffd700' },
   btnTxt: { color: '#ffd700', fontSize: 13, fontWeight: '700' },
   btnMainTxt: { color: '#111' },
   off: { opacity: 0.35 },
-  chip: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 14, borderWidth: 1, borderColor: '#44445a' },
+  chip: { paddingHorizontal: 11, paddingVertical: 6, borderRadius: 14, borderWidth: 1, borderColor: '#44445a' },
   chipOn: { backgroundColor: '#ffd700', borderColor: '#ffd700' },
   chipTxt: { color: '#c9c9d6', fontSize: 12, fontWeight: '700' },
   chipTxtOn: { color: '#111' },

@@ -10,7 +10,7 @@ import { DEFAULT_INSTRUMENT } from '../core/instruments';
 import type { NoteEvent } from '../core/types';
 
 export type AudioKind = 'mp3' | 'wav' | 'aac';
-const SR = 44100;
+export const SR = 44100;
 
 export async function exportImageFile(events: NoteEvent[], kind: ImageKind): Promise<{ uri: string; ext: string }> {
   const b64 = exportSpiralImage(events, kind);
@@ -29,10 +29,10 @@ export function eventsToNotes(events: NoteEvent[], nowMs = Date.now()): RenderNo
   }));
 }
 
-export async function exportAudioFile(
-  events: NoteEvent[], kind: AudioKind, samples?: Record<string, SampleSet>, onProgress?: (p: number) => void,
+/** Codează un mix randat în formatul cerut și îl scrie în cache. */
+export async function exportMixFile(
+  mix: Float32Array, kind: AudioKind, onProgress?: (p: number) => void,
 ): Promise<{ uri: string; ext: string }> {
-  const mix = renderMix(eventsToNotes(events), { sampleRate: SR, samples });
   if (kind === 'mp3') {
     return { uri: await writeBase64(stampName('mp3'), toBase64(await encodeMp3(mix, SR, 128, onProgress))), ext: 'mp3' };
   }
@@ -42,4 +42,10 @@ export async function exportAudioFile(
   const out = cachePath(stampName('m4a'));
   await encodeWavToM4a(tmp, out, 128000);
   return { uri: out, ext: 'm4a' };
+}
+
+export async function exportAudioFile(
+  events: NoteEvent[], kind: AudioKind, samples?: Record<string, SampleSet>, onProgress?: (p: number) => void,
+): Promise<{ uri: string; ext: string }> {
+  return exportMixFile(renderMix(eventsToNotes(events), { sampleRate: SR, samples }), kind, onProgress);
 }
