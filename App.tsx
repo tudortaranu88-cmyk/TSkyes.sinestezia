@@ -2,7 +2,7 @@
 // Sus: bara discretă cu numele aplicației și selectorul de nivel.
 // Nivel 1: 50% vizualizator (sus, cu Nou / Salvează) / 50% claviatură cu 7 rânduri vizibile (jos);
 // instrumentele stau ascunse pe marginea din dreapta (săgeata mică le deschide).
-// Nivel 2: imagine → melodie + partitură (src/screens/Level2.tsx). Nivelul 3 urmează.
+// Nivel 2: imagine → melodie + partitură. Nivel 3: partitură → tablou (src/screens/Level3.tsx).
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, Alert, Linking } from 'react-native';
@@ -15,9 +15,11 @@ import { Header, type Level } from './src/components/Header';
 import { SaveSheet } from './src/components/SaveSheet';
 import { exportImageFile, exportAudioFile } from './src/io/exportComposition';
 import type { ImageKind } from './src/render/exportImage';
-import { demoComposition, runSelfTest, runSelfTest2, runAudioProbe } from './src/io/selfTest';
+import { demoComposition, runSelfTest, runSelfTest2, runSelfTest3, demoScorePages, runAudioProbe } from './src/io/selfTest';
 import { Level2 } from './src/screens/Level2';
+import { Level3 } from './src/screens/Level3';
 import { demoPixels, sourceFromPixels, type ImageSource } from './src/io/imageSource';
+import type { ScorePixels } from './src/core/scoreDecode';
 import { AudioEngine } from './src/audio/AudioEngine';
 import { SAMPLE_MANIFEST } from './assets/sunete/manifest';
 import { NOTES, cellColor, cellPitch, freqToMidi, type Tuning } from './src/core/golden';
@@ -38,6 +40,7 @@ export default function App() {
   const nextId = useRef(1);
   const [saveOpen, setSaveOpen] = useState(false);
   const [l2Injected, setL2Injected] = useState<ImageSource | null>(null);
+  const [l3Injected, setL3Injected] = useState<ScorePixels[] | null>(null);
 
   useEffect(() => {
     const e = new AudioEngine();
@@ -50,6 +53,13 @@ export default function App() {
     const handle = (url: string | null) => {
       if (!url || !(url.includes('selftest') || url.includes('audioprobe'))) return;
       if (url.includes('audioprobe')) { runAudioProbe(engine.current); return; }
+      if (url.includes('selftest3')) {
+        const { pages, noteCount } = demoScorePages();
+        setLevel(3);
+        setL3Injected(pages);
+        runSelfTest3(pages, noteCount, engine.current?.getSampleSets() ?? {});
+        return;
+      }
       if (url.includes('selftest2')) {
         const src = sourceFromPixels(demoPixels(), 360, 270, 'test');
         setLevel(2);
@@ -117,10 +127,7 @@ export default function App() {
       ) : level === 2 ? (
         <Level2 engine={engine} instrument={instrument} onInstrumentChange={setInstrument} injected={l2Injected} />
       ) : (
-        <View style={styles.soon}>
-          <Text style={styles.soonTitle}>Nivelul 3</Text>
-          <Text style={styles.soonTxt}>Partitură → tablou. În lucru.</Text>
-        </View>
+        <Level3 engine={engine} injected={l3Injected} />
       )}
       <SaveSheet
         visible={saveOpen}

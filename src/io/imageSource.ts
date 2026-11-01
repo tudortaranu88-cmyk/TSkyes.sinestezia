@@ -26,6 +26,30 @@ export async function pickImage(): Promise<ImageSource | null> {
   return { rgba: px as Uint8Array, width: w, height: h, image: img, name: a.fileName ?? 'imagine' };
 }
 
+const SCORE_SIDE = 1200; // partiturile se citesc la rezoluție mare, ca banda de culori să fie clară
+
+/** Alege una sau mai multe partituri (Nivelul 3), în ordinea numelui (…_p1, _p2…), la rezoluție mare. */
+export async function pickScoreImages(): Promise<ImageSource[]> {
+  const res = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['images'], allowsMultipleSelection: true, quality: 1 });
+  if (res.canceled || !res.assets?.length) return [];
+  const assets = [...res.assets].sort((a, b) => (a.fileName ?? '').localeCompare(b.fileName ?? '', undefined, { numeric: true }));
+  const out: ImageSource[] = [];
+  for (const a of assets) {
+    const landscape = (a.width ?? 1) >= (a.height ?? 1);
+    const big = await manipulateAsync(a.uri, [{ resize: landscape ? { width: SCORE_SIDE } : { height: SCORE_SIDE } }], {
+      format: SaveFormat.PNG, base64: true,
+    });
+    if (!big.base64) continue;
+    const img = Skia.Image.MakeImageFromEncoded(Skia.Data.fromBase64(big.base64));
+    if (!img) continue;
+    const w = img.width(), h = img.height();
+    const px = img.readPixels(0, 0, { width: w, height: h, colorType: ColorType.RGBA_8888, alphaType: AlphaType.Unpremul });
+    if (px) out.push({ rgba: px as Uint8Array, width: w, height: h, image: img, name: a.fileName ?? 'partitura' });
+  }
+  if (!out.length) throw new Error('Partiturile nu au putut fi citite');
+  return out;
+}
+
 /** Sursă construită direct din pixeli (autotest). */
 export function sourceFromPixels(rgba: Uint8Array, width: number, height: number, name: string): ImageSource {
   const image = Skia.Image.MakeImage(

@@ -21,6 +21,8 @@ export const STRIP_Y = PAGE_H - 125;
 export const STRIP_H = 22;
 export const STRIP_X0 = MARGIN;
 export const STRIP_X1 = PAGE_W - MARGIN;
+export const STRIP_BG: RGB = [230, 0, 170];     // fundalul/golurile benzii: magenta, hue absent din paletă
+                                                 // (paleta acoperă toată axa gri prin Do4, deci gri/alb/negru nu sunt sigure)
 
 export type Prim =
   | { k: 'line'; x1: number; y1: number; x2: number; y2: number; w: number }
@@ -89,13 +91,17 @@ export function layoutScore(melody: MelodyNote[], meta: ScoreMeta): ScorePage[] 
         }
       }
     }
-    // banda de culori a paginii: blocul negru de calibrare = 1 pătrime, apoi notele (lățime ∝ durata)
+    // banda de culori a paginii (citită la Nivelul 3): fundal gri neutru, ca golurile dintre blocuri
+    // să fie distincte de alb, de negru și de culori (inclusiv Do4, aproape alb). Blocul negru de
+    // calibrare = 1 pătrime; apoi câte un bloc pe notă, lățime ∝ durata, separate prin goluri gri.
     const beatsHere = pageNotes.reduce((a, n) => a + n.beats, 0);
     const unit = (STRIP_X1 - STRIP_X0) / (beatsHere + 1);
-    prims.push({ k: 'rect', x: STRIP_X0, y: STRIP_Y, w: unit - 1, h: STRIP_H, color: [0, 0, 0] });
+    const STRIP_GAP = 3;
+    prims.push({ k: 'rect', x: STRIP_X0, y: STRIP_Y, w: STRIP_X1 - STRIP_X0, h: STRIP_H, color: STRIP_BG });
+    prims.push({ k: 'rect', x: STRIP_X0, y: STRIP_Y, w: unit - STRIP_GAP, h: STRIP_H, color: [0, 0, 0] });
     let sx = STRIP_X0 + unit;
     for (const n of pageNotes) {
-      prims.push({ k: 'rect', x: sx, y: STRIP_Y, w: n.beats * unit - 1, h: STRIP_H, color: n.color });
+      prims.push({ k: 'rect', x: sx, y: STRIP_Y, w: n.beats * unit - STRIP_GAP, h: STRIP_H, color: n.color });
       sx += n.beats * unit;
     }
     prims.push({ k: 'text', x: MARGIN, y: PAGE_H - 60, text: 'Music&Color · TSkyes', size: 16, align: 'left', gray: true });

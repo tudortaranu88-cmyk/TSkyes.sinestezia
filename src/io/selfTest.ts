@@ -96,3 +96,47 @@ export async function runAudioProbe(eng: { ensureRunning(): Promise<string>; sam
   }
   log('done');
 }
+
+// ---------- Nivelul 3 (musiccolor://selftest3) ----------
+// Generează o partitură (ca la Nivelul 2), o randează în pixeli, o decodează și comparăm numărul de note,
+// apoi refacem și salvăm tabloul.
+import { Skia, ColorType, AlphaType } from '@shopify/react-native-skia';
+import { decodeScores, type ScorePixels } from '../core/scoreDecode';
+import { exportSpiralImage } from '../render/exportImage';
+
+function pngToPixels(b64: string): ScorePixels {
+  const img = Skia.Image.MakeImageFromEncoded(Skia.Data.fromBase64(b64));
+  if (!img) throw new Error('PNG invalid');
+  const w = img.width(), h = img.height();
+  const px = img.readPixels(0, 0, { width: w, height: h, colorType: ColorType.RGBA_8888, alphaType: AlphaType.Unpremul });
+  if (!px) throw new Error('pixeli indisponibili');
+  return { rgba: px as Uint8Array, width: w, height: h };
+}
+
+export function demoScorePages(): { pages: ScorePixels[]; noteCount: number } {
+  const demo = demoComposition(40);
+  // demoComposition dă NoteEvent-uri; construim o melodie din culorile lor pentru partitură
+  const melody = buildMelody(demo.map((e: NoteEvent) => e.color));
+  const scorePages = layoutScore(melody, { title: 'Music&Color', subtitle: 'Autotest N3', instrument: 'Pian', bpm: 105 });
+  const pages = scorePages.map((pg: any) => pngToPixels(renderScorePage(pg, 'png')));
+  return { pages, noteCount: melody.length };
+}
+
+export async function runSelfTest3(pages: ScorePixels[], expected: number, samples: Record<string, SampleSet>): Promise<void> {
+  const log = (s: string) => console.log(`SELFTEST3 ${s}`);
+  try {
+    const t = Date.now();
+    const melody = decodeScores(pages);
+    log(`decodat ${pages.length} pagini → ${melody.length} note (asteptat ${expected}) ${Date.now() - t} ms`);
+    if (melody.length !== expected) log(`AVERTISMENT numar de note diferit`);
+    const events = melodyToEvents(melody, 105, 'pian', 0);
+    for (const kind of ['png', 'jpeg', 'tiff'] as const) {
+      const tt = Date.now();
+      const b64 = exportSpiralImage(events, kind, 1024);
+      log(`tablou ${kind} ok ${Math.round((b64.length * 3) / 4)} bytes ${Date.now() - tt} ms`);
+    }
+  } catch (e: any) {
+    log(`FAIL ${e?.message ?? e}`);
+  }
+  log('done');
+}

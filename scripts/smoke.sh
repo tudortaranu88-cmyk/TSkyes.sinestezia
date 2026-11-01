@@ -72,11 +72,19 @@ adb shell ls /sdcard/DCIM > $OUT/dcim.txt 2>&1
 F=$(adb shell ls /sdcard/DCIM | tr -d '\r' | grep partitura | head -1)
 [ -n "$F" ] && adb pull "/sdcard/DCIM/$F" $OUT/partitura-android.png >/dev/null 2>&1
 
+echo "== nivelul 3" >> $OUT/pasi.txt
+adb shell am start -a android.intent.action.VIEW -d "musiccolor://selftest3" $PKG >> $OUT/start.txt 2>&1
+for i in $(seq 1 60); do adb logcat -d | grep -q "SELFTEST3 done" && break; sleep 2; done
+sleep 2; shot 14-nivel3
+tap_text "▶ Ascultă"; sleep 3; shot 15-nivel3-redare
+tap_text "Salvează tabloul"; sleep 1.5; shot 16-nivel3-salvare
+adb shell input keyevent KEYCODE_BACK; sleep 1
+
 PID=$(adb shell pidof $PKG | tr -d '\r')
 echo "pid=$PID" > $OUT/pid.txt
 adb logcat -d -v threadtime > $OUT/logcat.txt
 adb logcat -d -b crash > $OUT/crash.txt
-grep -oE "SELFTEST.*" $OUT/logcat.txt > $OUT/selftest.txt
+grep -oE "SELFTEST[0-9]* .*" $OUT/logcat.txt > $OUT/selftest.txt
 grep -oE "AUDIOPROBE.*" $OUT/logcat.txt > $OUT/audioprobe.txt
 grep -E "AndroidRuntime|ReactNativeJS|FATAL|libc|DEBUG" $OUT/logcat.txt > $OUT/filtrat.txt
 rm -f $OUT/ui.xml
