@@ -64,7 +64,7 @@ export function layoutScore(melody: MelodyNote[], meta: ScoreMeta): ScorePage[] 
       const y0 = top + s * SYSTEM_H + 50;           // linia de sus
       const bottomY = y0 + 4 * GAP;
       for (let i = 0; i < 5; i++) prims.push({ k: 'line', x1: MARGIN, y1: y0 + i * GAP, x2: PAGE_W - MARGIN, y2: y0 + i * GAP, w: 1.4 });
-      prims.push({ k: 'clef', x: MARGIN + 6, y: bottomY - GAP, size: GAP * 7.2 });
+      prims.push({ k: 'clef', x: MARGIN + 8, y: bottomY - GAP, size: GAP * 4 }); // 1 em = 4 spații; linia de bază = linia Sol
       let x = MARGIN + 62;
       if (sys === 0) {
         prims.push({ k: 'text', x: x + 14, y: y0 + 2 * GAP - 2, text: '4', size: 30, align: 'center', bold: true });

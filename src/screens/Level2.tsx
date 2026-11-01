@@ -103,8 +103,8 @@ export function Level2({ engine, instrument, onInstrumentChange, injected }: Pro
     }
     return out;
   };
-  const exportAudio = (kind: AudioKind) =>
-    exportAudioFile(melodyToEvents(melody, LEVEL2_BPM, instrument), kind, engine.current?.getSampleSets());
+  const exportAudio = (kind: AudioKind, onProgress?: (p: number) => void) =>
+    exportAudioFile(melodyToEvents(melody, LEVEL2_BPM, instrument), kind, engine.current?.getSampleSets(), onProgress);
 
   // ----- desen -----
   const fit = useMemo(() => {

@@ -128,7 +128,7 @@ export default function App() {
         imageLabel="Imaginea (spirala completă)"
         imageKinds={SPIRAL_KINDS}
         exportImage={async kind => [await exportImageFile(events, kind as ImageKind)]}
-        exportAudio={kind => exportAudioFile(events, kind, engine.current?.getSampleSets())}
+        exportAudio={(kind, onProgress) => exportAudioFile(events, kind, engine.current?.getSampleSets(), onProgress)}
         onClose={() => setSaveOpen(false)}
       />
     </SafeAreaView>

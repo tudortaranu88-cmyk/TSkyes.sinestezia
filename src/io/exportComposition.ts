@@ -30,11 +30,11 @@ export function eventsToNotes(events: NoteEvent[], nowMs = Date.now()): RenderNo
 }
 
 export async function exportAudioFile(
-  events: NoteEvent[], kind: AudioKind, samples?: Record<string, SampleSet>,
+  events: NoteEvent[], kind: AudioKind, samples?: Record<string, SampleSet>, onProgress?: (p: number) => void,
 ): Promise<{ uri: string; ext: string }> {
   const mix = renderMix(eventsToNotes(events), { sampleRate: SR, samples });
   if (kind === 'mp3') {
-    return { uri: await writeBase64(stampName('mp3'), toBase64(encodeMp3(mix, SR))), ext: 'mp3' };
+    return { uri: await writeBase64(stampName('mp3'), toBase64(await encodeMp3(mix, SR, 128, onProgress))), ext: 'mp3' };
   }
   const wavB64 = toBase64(encodeWav(mix, SR));
   if (kind === 'wav') return { uri: await writeBase64(stampName('wav'), wavB64), ext: 'wav' };

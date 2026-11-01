@@ -30,6 +30,12 @@ for f in 20 40 60 80; do adb shell input tap $((W*f/100)) $((H*62/100)); sleep 0
 sleep 2
 shot 2-dupa-note
 
+echo "== selector imagine (pornire normală)" >> $OUT/pasi.txt
+tap_text "N2"; sleep 1.5; shot 2b-nivel2-gol
+tap_text "Alege imagine"; sleep 4; shot 2c-selector-imagine
+adb shell input keyevent KEYCODE_BACK; sleep 2
+tap_text "N1"; sleep 1.5
+
 echo "== instrumente" >> $OUT/pasi.txt
 tap_text "‹"; sleep 1.5; shot 3-instrumente
 tap_text "Vioara"; sleep 1
@@ -55,11 +61,9 @@ tap_text "▶ Ascultă"; sleep 4; shot 9-nivel2-redare
 tap_text "■ Oprește"; sleep 1
 tap_text "‹"; sleep 1.5; shot 10-nivel2-instrumente
 tap_text "Flaut"; sleep 1
-tap_text "Floarea-soarelui (φ)"; sleep 2; shot 11-nivel2-floare
+tap_text "Floarea-soarelui \\(φ\\)"; sleep 2; shot 11-nivel2-floare
 tap_text "Salvează"; sleep 1.5; shot 12-nivel2-salvare
 adb shell input keyevent KEYCODE_BACK; sleep 1
-tap_text "Altă imagine"; sleep 4; shot 13-alegere-imagine
-adb shell input keyevent KEYCODE_BACK; sleep 2
 adb shell ls /sdcard/DCIM > $OUT/dcim.txt 2>&1
 F=$(adb shell ls /sdcard/DCIM | tr -d '\r' | grep partitura | head -1)
 [ -n "$F" ] && adb pull "/sdcard/DCIM/$F" $OUT/partitura-android.png >/dev/null 2>&1

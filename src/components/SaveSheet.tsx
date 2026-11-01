@@ -17,7 +17,7 @@ interface Props {
   imageLabel: string;
   imageKinds: { id: string; label: string }[];
   exportImage: (kind: string) => Promise<ExportedFile[]>;
-  exportAudio: (kind: AudioKind) => Promise<ExportedFile>;
+  exportAudio: (kind: AudioKind, onProgress?: (p: number) => void) => Promise<ExportedFile>;
   onClose: () => void;
 }
 
@@ -38,7 +38,8 @@ export function SaveSheet({ visible, title = 'Salvează', subtitle, imageLabel, 
     setMsg({ text: what === 'image' ? 'Se generează imaginea…' : 'Se generează melodia…', ok: true });
     await new Promise(r => setTimeout(r, 30)); // lasă indicatorul să apară înainte de calcul
     try {
-      const files = what === 'image' ? await exportImage(imgKind) : [await exportAudio(audKind)];
+      const progress = (p: number) => setMsg({ text: `Se codează ${audKind.toUpperCase()}… ${Math.round(p * 100)}%`, ok: true });
+      const files = what === 'image' ? await exportImage(imgKind) : [await exportAudio(audKind, progress)];
       if (action === 'save') {
         for (const f of files) await saveToDevice(f.uri);
         setMsg({
