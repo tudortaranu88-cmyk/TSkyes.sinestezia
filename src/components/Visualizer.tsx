@@ -4,7 +4,7 @@
 // sunt marcate 'worklet', deci pot fi mutate ulterior pe firul UI (Reanimated) fără rescriere.
 
 import React, { useEffect, useMemo, useState } from 'react';
-import { View, LayoutChangeEvent } from 'react-native';
+import { View, Text, Pressable, StyleSheet, LayoutChangeEvent } from 'react-native';
 import { Canvas, Path, Circle, Line, RoundedRect, Skia, vec } from '@shopify/react-native-skia';
 import { buildScene } from '../core/scene';
 import { rgbToCss } from '../core/golden';
@@ -21,7 +21,13 @@ function polyline(points: Point[]) {
 }
 const easeOut = (x: number) => 1 - Math.pow(1 - x, 3);
 
-export function Visualizer({ events }: { events: NoteEvent[] }) {
+interface Props {
+  events: NoteEvent[];
+  onNew?: () => void;
+  onSave?: () => void;
+}
+
+export function Visualizer({ events, onNew, onSave }: Props) {
   const [size, setSize] = useState({ w: 0, h: 0 });
   const [now, setNow] = useState(() => Date.now());
 
@@ -69,6 +75,33 @@ export function Visualizer({ events }: { events: NoteEvent[] }) {
           ))}
         </Canvas>
       )}
+      {(onNew || onSave) && (
+        <View style={styles.actions}>
+          {onNew && (
+            <Pressable onPress={onNew} hitSlop={6} style={styles.action}>
+              <Text style={styles.actionTxt}>Nou</Text>
+            </Pressable>
+          )}
+          {onSave && (
+            <Pressable onPress={onSave} hitSlop={6} disabled={!events.length}
+              style={[styles.action, styles.actionMain, !events.length && styles.actionOff]}>
+              <Text style={[styles.actionTxt, styles.actionMainTxt]}>Salvează</Text>
+            </Pressable>
+          )}
+        </View>
+      )}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  actions: { position: 'absolute', top: 6, right: 8, flexDirection: 'row', gap: 6 },
+  action: {
+    paddingHorizontal: 10, paddingVertical: 3, borderRadius: 10,
+    borderWidth: 1, borderColor: '#44445a', backgroundColor: 'rgba(14,14,18,0.7)',
+  },
+  actionMain: { borderColor: '#ffd700' },
+  actionOff: { opacity: 0.35 },
+  actionTxt: { color: '#c9c9d6', fontSize: 11, fontWeight: '700' },
+  actionMainTxt: { color: '#ffd700' },
+});

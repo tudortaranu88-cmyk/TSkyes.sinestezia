@@ -11,4 +11,5 @@ export interface NoteEvent {
   color: RGB;
   startMs: number;           // momentul apăsării
   durationMs: number | null; // null cât timp butonul este ținut apăsat
+  instrument?: string;       // id-ul instrumentului (src/core/instruments.ts)
 }

@@ -91,6 +91,16 @@ test('scenă: zoom continuu la sosirea unei note noi (fără salt)', () => {
 
 test('scenă: raporturile φ se păstrează și în scena randată', () => {
   const s = buildScene({ width: 390, height: 422, events: mk(12), nowMs: 9000, insertPhase: 1, pxPerSec: 60 });
-  const nd = s.nodes.slice().reverse(); // de la cea mai nouă
+  const nd = s.nodes; // de la cea mai veche (centru) spre cea mai nouă (exterior)
+  assert.equal(nd.length, 12);
   for (let k = 0; k + 1 < nd.length; k++) close(nd[k + 1].radius / nd[k].radius, PHI);
+});
+
+test('scenă: zoom out – vârful notei celei mai noi stă la marginea zonei, oricâte note ar fi', () => {
+  for (const n of [1, 5, 20, 60]) {
+    const s = buildScene({ width: 390, height: 422, events: mk(n), nowMs: 99000, insertPhase: 1, pxPerSec: 60 });
+    const tip = s.arcs[s.arcs.length - 1].points.at(-1)!;
+    close(Math.hypot(tip.x - s.spiral.cx, tip.y - s.spiral.cy), (390 / 2) * 0.92, 1e-9);
+    for (const a of s.arcs) for (const p of a.points) assert.ok(Math.hypot(p.x - s.spiral.cx, p.y - s.spiral.cy) <= 390 / 2);
+  }
 });

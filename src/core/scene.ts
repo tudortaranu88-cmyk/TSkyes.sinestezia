@@ -3,7 +3,7 @@
 
 import type { NoteEvent } from './types';
 import type { RGB } from './golden';
-import { fitSpiral, noteSegment, visibleCount, pointAt, QUARTER, type Point, type SpiralConfig } from './spiral';
+import { fitSpiral, noteSegment, pointAt, PHI, B, QUARTER, type Point, type SpiralConfig } from './spiral';
 import { midiToStaff, staffY, ledgerSteps } from './staff';
 
 export interface SceneInput {
@@ -13,7 +13,8 @@ export interface SceneInput {
   nowMs: number;
   insertPhase: number;   // 0 → 1: animația de intrare a celei mai noi note
   pxPerSec: number;      // viteza de derulare a portativului
-  notesVisible?: number; // câte note încap pe spirală (implicit 9)
+  fill?: number;         // cât din raza disponibilă ocupă spirala (implicit 0,92)
+  minRadius?: number;    // notele mai mici de atât (px) nu se desenează (implicit 0,3)
 }
 
 export interface Arc { points: Point[]; strokeWidth: number; color: RGB; alpha: number }
@@ -39,13 +40,18 @@ export function durationAlpha(durationMs: number | null): number {
 export function buildScene(inp: SceneInput): Scene {
   'worklet';
   const { width, height, events, nowMs, insertPhase, pxPerSec } = inp;
-  // Zoom adaptiv: cu puține note, spirala e mărită ca să umple zona; de la `notesVisible`
-  // note în sus scara se fixează. Schimbă doar scara globală `a` → raporturile φ rămân exacte.
-  const notesVisible = inp.notesVisible ?? 6;
-  const zoomExp = Math.min(notesVisible, Math.max(1, events.length - 1 + insertPhase));
-  const spiral = fitSpiral(width, height, zoomExp);
-  const maxR = Math.min(width, height) / 2;
-  const limit = visibleCount(spiral, Math.hypot(width, height) / 2) + 1;
+  const fill = inp.fill ?? 0.92;
+  const minR = inp.minRadius ?? 0.3;
+  const n = events.length;
+
+  // Creștere spre exterior: nota i (0 = prima) ocupă θ ∈ [i·π/2, (i+1)·π/2]; fiecare notă nouă
+  // continuă spirala în afară, de φ ori mai mare decât precedenta. „Camera” face zoom out continuu,
+  // astfel încât vârful notei celei mai noi să fie mereu la marginea zonei → toată compoziția e vizibilă.
+  // Schimbă doar scara globală `a` → raporturile φ rămân exacte.
+  const tipExp = Math.max(1, n - 1 + insertPhase);
+  const maxR = (Math.min(width, height) / 2) * fill;
+  const spiral = fitSpiral(width, height, tipExp);
+  spiral.a = maxR / Math.pow(PHI, tipExp);
 
   // --- portativ ---
   const lineGap = height / 14;
@@ -55,7 +61,7 @@ export function buildScene(inp: SceneInput): Scene {
 
   const staffNotes: StaffNote[] = [];
   const ledgers: { x1: number; x2: number; y: number }[] = [];
-  for (let i = events.length - 1; i >= 0; i--) {
+  for (let i = n - 1; i >= 0; i--) {
     const e = events[i];
     const held = e.durationMs === null ? nowMs - e.startMs : e.durationMs;
     const x = spiral.cx - ((nowMs - e.startMs) / 1000) * pxPerSec;
@@ -69,25 +75,32 @@ export function buildScene(inp: SceneInput): Scene {
   }
 
   // --- spirala ---
-  // vârsta u: cea mai nouă notă intră de la u = -1 (în pol) la u = 0
+  // notele prea mici (rază sub minR px) nu se mai văd → nu le desenăm
+  const first = Math.max(0, Math.floor(Math.log(minR / spiral.a) / Math.log(PHI)));
   const arcs: Arc[] = [];
   const nodes: Node[] = [];
-  const shift = insertPhase - 1;
-  const count = Math.min(events.length, limit);
-  for (let k = count - 1; k >= 0; k--) {           // desenăm de la cea mai veche spre cea mai nouă
-    const e = events[events.length - 1 - k];
-    const u = k + shift;
-    const seg = noteSegment(u, spiral, 28);
+  for (let i = first; i < n; i++) {               // de la cea mai veche spre cea mai nouă
+    const e = events[i];
+    const newest = i === n - 1;
+    const seg = noteSegment(i, spiral, 28);
+    let points = seg.points;
+    if (newest && insertPhase < 1) {               // nota nouă se „desenează” din nodul ei spre exterior
+      points = [];
+      const t0 = i * QUARTER, t1 = (i + Math.max(0.02, insertPhase)) * QUARTER;
+      for (let j = 0; j <= 28; j++) points.push(pointAt(t0 + ((t1 - t0) * j) / 28, spiral));
+    }
     let alpha = durationAlpha(e.durationMs);
-    if (seg.r0 > maxR) alpha *= Math.max(0, 1 - (seg.r0 - maxR) / maxR); // stingere în afara cercului util
-    if (k === 0) alpha *= Math.min(1, insertPhase * 1.5);                 // apariție lină din centru
-    arcs.push({ points: seg.points, strokeWidth: seg.strokeWidth, color: e.color, alpha });
+    if (newest) alpha *= Math.min(1, 0.3 + insertPhase);
+    arcs.push({ points, strokeWidth: seg.strokeWidth, color: e.color, alpha });
     nodes.push({ x: seg.node.x, y: seg.node.y, radius: seg.node.radius, color: e.color, alpha });
   }
 
+  // ghidul fin: de unde spirala devine vizibilă până la un sfert de tură după vârf
   const guide: Point[] = [];
-  const steps = (limit + 1) * 16;
-  for (let i = 0; i <= steps; i++) guide.push(pointAt(-2 * QUARTER + (i / 16) * QUARTER, spiral));
+  const g0 = Math.max(0, Math.log(minR / spiral.a) / B);
+  const g1 = (tipExp + 1) * QUARTER;
+  const gSteps = Math.max(16, Math.ceil(((g1 - g0) / QUARTER) * 16));
+  for (let i = 0; i <= gSteps; i++) guide.push(pointAt(g0 + ((g1 - g0) * i) / gSteps, spiral));
 
   return { spiral, staffLines, ledgers, staffNotes, guide, arcs, nodes };
 }

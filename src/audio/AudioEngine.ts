@@ -9,6 +9,7 @@ import { AudioContext } from 'react-native-audio-api';
 import { Asset } from 'expo-asset';
 import { BASE_FREQS } from '../core/golden';
 import { instrumentById } from '../core/instruments';
+import type { SampleSet } from '../core/audioRender';
 
 export interface InstrumentCfg {
   samples: Partial<Record<number, number>>; // coloană (0..7) → require('...wav')
@@ -70,6 +71,20 @@ export class AudioEngine {
     }
     this.bank[name] = { cfg, list };
     return list.length;
+  }
+
+  /** Sample-urile decodate, pentru randarea offline (export audio). */
+  getSampleSets(): Record<string, SampleSet> {
+    const out: Record<string, SampleSet> = {};
+    for (const [name, { cfg, list }] of Object.entries(this.bank)) {
+      if (!list.length) continue;
+      out[name] = {
+        list: list.map(s => ({ freq: s.freq, data: s.buf.getChannelData(0) as Float32Array, sampleRate: s.buf.sampleRate as number })),
+        loop: cfg.loop, loopStart: cfg.loopStart, loopEnd: cfg.loopEnd,
+        attack: cfg.attack, release: cfg.release, gain: cfg.gain,
+      };
+    }
+    return out;
   }
 
   /** Pornește o notă susținută; întoarce un id folosit la noteOff. */

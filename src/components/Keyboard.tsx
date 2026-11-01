@@ -25,8 +25,9 @@ export function Keyboard({ onPressIn, onPressOut }: Props) {
   }, []);
 
   const onLayout = (e: LayoutChangeEvent) => {
-    const h = e.nativeEvent.layout.height / VISIBLE_ROWS;
-    if (Math.abs(h - rowH) > 0.5) setRowH(h);
+    // rânduri cu înălțime întreagă (px) → fără rânduri tăiate la margine din cauza rotunjirilor
+    const h = Math.floor(e.nativeEvent.layout.height / VISIBLE_ROWS);
+    if (h !== rowH) setRowH(h);
   };
 
   const onContentSize = () => {
@@ -40,6 +41,7 @@ export function Keyboard({ onPressIn, onPressOut }: Props) {
       {rowH > 0 && (
         <ScrollView
           ref={scroll}
+          style={{ height: rowH * VISIBLE_ROWS, flexGrow: 0 }}
           showsVerticalScrollIndicator={false}
           snapToInterval={rowH}
           decelerationRate="fast"
@@ -77,7 +79,7 @@ export function Keyboard({ onPressIn, onPressOut }: Props) {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1 },
+  root: { flex: 1, justifyContent: 'center' },
   row: { flexDirection: 'row', alignItems: 'stretch', paddingVertical: 3, gap: 3 },
   rowZero: { backgroundColor: 'rgba(255,215,0,0.08)' },
   rowLabel: { width: 24, color: '#8a8a99', fontSize: 10, fontWeight: '700', textAlign: 'center', textAlignVertical: 'center' },

@@ -13,6 +13,21 @@
     },
     "ios": {
       "bundleIdentifier": "com.tskyes.sinestezia"
-    }
+    },
+    "scheme": "musiccolor",
+    "plugins": [
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Music&Color salvează imaginile create în galerie.",
+          "savePhotosPermission": "Music&Color salvează imaginile create în galerie.",
+          "isAccessMediaLocationEnabled": false,
+          "granularPermissions": [
+            "photo",
+            "audio"
+          ]
+        }
+      ]
+    ]
   }
 }

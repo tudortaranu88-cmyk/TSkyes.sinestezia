@@ -9,15 +9,17 @@ const LEVELS: Level[] = [1, 2, 3];
 
 interface Props {
   level: Level;
+  instrument?: string;
   onLevelChange: (l: Level) => void;
 }
 
-export function Header({ level, onLevelChange }: Props) {
+export function Header({ level, instrument, onLevelChange }: Props) {
   return (
     <View style={styles.root}>
       <Text style={styles.title}>
         {'Music&Color '}<Text style={styles.maker}>· TSkyes</Text>
       </Text>
+      {!!instrument && <Text style={styles.instr}>♪ {instrument}</Text>}
       <View style={styles.levels}>
         {LEVELS.map(l => (
           <Pressable key={l} onPress={() => onLevelChange(l)} hitSlop={6} style={[styles.lvl, l === level && styles.lvlOn]}>
@@ -36,6 +38,7 @@ const styles = StyleSheet.create({
   },
   title: { color: '#ffd700', fontSize: 11, fontWeight: '700', letterSpacing: 0.3 },
   maker: { color: '#8a8a99', fontWeight: '500' },
+  instr: { color: '#c9c9d6', fontSize: 10, fontWeight: '600' },
   levels: { flexDirection: 'row', gap: 4 },
   lvl: { paddingHorizontal: 7, paddingVertical: 1, borderRadius: 8, borderWidth: 1, borderColor: '#33334a' },
   lvlOn: { backgroundColor: '#ffd700', borderColor: '#ffd700' },
