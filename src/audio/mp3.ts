@@ -1,8 +1,13 @@
 // Encoder MP3 (lamejs, JS pur) – mono, 128 kbps.
-import { Mp3Encoder } from '@breezystack/lamejs';
+import * as lame from '@breezystack/lamejs';
+
+// biblioteca e publicată ca ESM + CJS; în funcție de bundler, clasa poate sta direct sau sub `default`
+const L: any = lame;
+const Mp3Encoder: any = L.Mp3Encoder ?? L.default?.Mp3Encoder ?? L.default?.default?.Mp3Encoder;
 import { floatToInt16 } from '../core/encoders';
 
 export function encodeMp3(samples: Float32Array, sampleRate: number, kbps = 128): Uint8Array {
+  if (typeof Mp3Encoder !== 'function') throw new Error('Encoderul MP3 nu este disponibil');
   const enc = new Mp3Encoder(1, sampleRate, kbps);
   const pcm = floatToInt16(samples);
   const chunks: Uint8Array[] = [];
