@@ -1,17 +1,17 @@
 // NIVEL 3 – încarci una sau mai multe partituri generate de aplicație (PNG/JPEG); aplicația le
-// citește banda de culori, reconstruiește melodia și reface tabloul-spirală, pe care îl poți salva
-// (PNG/JPEG/TIFF) și, opțional, asculta.
+// citește banda de culori, reconstruiește melodia și reface tabloul (toate notele ca puncte de
+// culoare, floarea-soarelui), pe care îl poți salva (PNG/JPEG/TIFF) și, opțional, asculta.
 
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { View, Text, Pressable, StyleSheet, ActivityIndicator, LayoutChangeEvent } from 'react-native';
-import { Canvas, Path, Circle, Skia } from '@shopify/react-native-skia';
+import { Canvas, Circle } from '@shopify/react-native-skia';
 import { SaveSheet, type ExportedFile } from '../components/SaveSheet';
 import { decodeScores, type ScorePixels } from '../core/scoreDecode';
 import { melodyToEvents, melodyBeats, type MelodyNote } from '../core/imageMelody';
-import { buildScene } from '../core/scene';
+import { sunflowerDots } from '../core/tablou';
 import { rgbToCss } from '../core/golden';
 import { renderLevel2Mix } from '../core/level2Mix';
-import { exportSpiralImage, type ImageKind } from '../render/exportImage';
+import { exportTablouImage, type ImageKind } from '../render/exportImage';
 import { exportMixFile, type AudioKind } from '../io/exportComposition';
 import { stampName, writeBase64 } from '../io/files';
 import { pickScoreImages, type ImageSource } from '../io/imageSource';
@@ -64,17 +64,11 @@ export function Level3({ engine, injected }: Props) {
 
   const events = useMemo(() => melodyToEvents(melody, PLAY_BPM, 'pian', 0), [melody]);
 
-  // tabloul-spirală (doar spirala, ca la export)
-  const scene = useMemo(() => {
-    if (!box.w || !events.length) return null;
-    return buildScene({ width: box.w, height: box.h, events, nowMs: 1e12, insertPhase: 1, pxPerSec: 60, fill: 0.98, cover: true });
-  }, [box, events]);
-
-  const poly = (pts: { x: number; y: number }[]) => {
-    const p = Skia.Path.Make();
-    pts.forEach((pt, i) => (i ? p.lineTo(pt.x, pt.y) : p.moveTo(pt.x, pt.y)));
-    return p;
-  };
+  // tabloul: toate notele ca puncte de culoare (floarea-soarelui), la fel ca imaginea salvată
+  const dots = useMemo(() => {
+    if (!box.w || !melody.length) return null;
+    return sunflowerDots(melody.length, box.w, box.h).map((d, i) => ({ ...d, color: melody[i].color }));
+  }, [box, melody]);
 
   const stop = useCallback(() => { stopper.current?.(); stopper.current = null; setPlaying(false); }, []);
 
@@ -91,7 +85,7 @@ export function Level3({ engine, injected }: Props) {
   }, [engine, melody, playing, stop]);
 
   const exportImage = async (kind: string): Promise<ExportedFile[]> => {
-    const b64 = exportSpiralImage(events, kind as ImageKind);
+    const b64 = exportTablouImage(events, kind as ImageKind);
     return [{ uri: await writeBase64(stampName(kind, '_tablou'), b64), ext: kind }];
   };
   const exportAudio = (kind: AudioKind, onProgress?: (p: number) => void) =>
@@ -103,19 +97,10 @@ export function Level3({ engine, injected }: Props) {
   return (
     <>
       <View style={styles.top} onLayout={onLayout}>
-        {scene ? (
+        {dots ? (
           <Canvas style={StyleSheet.absoluteFill}>
-            <Path path={poly(scene.guide)} style="stroke" strokeWidth={1} color="rgba(255,215,0,0.12)" />
-            {scene.arcs.map((a, i) => (
-              <Path key={`h${i}`} path={poly(a.points)} style="stroke" strokeCap="round"
-                strokeWidth={a.strokeWidth * 1.35} color={`rgba(255,255,255,${0.18 * a.alpha})`} />
-            ))}
-            {scene.arcs.map((a, i) => (
-              <Path key={`a${i}`} path={poly(a.points)} style="stroke" strokeCap="round"
-                strokeWidth={a.strokeWidth} color={rgbToCss(a.color, a.alpha)} />
-            ))}
-            {scene.nodes.map((n, i) => (
-              <Circle key={`c${i}`} cx={n.x} cy={n.y} r={n.radius} color={rgbToCss(n.color, n.alpha)} />
+            {dots.map((d, i) => (
+              <Circle key={i} cx={d.x} cy={d.y} r={d.r} color={rgbToCss(d.color)} />
             ))}
           </Canvas>
         ) : (

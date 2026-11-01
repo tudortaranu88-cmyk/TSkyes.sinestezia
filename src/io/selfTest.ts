@@ -102,7 +102,7 @@ export async function runAudioProbe(eng: { ensureRunning(): Promise<string>; sam
 // apoi refacem și salvăm tabloul.
 import { Skia, ColorType, AlphaType } from '@shopify/react-native-skia';
 import { decodeScores, type ScorePixels } from '../core/scoreDecode';
-import { exportSpiralImage } from '../render/exportImage';
+import { exportTablouImage } from '../render/exportImage';
 
 function pngToPixels(b64: string): ScorePixels {
   const img = Skia.Image.MakeImageFromEncoded(Skia.Data.fromBase64(b64));
@@ -132,7 +132,7 @@ export async function runSelfTest3(pages: ScorePixels[], expected: number, sampl
     const events = melodyToEvents(melody, 105, 'pian', 0);
     for (const kind of ['png', 'jpeg', 'tiff'] as const) {
       const tt = Date.now();
-      const b64 = exportSpiralImage(events, kind, 1024);
+      const b64 = exportTablouImage(events, kind, 1024);
       log(`tablou ${kind} ok ${Math.round((b64.length * 3) / 4)} bytes ${Date.now() - tt} ms`);
     }
   } catch (e: any) {

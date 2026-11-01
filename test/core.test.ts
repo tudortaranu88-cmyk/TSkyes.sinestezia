@@ -114,6 +114,26 @@ test('scenă cover (export A4): vârful atinge jumătatea diagonalei → colțur
   assert.ok(half * 0.98 > Math.min(W, H) / 2, 'raza depășește latura scurtă → spirala intră în colțuri');
 });
 
+import { sunflowerDots } from '../src/core/tablou';
+
+test('tablou floarea-soarelui: toate notele devin puncte, în discul înscris', () => {
+  const W = 1240, H = 1754, fill = 0.92;
+  for (const n of [1, 12, 150, 600]) {
+    const dots = sunflowerDots(n, W, H, fill);
+    assert.equal(dots.length, n, 'fiecare notă are un punct');
+    const R = (Math.min(W, H) / 2) * fill, cx = W / 2, cy = H / 2;
+    for (const d of dots) assert.ok(Math.hypot(d.x - cx, d.y - cy) <= R + 1e-6, 'punctul stă în disc');
+    // raza punctului scade cu √n (punctele se ating la orice densitate)
+    close(dots[0].r, (0.85 * R) / Math.sqrt(n));
+    assert.ok(dots[0].r > 0);
+  }
+  // primul punct e lângă centru, ultimul aproape de margine
+  const d = sunflowerDots(100, W, H, 0.92);
+  const R = (Math.min(W, H) / 2) * 0.92;
+  assert.ok(Math.hypot(d[0].x - W / 2, d[0].y - H / 2) < R * 0.1, 'primul punct lângă centru');
+  assert.ok(Math.hypot(d[99].x - W / 2, d[99].y - H / 2) > R * 0.9, 'ultimul punct lângă margine');
+});
+
 test('denumirea notelor: rândul 0 fără cifră, sufix pe rânduri, Do\' la octava de sus', () => {
   assert.equal(noteLabel(0, 0), 'Do');          // fundamentala, fără cifră
   assert.equal(noteLabel(6, 0), 'Si');
