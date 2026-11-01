@@ -47,6 +47,23 @@ for i in $(seq 1 60); do adb logcat -d | grep -q "SELFTEST done" && break; sleep
 shot 7-autotest
 adb shell ls -l /sdcard/Pictures /sdcard/DCIM /sdcard/Music > $OUT/fisiere-telefon.txt 2>&1
 
+echo "== nivelul 2" >> $OUT/pasi.txt
+adb shell am start -a android.intent.action.VIEW -d "musiccolor://selftest2" $PKG >> $OUT/start.txt 2>&1
+for i in $(seq 1 60); do adb logcat -d | grep -q "SELFTEST2 done" && break; sleep 2; done
+sleep 2; shot 8-nivel2
+tap_text "▶ Ascultă"; sleep 4; shot 9-nivel2-redare
+tap_text "■ Oprește"; sleep 1
+tap_text "‹"; sleep 1.5; shot 10-nivel2-instrumente
+tap_text "Flaut"; sleep 1
+tap_text "Floarea-soarelui (φ)"; sleep 2; shot 11-nivel2-floare
+tap_text "Salvează"; sleep 1.5; shot 12-nivel2-salvare
+adb shell input keyevent KEYCODE_BACK; sleep 1
+tap_text "Altă imagine"; sleep 4; shot 13-alegere-imagine
+adb shell input keyevent KEYCODE_BACK; sleep 2
+adb shell ls /sdcard/DCIM > $OUT/dcim.txt 2>&1
+F=$(adb shell ls /sdcard/DCIM | tr -d '\r' | grep partitura | head -1)
+[ -n "$F" ] && adb pull "/sdcard/DCIM/$F" $OUT/partitura-android.png >/dev/null 2>&1
+
 PID=$(adb shell pidof $PKG | tr -d '\r')
 echo "pid=$PID" > $OUT/pid.txt
 adb logcat -d -v threadtime > $OUT/logcat.txt

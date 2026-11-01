@@ -57,6 +57,7 @@ jobs:
           cat smoke/selftest.txt || true
           if grep -q 'pid=$' smoke/pid.txt; then echo "::error::Aplicația s-a oprit"; head -40 smoke/crash.txt; exit 1; fi
           if ! grep -q 'SELFTEST done' smoke/selftest.txt; then echo "::error::Autotestul de export nu s-a terminat"; exit 1; fi
+          if ! grep -q 'SELFTEST2 done' smoke/selftest.txt; then echo "::error::Autotestul Nivelului 2 nu s-a terminat"; exit 1; fi
           if grep -q 'FAIL' smoke/selftest.txt; then echo "::error::$(grep FAIL smoke/selftest.txt | tr '\n' ' ')"; exit 1; fi
 
       - name: Publicare rezultate pe ramura smoke-output

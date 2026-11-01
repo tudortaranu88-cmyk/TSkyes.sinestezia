@@ -9,11 +9,11 @@ export const MIME: Record<string, string> = {
   mp3: 'audio/mpeg', wav: 'audio/wav', m4a: 'audio/mp4',
 };
 
-export function stampName(ext: string): string {
+export function stampName(ext: string, suffix = ''): string {
   const d = new Date();
   const p = (n: number) => String(n).padStart(2, '0');
   const ext2 = ext === 'jpeg' ? 'jpg' : ext;
-  return `MusicColor_${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}.${ext2}`;
+  return `MusicColor_${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}${suffix}.${ext2}`;
 }
 
 export function cachePath(name: string): string {

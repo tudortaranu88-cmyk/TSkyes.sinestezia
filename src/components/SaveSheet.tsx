@@ -1,32 +1,34 @@
-// Panoul „Salvează”: imaginea spiralei (PNG / JPEG / TIFF) și melodia (MP3 / WAV / AAC),
+// Panoul „Salvează”: o imagine (spirala – Nivel 1, partitura – Nivel 2) și melodia (MP3 / WAV / AAC),
 // fiecare cu „Salvează în telefon” și „Partajează” (WhatsApp, e-mail…).
+// Exportul imaginii poate produce mai multe fișiere (paginile partiturii): toate se salvează,
+// iar la partajare se deschide meniul pentru fiecare pagină, pe rând.
 
 import React, { useState } from 'react';
 import { Modal, View, Text, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
-import { exportImageFile, exportAudioFile, type AudioKind } from '../io/exportComposition';
+import type { AudioKind } from '../io/exportComposition';
 import { saveToDevice, shareFile, MIME } from '../io/files';
-import type { ImageKind } from '../render/exportImage';
-import type { SampleSet } from '../core/audioRender';
-import type { NoteEvent } from '../core/types';
+
+export interface ExportedFile { uri: string; ext: string }
 
 interface Props {
   visible: boolean;
-  events: NoteEvent[];
-  getSamples: () => Record<string, SampleSet>;
+  title?: string;
+  subtitle: string;
+  imageLabel: string;
+  imageKinds: { id: string; label: string }[];
+  exportImage: (kind: string) => Promise<ExportedFile[]>;
+  exportAudio: (kind: AudioKind) => Promise<ExportedFile>;
   onClose: () => void;
 }
 
 type Action = 'save' | 'share';
 
-const IMAGE_KINDS: { id: ImageKind; label: string }[] = [
-  { id: 'png', label: 'PNG' }, { id: 'jpeg', label: 'JPEG' }, { id: 'tiff', label: 'TIFF' },
-];
 const AUDIO_KINDS: { id: AudioKind; label: string }[] = [
   { id: 'mp3', label: 'MP3' }, { id: 'wav', label: 'WAV' }, { id: 'aac', label: 'AAC' },
 ];
 
-export function SaveSheet({ visible, events, getSamples, onClose }: Props) {
-  const [imgKind, setImgKind] = useState<ImageKind>('png');
+export function SaveSheet({ visible, title = 'Salvează', subtitle, imageLabel, imageKinds, exportImage, exportAudio, onClose }: Props) {
+  const [imgKind, setImgKind] = useState<string>(imageKinds[0]?.id ?? 'png');
   const [audKind, setAudKind] = useState<AudioKind>('mp3');
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ text: string; ok: boolean } | null>(null);
@@ -36,14 +38,16 @@ export function SaveSheet({ visible, events, getSamples, onClose }: Props) {
     setMsg({ text: what === 'image' ? 'Se generează imaginea…' : 'Se generează melodia…', ok: true });
     await new Promise(r => setTimeout(r, 30)); // lasă indicatorul să apară înainte de calcul
     try {
-      const file = what === 'image'
-        ? await exportImageFile(events, imgKind)
-        : await exportAudioFile(events, audKind, getSamples());
+      const files = what === 'image' ? await exportImage(imgKind) : [await exportAudio(audKind)];
       if (action === 'save') {
-        await saveToDevice(file.uri);
-        setMsg({ text: what === 'image' ? 'Imaginea a fost salvată în galerie.' : 'Melodia a fost salvată în telefon (Muzică).', ok: true });
+        for (const f of files) await saveToDevice(f.uri);
+        setMsg({
+          text: what === 'audio' ? 'Melodia a fost salvată în telefon (Muzică).'
+            : files.length > 1 ? `${files.length} pagini au fost salvate în galerie.` : 'Imaginea a fost salvată în galerie.',
+          ok: true,
+        });
       } else {
-        await shareFile(file.uri, MIME[file.ext]);
+        for (const f of files) await shareFile(f.uri, MIME[f.ext]);
         setMsg(null);
       }
     } catch (e: any) {
@@ -80,13 +84,13 @@ export function SaveSheet({ visible, events, getSamples, onClose }: Props) {
       <Pressable style={styles.backdrop} onPress={busy ? undefined : onClose} />
       <View style={styles.sheet}>
         <View style={styles.head}>
-          <Text style={styles.title}>Salvează compoziția</Text>
+          <Text style={styles.title}>{title}</Text>
           <Pressable onPress={onClose} disabled={busy} hitSlop={10}><Text style={styles.close}>✕</Text></Pressable>
         </View>
-        <Text style={styles.sub}>{events.length} {events.length === 1 ? 'notă' : 'note'}</Text>
+        <Text style={styles.sub}>{subtitle}</Text>
 
-        <Text style={styles.section}>Imaginea (spirala completă)</Text>
-        <Chips items={IMAGE_KINDS} value={imgKind} onChange={setImgKind} />
+        <Text style={styles.section}>{imageLabel}</Text>
+        <Chips items={imageKinds} value={imgKind} onChange={setImgKind} />
         <Actions what="image" />
 
         <Text style={styles.section}>Melodia</Text>

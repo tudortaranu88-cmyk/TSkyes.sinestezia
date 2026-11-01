@@ -27,6 +27,14 @@
             "audio"
           ]
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Music&Color citește imaginea aleasă pentru a crea melodia.",
+          "cameraPermission": false,
+          "microphonePermission": false
+        }
       ]
     ]
   }

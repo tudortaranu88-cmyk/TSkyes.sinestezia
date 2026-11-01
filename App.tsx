@@ -2,7 +2,7 @@
 // Sus: bara discretă cu numele aplicației și selectorul de nivel.
 // Nivel 1: 50% vizualizator (sus, cu Nou / Salvează) / 50% claviatură cu 7 rânduri vizibile (jos);
 // instrumentele stau ascunse pe marginea din dreapta (săgeata mică le deschide).
-// Nivelurile 2 și 3 urmează în etapele următoare.
+// Nivel 2: imagine → melodie + partitură (src/screens/Level2.tsx). Nivelul 3 urmează.
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, Alert, Linking } from 'react-native';
@@ -13,7 +13,11 @@ import { Keyboard } from './src/components/Keyboard';
 import { InstrumentBar } from './src/components/InstrumentBar';
 import { Header, type Level } from './src/components/Header';
 import { SaveSheet } from './src/components/SaveSheet';
-import { demoComposition, runSelfTest } from './src/io/selfTest';
+import { exportImageFile, exportAudioFile } from './src/io/exportComposition';
+import type { ImageKind } from './src/render/exportImage';
+import { demoComposition, runSelfTest, runSelfTest2 } from './src/io/selfTest';
+import { Level2 } from './src/screens/Level2';
+import { demoPixels, sourceFromPixels, type ImageSource } from './src/io/imageSource';
 import { AudioEngine } from './src/audio/AudioEngine';
 import { SAMPLE_MANIFEST } from './assets/sunete/manifest';
 import { NOTES, cellColor, cellPitch, freqToMidi, type Tuning } from './src/core/golden';
@@ -21,6 +25,7 @@ import { DEFAULT_INSTRUMENT, instrumentById } from './src/core/instruments';
 import type { NoteEvent } from './src/core/types';
 
 const TUNING: Tuning = 'tempered';
+const SPIRAL_KINDS = [{ id: 'png', label: 'PNG' }, { id: 'jpeg', label: 'JPEG' }, { id: 'tiff', label: 'TIFF' }];
 
 const keyOf = (col: number, row: number) => `${row}:${col}`;
 
@@ -32,6 +37,7 @@ export default function App() {
   const held = useRef(new Map<string, { voice: number; eventId: number }>());
   const nextId = useRef(1);
   const [saveOpen, setSaveOpen] = useState(false);
+  const [l2Injected, setL2Injected] = useState<ImageSource | null>(null);
 
   useEffect(() => {
     const e = new AudioEngine();
@@ -43,6 +49,13 @@ export default function App() {
   useEffect(() => {
     const handle = (url: string | null) => {
       if (!url || !url.includes('selftest')) return;
+      if (url.includes('selftest2')) {
+        const src = sourceFromPixels(demoPixels(), 360, 270, 'test');
+        setLevel(2);
+        setL2Injected(src);
+        runSelfTest2(src, 'pian', engine.current?.getSampleSets() ?? {});
+        return;
+      }
       const demo = demoComposition();
       setEvents(demo);
       runSelfTest(demo, engine.current?.getSampleSets() ?? {});
@@ -100,20 +113,22 @@ export default function App() {
             <InstrumentBar selected={instrument} onSelect={setInstrument} />
           </View>
         </>
+      ) : level === 2 ? (
+        <Level2 engine={engine} instrument={instrument} onInstrumentChange={setInstrument} injected={l2Injected} />
       ) : (
         <View style={styles.soon}>
-          <Text style={styles.soonTitle}>Nivelul {level}</Text>
-          <Text style={styles.soonTxt}>
-            {level === 2
-              ? 'Imagine → melodie și partitură. În lucru.'
-              : 'Partitură → tablou. În lucru.'}
-          </Text>
+          <Text style={styles.soonTitle}>Nivelul 3</Text>
+          <Text style={styles.soonTxt}>Partitură → tablou. În lucru.</Text>
         </View>
       )}
       <SaveSheet
         visible={saveOpen}
-        events={events}
-        getSamples={() => engine.current?.getSampleSets() ?? {}}
+        title="Salvează compoziția"
+        subtitle={`${events.length} ${events.length === 1 ? 'notă' : 'note'}`}
+        imageLabel="Imaginea (spirala completă)"
+        imageKinds={SPIRAL_KINDS}
+        exportImage={async kind => [await exportImageFile(events, kind as ImageKind)]}
+        exportAudio={kind => exportAudioFile(events, kind, engine.current?.getSampleSets())}
         onClose={() => setSaveOpen(false)}
       />
     </SafeAreaView>
