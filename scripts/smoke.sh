@@ -19,6 +19,7 @@ tap_text() {
 
 adb wait-for-device
 adb install -r app.apk > $OUT/install.txt 2>&1
+adb logcat -G 16M   # buffer mare: liniile de autotest nu se pierd în timpul exporturilor lungi
 adb logcat -c
 adb shell am start -W -n $PKG/.MainActivity > $OUT/start.txt 2>&1
 sleep 25

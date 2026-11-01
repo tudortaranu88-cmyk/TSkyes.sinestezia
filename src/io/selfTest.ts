@@ -60,7 +60,7 @@ export async function runSelfTest2(src: ImageSource, instrument: string, samples
       log(`partitura ${kind} ok ${Math.round((b64.length * 3) / 4)} bytes ${Date.now() - t} ms (${pages.length} pagini)`);
       if (kind === 'png') { await saveToDevice(uri); log('partitura salvata in galerie'); }
     }
-    for (const kind of ['wav', 'aac', 'mp3'] as const) {
+    for (const kind of ['wav', 'aac'] as const) {  // MP3 e verificat în autotestul Nivelului 1 (lent)
       const t = Date.now();
       const f = await exportAudioFile(melodyToEvents(melody, 96, instrument), kind, samples);
       const info = await FileSystem.getInfoAsync(f.uri);
