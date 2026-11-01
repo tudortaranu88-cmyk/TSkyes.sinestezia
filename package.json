@@ -8,11 +8,12 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test test/*.test.ts"
+    "test": "tsx --test test/core.test.ts test/encoders.test.ts"
   },
   "dependencies": {
     "@breezystack/lamejs": "^1.2.7",
     "@shopify/react-native-skia": "2.2.12",
+    "aac-encoder": "file:./modules/aac-encoder",
     "expo": "~54.0.0",
     "expo-asset": "~12.0.9",
     "expo-file-system": "~19.0.17",
@@ -30,10 +31,5 @@
     "@types/react": "~19.1.10",
     "tsx": "^4.19.0",
     "typescript": "~5.9.2"
-  },
-  "expo": {
-    "autolinking": {
-      "nativeModulesDir": "./modules"
-    }
   }
 }

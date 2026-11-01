@@ -1,4 +1,4 @@
-// Encoder MP3 (lamejs, JS pur) – mono, 128 kbps.
+// Encoder MP3 (lamejs, JS pur) – mono, 128 kbps. Verificat pe Android prin autotestul de pe emulator.
 import * as lame from '@breezystack/lamejs';
 
 // biblioteca e publicată ca ESM + CJS; în funcție de bundler, clasa poate sta direct sau sub `default`

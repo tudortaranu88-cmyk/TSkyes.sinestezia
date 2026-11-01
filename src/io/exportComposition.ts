@@ -4,7 +4,7 @@ import { exportSpiralImage, type ImageKind } from '../render/exportImage';
 import { renderMix, type RenderNote, type SampleSet } from '../core/audioRender';
 import { encodeWav, toBase64 } from '../core/encoders';
 import { encodeMp3 } from '../audio/mp3';
-import { encodeWavToM4a } from '../../modules/aac-encoder';
+import { encodeWavToM4a } from 'aac-encoder';
 import { cachePath, stampName, writeBase64 } from './files';
 import { DEFAULT_INSTRUMENT } from '../core/instruments';
 import type { NoteEvent } from '../core/types';

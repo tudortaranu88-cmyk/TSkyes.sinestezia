@@ -49,7 +49,6 @@ jobs:
 
       - name: Teste core
         run: npm test 2>&1 | tee ci-logs/4-test.txt
-        continue-on-error: true
 
       - name: Expo prebuild (Android)
         run: npx expo prebuild --platform android --no-install --clean 2>&1 | tee ci-logs/5-prebuild.txt
