@@ -1,7 +1,9 @@
 // Ritmuri de tobe (sintetizate; sample-urile vin ulterior). Un tipar = o măsură de 4/4 împărțită
 // în 16 pătrimi de dublă (16 „pași”). Tiparul se repetă pe toată durata melodiei.
 
-export type DrumId = 'backbeat' | 'fourfloor' | 'dembow' | 'halftime';
+import { PHI } from './spiral';
+
+export type DrumId = 'backbeat' | 'fourfloor' | 'dembow' | 'halftime' | 'golden';
 type Piece = 'k' | 's' | 'h';          // kick (toba mare), snare (toba mică), hi-hat
 interface Hit { step: number; piece: Piece; vol: number }
 
@@ -9,7 +11,7 @@ const at = (piece: Piece, steps: number[], vol: number): Hit[] => steps.map(step
 const EIGHTHS = [0, 2, 4, 6, 8, 10, 12, 14];
 const SIXTEENTHS = Array.from({ length: 16 }, (_, i) => i);
 
-export const DRUM_PATTERNS: { id: DrumId; label: string; hits: Hit[] }[] = [
+export const DRUM_PATTERNS: { id: DrumId; label: string; hits: Hit[]; golden?: boolean }[] = [
   // Pulsul de bază al pop-ului/rock-ului: kick pe 1 și 3, snare pe 2 și 4.
   { id: 'backbeat', label: 'Backbeat', hits: [...at('k', [0, 8], 1), ...at('s', [4, 12], 0.9), ...at('h', EIGHTHS, 0.45)] },
   // Kick pe fiecare timp: pulsația hipnotică din house, techno, disco.
@@ -18,7 +20,18 @@ export const DRUM_PATTERNS: { id: DrumId; label: string; hits: Hit[] }[] = [
   { id: 'dembow', label: 'Dembow', hits: [...at('k', [0, 6, 12], 1), ...at('s', [4, 12], 0.9), ...at('h', EIGHTHS, 0.35)] },
   // Snare pe timpul 3, hi-hat rapid: senzație de tempo lent (trap, lo-fi).
   { id: 'halftime', label: 'Half-time', hits: [...at('k', [0, 10], 1), ...at('s', [8], 0.9), ...SIXTEENTHS.map(step => ({ step, piece: 'h' as Piece, vol: step % 4 === 0 ? 0.5 : 0.28 }))] },
+  // Ritm auriu: lovituri rare, cu pauză CONSTANTĂ = φ × o pătrime (unitate fixă). Nu se aude
+  // continuu; kick și snare alternează la fiecare interval auriu.
+  { id: 'golden', label: 'Auriu (φ)', hits: [], golden: true },
 ];
+
+/** Momentele (secunde) loviturilor ritmului auriu: pornesc la `startSec`, cu pasul φ × o pătrime. */
+export function goldenHitTimes(bpm: number, startSec: number, endSec: number): number[] {
+  const gap = (60 / bpm) * PHI;         // unitatea fixă = o pătrime; pauza = φ × unitate
+  const out: number[] = [];
+  for (let t = startSec; t < endSec; t += gap) out.push(t);
+  return out;
+}
 
 export function drumPattern(id: DrumId) {
   const p = DRUM_PATTERNS.find(x => x.id === id);
@@ -72,6 +85,14 @@ export function renderDrums(
   const bar = beat * 4;
   const endSec = startSec + totalSec;
   const rnd = lcg(20261101);
+  if (pat.golden) {
+    goldenHitTimes(bpm, startSec, endSec).forEach((t, k) => {
+      const i0 = Math.floor(t * sr);
+      if (k % 2 === 0) addKick(out, i0, sr, gain);
+      else addSnare(out, i0, sr, 0.9 * gain, rnd);
+    });
+    return;
+  }
   for (let b = 0; startSec + b * bar < endSec; b++) {
     for (const h of pat.hits) {
       const t = startSec + b * bar + h.step * step;

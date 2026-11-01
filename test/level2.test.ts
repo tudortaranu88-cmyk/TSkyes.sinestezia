@@ -5,7 +5,7 @@ import { spiralCells, continuousSpiralCells, sampleColors, nearestCell, buildMel
 import { layoutScore, PAGE_W, PAGE_H } from '../src/core/scoreLayout';
 import { cellColor, type RGB } from '../src/core/golden';
 import { PHI } from '../src/core/spiral';
-import { DRUM_PATTERNS, renderDrums, drumPattern } from '../src/core/drums';
+import { DRUM_PATTERNS, renderDrums, drumPattern, goldenHitTimes } from '../src/core/drums';
 import { melodyToNotes } from '../src/core/imageMelody';
 import { renderLevel2Mix } from '../src/core/level2Mix';
 
@@ -111,4 +111,17 @@ test('mix Nivelul 2: cu ritm se obține un fragment mai lung/energic decât făr
   assert.equal(a.length, b.length);
   const e = (x: Float32Array) => x.reduce((s, v) => s + v * v, 0);
   assert.ok(e(b) > e(a));
+});
+
+test('ritmul auriu: pauze constante = φ × o pătrime, lovituri rare (nu continuu)', () => {
+  const bpm = 105, beat = 60 / bpm;
+  const t = goldenHitTimes(bpm, 0, 20);
+  for (let i = 1; i < t.length; i++) assert.ok(Math.abs((t[i] - t[i - 1]) - beat * PHI) < 1e-9, `pauza ${i}`);
+  // mai rare decât o pătrime: pasul auriu > un beat (φ ≈ 1,618)
+  assert.ok(t[1] - t[0] > beat);
+  // se aude în mix și aici
+  const sr = 22050, buf = new Float32Array(sr * 10);
+  renderDrums(buf, sr, 'golden', bpm, 0, 10);
+  assert.ok(buf.reduce((a, v) => a + v * v, 0) > 10);
+  assert.equal(drumPattern('golden').golden, true);
 });
