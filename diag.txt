@@ -1,0 +1,60 @@
+== ls node_modules/aac-encoder
+lrwxrwxrwx 1 runner runner   22 Nov  1 09:47 node_modules/aac-encoder -> ../modules/aac-encoder
+
+node_modules/aac-encoder/:
+total 20
+drwxr-xr-x 2 runner runner 4096 Nov  1 09:47 .
+drwxr-xr-x 3 runner runner 4096 Nov  1 09:47 ..
+-rw-r--r-- 1 runner runner  111 Nov  1 09:47 expo-module.config.json
+-rw-r--r-- 1 runner runner  657 Nov  1 09:47 index.ts
+-rw-r--r-- 1 runner runner   90 Nov  1 09:47 package.json
+== autolinking version
+  "version": "3.0.28",
+== search
+  [32m'aac-encoder'[39m: {
+    name: [32m'aac-encoder'[39m,
+    path: [32m'/home/runner/work/TSkyes.sinestezia/TSkyes.sinestezia/modules/aac-encoder'[39m,
+    version: [32m'0.1.0'[39m,
+    config: ExpoModuleConfig {
+      rawConfig: {
+        platforms: [ [32m'android'[39m ],
+        android: { modules: [ [32m'expo.modules.aacencoder.AacEncoderModule'[39m ] }
+      }
+    },
+    duplicates: []
+  },
+  expo: {
+    name: [32m'expo'[39m,
+    path: [32m'/home/runner/work/TSkyes.sinestezia/TSkyes.sinestezia/node_modules/expo'[39m,
+    version: [32m'54.0.38'[39m,
+== verbose resolve
+"packageName":"expo"
+"packageName":"expo-asset"
+"packageName":"expo-constants"
+"packageName":"expo-file-system"
+"packageName":"expo-font"
+"packageName":"expo-keep-awake"
+"packageName":"expo-media-library"
+"packageName":"expo-modules-core"
+"packageName":"expo-sharing"
+== grep sources
+node_modules/expo-modules-autolinking/build/reactNativeConfig/androidResolver.js:138:    if (await (0, utils_1.fileExistsAsync)(path_1.default.join(packageRoot, 'expo-module.config.json'))) {
+node_modules/expo-modules-autolinking/build/reactNativeConfig/reactNativeConfig.js:105:    const searchPaths = autolinkingOptions.nativeModulesDir
+node_modules/expo-modules-autolinking/build/reactNativeConfig/reactNativeConfig.js:106:        ? [autolinkingOptions.nativeModulesDir, ...autolinkingOptions.searchPaths]
+node_modules/expo-modules-autolinking/build/ExpoModuleConfig.js:161:const EXPO_MODULE_CONFIG_FILENAMES = ['expo-module.config.json', 'unimodule.json'];
+node_modules/expo-modules-autolinking/build/dependencies/scanning.js:52:        // and can skip the rest. This is a special case created by create-expo-module's `nativeModulesDir: ../`
+node_modules/expo-modules-autolinking/build/dependencies/scanning.js:60:            if (entry.isSymbolicLink()) {
+node_modules/expo-modules-autolinking/build/dependencies/scanning.js:78:                        if (child.isDirectory() || child.isSymbolicLink()) {
+node_modules/expo-modules-autolinking/build/dependencies/utils.js:57:        return await fs_1.default.promises.realpath(target);
+node_modules/expo-modules-autolinking/build/dependencies/CachedDependenciesLinker.js:112:    searchPaths: options.nativeModulesDir && fs_1.default.existsSync(options.nativeModulesDir)
+node_modules/expo-modules-autolinking/build/dependencies/CachedDependenciesLinker.js:113:        ? [options.nativeModulesDir, ...(options.searchPaths ?? [])]
+node_modules/expo-modules-autolinking/build/utils.js:95:        return await fs_1.default.promises.realpath(target);
+node_modules/expo-modules-autolinking/build/commands/autolinkingOptions.js:71:    // nativeModulesDir
+node_modules/expo-modules-autolinking/build/commands/autolinkingOptions.js:72:    if (typeof mergedOptions.nativeModulesDir === 'string') {
+node_modules/expo-modules-autolinking/build/commands/autolinkingOptions.js:73:        outputOptions.nativeModulesDir = resolvePathMaybe(mergedOptions.nativeModulesDir, appRoot);
+node_modules/expo-modules-autolinking/build/commands/autolinkingOptions.js:162:        nativeModulesDir: options.nativeModulesDir
+node_modules/expo-modules-autolinking/build/commands/autolinkingOptions.js:163:            ? (resolvePathMaybe(options.nativeModulesDir, appRoot) ?? null)
+node_modules/expo-modules-autolinking/build/platforms/devtools.js:26:    // NOTE(@kitten): Failing realpath-ing, typically due to ENOENT, results in the original value
+node_modules/expo-modules-autolinking/build/platforms/android/android.js:130:    // TODO: Instead of ignoring `expo` here, make the package class paths configurable from `expo-module.config.json`.
+node_modules/expo-modules-autolinking/build/autolinking/findModules.js:33:    const searchPaths = autolinkingOptions.nativeModulesDir
+node_modules/expo-modules-autolinking/build/autolinking/findModules.js:34:        ? [autolinkingOptions.nativeModulesDir, ...autolinkingOptions.searchPaths]
