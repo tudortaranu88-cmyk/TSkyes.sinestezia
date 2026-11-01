@@ -8,6 +8,7 @@
 import { AudioContext } from 'react-native-audio-api';
 import { Asset } from 'expo-asset';
 import { BASE_FREQS } from '../core/golden';
+import { instrumentById } from '../core/instruments';
 
 export interface InstrumentCfg {
   samples: Partial<Record<number, number>>; // coloană (0..7) → require('...wav')
@@ -99,13 +100,14 @@ export class AudioEngine {
       gain.gain.setValueAtTime(0, t);
       gain.gain.linearRampToValueAtTime(peak, t + (cfg.attack ?? 0.01));
     } else {
-      // sinteză de rezervă până sosesc sample-urile
+      // sinteză de rezervă până sosesc sample-urile – timbru propriu fiecărui instrument
+      const s = instrumentById(instr).synth;
       src = this.ctx.createOscillator();
-      src.type = 'triangle';
-      src.frequency.value = freq;
+      src.type = s.wave;
+      src.frequency.value = freq * s.mult;
       gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(0.35, t + 0.02);
-      gain.gain.setTargetAtTime(0.2, t + 0.02, 0.4);
+      gain.gain.linearRampToValueAtTime(s.peak, t + s.attack);
+      gain.gain.setTargetAtTime(Math.max(s.sustain, 0.0001), t + s.attack, s.decay);
     }
     src.connect(gain);
     src.start(t);

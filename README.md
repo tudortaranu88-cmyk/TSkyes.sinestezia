@@ -1,4 +1,4 @@
-# Sinestezia – schelet aplicație mobilă (React Native + Skia)
+# Music&Color (TSkyes) – aplicație mobilă (React Native + Skia)
 
 ## Instalare (o singură dată)
 
@@ -27,7 +27,10 @@ verifică tipurile, rulează testele, face `expo prebuild` și compilează un AP
 | `src/core/staff.ts` | Poziționarea pe portativ (cheia Sol) |
 | `src/core/golden.ts` | Matricea Aurie portată din DAW (frecvențe, culori, acordaje) |
 | `src/components/Visualizer.tsx` | Randare Skia |
-| `src/components/Keyboard.tsx` | Claviatura colorată (8 note × rând -10..+10) |
+| `src/components/Keyboard.tsx` | Claviatura: 21 rânduri × 8 note, 7 vizibile, glisare verticală |
+| `src/components/InstrumentBar.tsx` | Coloana de instrumente (dreapta) |
+| `src/components/Header.tsx` | Bara de sus: Music&Color · TSkyes + selectorul de nivel |
+| `src/core/instruments.ts` | Lista instrumentelor + timbrurile sintetizate de rezervă |
 | `src/audio/AudioEngine.ts` | Sample-uri reale + sinteză de rezervă + limitator |
 | `assets/sunete/manifest.ts` | Lista sample-urilor (require static) |
 
