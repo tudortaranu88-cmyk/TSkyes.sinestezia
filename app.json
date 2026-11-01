@@ -35,7 +35,8 @@
           "cameraPermission": false,
           "microphonePermission": false
         }
-      ]
+      ],
+      "./plugins/withConfigChanges"
     ]
   }
 }

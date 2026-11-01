@@ -49,7 +49,7 @@ class AacEncoderModule : Module() {
     val format = MediaFormat.createAudioFormat(MediaFormat.MIMETYPE_AUDIO_AAC, sampleRate, channels)
     format.setInteger(MediaFormat.KEY_AAC_PROFILE, MediaCodecInfo.CodecProfileLevel.AACObjectLC)
     format.setInteger(MediaFormat.KEY_BIT_RATE, bitrate)
-    format.setInteger(MediaFormat.KEY_MAX_INPUT_SIZE, 16384)
+    format.setInteger(MediaFormat.KEY_MAX_INPUT_SIZE, 65536)
 
     val codec = MediaCodec.createEncoderByType(MediaFormat.MIMETYPE_AUDIO_AAC)
     codec.configure(format, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE)
@@ -66,30 +66,35 @@ class AacEncoderModule : Module() {
 
     try {
       while (!outputDone) {
-        if (!inputDone) {
-          val inIdx = codec.dequeueInputBuffer(10000)
-          if (inIdx >= 0) {
-            val buf = codec.getInputBuffer(inIdx)!!
-            buf.clear()
-            var n = minOf(buf.remaining(), dataLen - inOff)
-            n -= n % frameBytes
-            val pts = (inOff.toLong() / frameBytes) * 1_000_000L / sampleRate
-            if (n <= 0) {
-              codec.queueInputBuffer(inIdx, 0, 0, pts, MediaCodec.BUFFER_FLAG_END_OF_STREAM)
-              inputDone = true
-            } else {
-              buf.put(bytes, dataOff + inOff, n)
-              codec.queueInputBuffer(inIdx, 0, n, pts, 0)
-              inOff += n
-            }
+        // alimentează encoderul cu toate bufferele de intrare libere (fără așteptare inutilă)
+        while (!inputDone) {
+          val inIdx = codec.dequeueInputBuffer(if (inOff == 0) 10000L else 0L)
+          if (inIdx < 0) break
+          val buf = codec.getInputBuffer(inIdx)!!
+          buf.clear()
+          var n = minOf(buf.remaining(), dataLen - inOff)
+          n -= n % frameBytes
+          val pts = (inOff.toLong() / frameBytes) * 1_000_000L / sampleRate
+          if (n <= 0) {
+            codec.queueInputBuffer(inIdx, 0, 0, pts, MediaCodec.BUFFER_FLAG_END_OF_STREAM)
+            inputDone = true
+          } else {
+            buf.put(bytes, dataOff + inOff, n)
+            codec.queueInputBuffer(inIdx, 0, n, pts, 0)
+            inOff += n
           }
         }
-        val outIdx = codec.dequeueOutputBuffer(info, 10000)
-        if (outIdx == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
-          track = muxer.addTrack(codec.outputFormat)
-          muxer.start()
-          muxStarted = true
-        } else if (outIdx >= 0) {
+        // golește toate ieșirile disponibile; așteaptă doar dacă nu mai avem ce trimite
+        while (true) {
+          val outIdx = codec.dequeueOutputBuffer(info, if (inputDone) 10000L else 1000L)
+          if (outIdx == MediaCodec.INFO_TRY_AGAIN_LATER) break
+          if (outIdx == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
+            track = muxer.addTrack(codec.outputFormat)
+            muxer.start()
+            muxStarted = true
+            continue
+          }
+          if (outIdx < 0) continue
           val out = codec.getOutputBuffer(outIdx)!!
           if ((info.flags and MediaCodec.BUFFER_FLAG_CODEC_CONFIG) != 0) info.size = 0
           if (info.size > 0 && muxStarted) {
@@ -98,7 +103,7 @@ class AacEncoderModule : Module() {
             muxer.writeSampleData(track, out, info)
           }
           codec.releaseOutputBuffer(outIdx, false)
-          if ((info.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) outputDone = true
+          if ((info.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) { outputDone = true; break }
         }
       }
     } finally {
