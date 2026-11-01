@@ -30,5 +30,10 @@
     "@types/react": "~19.1.10",
     "tsx": "^4.19.0",
     "typescript": "~5.9.2"
+  },
+  "expo": {
+    "autolinking": {
+      "nativeModulesDir": "./modules"
+    }
   }
 }

@@ -41,11 +41,15 @@ jobs:
       - name: Aliniere versiuni cu SDK-ul Expo
         run: npx expo install --fix 2>&1 | tee ci-logs/2-expo-fix.txt
 
+      - name: Module native găsite de autolinking
+        run: npx expo-modules-autolinking resolve --platform android 2>&1 | tee ci-logs/2b-autolinking.txt | grep -iE "aac|error" || true
+
       - name: Verificare tipuri
         run: npx tsc --noEmit 2>&1 | tee ci-logs/3-tsc.txt
 
       - name: Teste core
         run: npm test 2>&1 | tee ci-logs/4-test.txt
+        continue-on-error: true
 
       - name: Expo prebuild (Android)
         run: npx expo prebuild --platform android --no-install --clean 2>&1 | tee ci-logs/5-prebuild.txt

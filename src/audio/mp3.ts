@@ -7,7 +7,9 @@ const Mp3Encoder: any = L.Mp3Encoder ?? L.default?.Mp3Encoder ?? L.default?.defa
 import { floatToInt16 } from '../core/encoders';
 
 export function encodeMp3(samples: Float32Array, sampleRate: number, kbps = 128): Uint8Array {
-  if (typeof Mp3Encoder !== 'function') throw new Error('Encoderul MP3 nu este disponibil');
+  if (typeof Mp3Encoder !== 'function') {
+    throw new Error(`Encoderul MP3 nu este disponibil (exporturi: ${Object.keys(L).join(',')}; default: ${typeof L.default} ${L.default ? Object.keys(L.default).join(',') : ''})`);
+  }
   const enc = new Mp3Encoder(1, sampleRate, kbps);
   const pcm = floatToInt16(samples);
   const chunks: Uint8Array[] = [];
