@@ -102,7 +102,7 @@ export default function App() {
   return (
     <SafeAreaView style={styles.root} edges={['top', 'bottom']}>
       <StatusBar style="light" />
-      <Header level={level} instrument={instrumentById(instrument).label} onLevelChange={setLevel} />
+      <Header level={level} instrument={instrumentById(instrument).label} engine={engine} onLevelChange={setLevel} />
       {level === 1 ? (
         <>
           <View style={styles.half}>

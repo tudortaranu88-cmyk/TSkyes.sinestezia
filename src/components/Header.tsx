@@ -2,6 +2,7 @@
 // Deocamdată toate nivelurile sunt deblocate (test, fără plată).
 
 import React from 'react';
+import { PeakMeter } from './PeakMeter';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 
 export type Level = 1 | 2 | 3;
@@ -10,16 +11,18 @@ const LEVELS: Level[] = [1, 2, 3];
 interface Props {
   level: Level;
   instrument?: string;
+  engine?: React.RefObject<any>;
   onLevelChange: (l: Level) => void;
 }
 
-export function Header({ level, instrument, onLevelChange }: Props) {
+export function Header({ level, instrument, engine, onLevelChange }: Props) {
   return (
     <View style={styles.root}>
       <Text style={styles.title}>
         {'Music&Color '}<Text style={styles.maker}>· TSkyes</Text>
       </Text>
       {!!instrument && <Text style={styles.instr}>♪ {instrument}</Text>}
+      {!!engine && <PeakMeter engine={engine} />}
       <View style={styles.levels}>
         {LEVELS.map(l => (
           <Pressable key={l} onPress={() => onLevelChange(l)} hitSlop={6} style={[styles.lvl, l === level && styles.lvlOn]}>
