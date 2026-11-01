@@ -10,7 +10,7 @@
 // rând = nuanță) → nota. Celulele consecutive identice se unesc în note mai lungi (ritm), fără
 // să treacă peste bara de măsură (4/4).
 
-import { NOTES, ROW_MAX, ROW_MIN, cellColor, cellPitch, freqToMidi, type RGB, type Tuning } from './golden';
+import { NOTES, ROW_MAX, ROW_MIN, cellColor, cellPitch, freqToMidi, noteLabel, type RGB, type Tuning } from './golden';
 import { PHI } from './spiral';
 import type { RenderNote } from './audioRender';
 import type { NoteEvent } from './types';
@@ -151,7 +151,7 @@ export function melodyToEvents(m: MelodyNote[], bpm: number, instrument: string,
   const beatMs = 60000 / bpm;
   return m.map((n, k) => ({
     id: k + 1, col: n.col, row: n.row,
-    label: `${NOTES[n.col]} (${n.row > 0 ? '+' : ''}${n.row})`,
+    label: noteLabel(n.col, n.row),
     freq: n.freq, midiFloat: freqToMidi(n.freq), color: n.color,
     startMs: t0 + n.startBeat * beatMs,
     durationMs: n.beats * beatMs * 0.92, // mică pauză de articulare între note

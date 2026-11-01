@@ -1,5 +1,5 @@
-// Randează spirala completă (fără portativ) într-o imagine pătrată de înaltă rezoluție,
-// cu aceleași primitive ca vizualizatorul live.
+// Randează spirala completă (fără portativ) într-o imagine A4 verticală de înaltă rezoluție,
+// cu aceleași primitive ca vizualizatorul live. Spirala crește până umple colțurile paginii.
 
 import { Skia, ImageFormat, ColorType, AlphaType, PaintStyle, StrokeCap } from '@shopify/react-native-skia';
 import { buildScene } from '../core/scene';
@@ -9,12 +9,16 @@ import type { NoteEvent } from '../core/types';
 
 export type ImageKind = 'png' | 'jpeg' | 'tiff';
 
-function renderSpiral(events: NoteEvent[], size: number) {
-  const surface = Skia.Surface.Make(size, size);
+// Proporția A4 vertical (ca partitura: 1240 × 1754). `width` dat → înălțimea rezultă din proporție.
+const A4_RATIO = 1754 / 1240;
+const a4Height = (width: number) => Math.round(width * A4_RATIO);
+
+function renderSpiral(events: NoteEvent[], width: number, height: number) {
+  const surface = Skia.Surface.Make(width, height);
   if (!surface) throw new Error('Nu am putut crea suprafața de desen');
   const canvas = surface.getCanvas();
   canvas.drawColor(Skia.Color('#0e0e12'));
-  const scene = buildScene({ width: size, height: size, events, nowMs: Date.now(), insertPhase: 1, pxPerSec: 60, fill: 0.9 });
+  const scene = buildScene({ width, height, events, nowMs: Date.now(), insertPhase: 1, pxPerSec: 60, fill: 0.98, cover: true });
   const stroke = Skia.Paint();
   stroke.setAntiAlias(true);
   stroke.setStyle(PaintStyle.Stroke);
@@ -44,12 +48,13 @@ function renderSpiral(events: NoteEvent[], size: number) {
   return surface.makeImageSnapshot();
 }
 
-/** Întoarce conținutul fișierului în Base64. */
-export function exportSpiralImage(events: NoteEvent[], kind: ImageKind, size = 2048): string {
-  const img = renderSpiral(events, size);
+/** Întoarce conținutul fișierului în Base64. `width` = lățimea imaginii A4 (înălțimea rezultă din proporție). */
+export function exportSpiralImage(events: NoteEvent[], kind: ImageKind, width = 2048): string {
+  const height = a4Height(width);
+  const img = renderSpiral(events, width, height);
   if (kind === 'png') return img.encodeToBase64(ImageFormat.PNG, 100);
   if (kind === 'jpeg') return img.encodeToBase64(ImageFormat.JPEG, 95);
-  const px = img.readPixels(0, 0, { width: size, height: size, colorType: ColorType.RGBA_8888, alphaType: AlphaType.Unpremul });
+  const px = img.readPixels(0, 0, { width, height, colorType: ColorType.RGBA_8888, alphaType: AlphaType.Unpremul });
   if (!px) throw new Error('Nu am putut citi pixelii imaginii');
-  return toBase64(encodeTiff(px as Uint8Array, size, size));
+  return toBase64(encodeTiff(px as Uint8Array, width, height));
 }

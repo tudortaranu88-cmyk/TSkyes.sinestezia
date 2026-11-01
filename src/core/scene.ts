@@ -15,6 +15,7 @@ export interface SceneInput {
   pxPerSec: number;      // viteza de derulare a portativului
   fill?: number;         // cât din raza disponibilă ocupă spirala (implicit 0,92)
   minRadius?: number;    // notele mai mici de atât (px) nu se desenează (implicit 0,3)
+  cover?: boolean;       // true → raza maximă = jumătate de diagonală (umple colțurile); implicit folosește latura scurtă
 }
 
 export interface Arc { points: Point[]; strokeWidth: number; color: RGB; alpha: number }
@@ -49,7 +50,9 @@ export function buildScene(inp: SceneInput): Scene {
   // astfel încât vârful notei celei mai noi să fie mereu la marginea zonei → toată compoziția e vizibilă.
   // Schimbă doar scara globală `a` → raporturile φ rămân exacte.
   const tipExp = Math.max(1, n - 1 + insertPhase);
-  const maxR = (Math.min(width, height) / 2) * fill;
+  // latura scurtă (disc înscris) la vizualizarea live; diagonala (colțuri umplute) la export/tablou
+  const half = inp.cover ? Math.hypot(width, height) / 2 : Math.min(width, height) / 2;
+  const maxR = half * fill;
   const spiral = fitSpiral(width, height, tipExp);
   spiral.a = maxR / Math.pow(PHI, tipExp);
 

@@ -4,7 +4,7 @@
 
 import React, { useMemo, useRef, useState } from 'react';
 import { View, Text, Pressable, ScrollView, StyleSheet, LayoutChangeEvent } from 'react-native';
-import { NOTES, ROW_MIN, ROW_MAX, cellColor, rgbToCss, textColorFor } from '../core/golden';
+import { NOTES, ROW_MIN, ROW_MAX, cellColor, rgbToCss, textColorFor, noteLabel } from '../core/golden';
 
 const VISIBLE_ROWS = 7;
 const TOP_VISIBLE_ROW = 3; // la pornire, primul rând vizibil este +3
@@ -52,11 +52,11 @@ export function Keyboard({ onPressIn, onPressOut }: Props) {
               <Text style={[styles.rowLabel, row === 0 && styles.rowLabelZero]}>
                 {row > 0 ? `+${row}` : `${row}`}
               </Text>
-              {NOTES.map((name, c) => {
+              {NOTES.map((_name, c) => {
                 const color = cellColor(c, row);
                 return (
                   <Pressable
-                    key={name}
+                    key={c}
                     onPressIn={() => onPressIn(c, row)}
                     onPressOut={() => onPressOut(c, row)}
                     style={({ pressed }) => [
@@ -65,7 +65,7 @@ export function Keyboard({ onPressIn, onPressOut }: Props) {
                     ]}
                   >
                     <Text numberOfLines={1} adjustsFontSizeToFit style={[styles.keyTxt, { color: textColorFor(color) }]}>
-                      {name}
+                      {noteLabel(c, row)}
                     </Text>
                   </Pressable>
                 );

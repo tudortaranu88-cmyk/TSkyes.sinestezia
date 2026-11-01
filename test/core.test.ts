@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { PHI, B, QUARTER, radiusAt, arcLength, curvatureAt, pointAt, noteSegment, fitSpiral, visibleCount } from '../src/core/spiral';
 import { midiToStaff, staffY, ledgerSteps, BOTTOM_LINE_STEP, TOP_LINE_STEP } from '../src/core/staff';
-import { cellPitch, cellColor } from '../src/core/golden';
+import { cellPitch, cellColor, noteLabel } from '../src/core/golden';
 
 const EPS = 1e-9;
 const close = (a: number, b: number, eps = EPS) => assert.ok(Math.abs(a - b) <= eps * Math.max(1, Math.abs(b)), `${a} ≠ ${b}`);
@@ -103,4 +103,24 @@ test('scenă: zoom out – vârful notei celei mai noi stă la marginea zonei, o
     close(Math.hypot(tip.x - s.spiral.cx, tip.y - s.spiral.cy), (390 / 2) * 0.92, 1e-9);
     for (const a of s.arcs) for (const p of a.points) assert.ok(Math.hypot(p.x - s.spiral.cx, p.y - s.spiral.cy) <= 390 / 2);
   }
+});
+
+test('scenă cover (export A4): vârful atinge jumătatea diagonalei → colțurile se umplu', () => {
+  const W = 1240, H = 1754; // proporția A4 a exportului
+  const s = buildScene({ width: W, height: H, events: mk(8), nowMs: 9000, insertPhase: 1, pxPerSec: 60, fill: 0.98, cover: true });
+  const half = Math.hypot(W, H) / 2;
+  const tip = s.arcs[s.arcs.length - 1].points.at(-1)!;
+  close(Math.hypot(tip.x - s.spiral.cx, tip.y - s.spiral.cy), half * 0.98, 1e-9);
+  assert.ok(half * 0.98 > Math.min(W, H) / 2, 'raza depășește latura scurtă → spirala intră în colțuri');
+});
+
+test('denumirea notelor: rândul 0 fără cifră, sufix pe rânduri, Do\' la octava de sus', () => {
+  assert.equal(noteLabel(0, 0), 'Do');          // fundamentala, fără cifră
+  assert.equal(noteLabel(6, 0), 'Si');
+  assert.equal(noteLabel(7, 0), "Do'");         // ultimul Do al rândului → apostrof
+  assert.equal(noteLabel(0, 1), 'Do+1');
+  assert.equal(noteLabel(4, 2), 'Sol+2');
+  assert.equal(noteLabel(7, 3), "Do'+3");
+  assert.equal(noteLabel(2, -1), 'Mi-1');
+  assert.equal(noteLabel(7, -5), "Do'-5");
 });

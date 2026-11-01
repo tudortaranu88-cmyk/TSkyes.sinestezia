@@ -9,7 +9,7 @@ import { InstrumentBar } from '../components/InstrumentBar';
 import { SaveSheet, type ExportedFile } from '../components/SaveSheet';
 import { readingCells, sampleColors, buildMelody, melodyBeats, type ReadPath, type MelodyNote } from '../core/imageMelody';
 import { layoutScore } from '../core/scoreLayout';
-import { midiName, rgbToCss } from '../core/golden';
+import { noteLabel, rgbToCss } from '../core/golden';
 import { instrumentById } from '../core/instruments';
 import { DRUM_PATTERNS, type DrumId } from '../core/drums';
 import { renderLevel2Mix } from '../core/level2Mix';
@@ -178,7 +178,7 @@ export function Level2({ engine, instrument, onInstrumentChange, injected }: Pro
         )}
         {current && (
           <View style={styles.nowPlaying}>
-            <Text style={styles.nowTxt}>{playIdx + 1} / {melody.length} · {midiName(current.midi)}</Text>
+            <Text style={styles.nowTxt}>{playIdx + 1} / {melody.length} · {noteLabel(current.col, current.row)}</Text>
           </View>
         )}
       </View>

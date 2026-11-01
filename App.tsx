@@ -22,7 +22,7 @@ import { demoPixels, sourceFromPixels, type ImageSource } from './src/io/imageSo
 import type { ScorePixels } from './src/core/scoreDecode';
 import { AudioEngine } from './src/audio/AudioEngine';
 import { SAMPLE_MANIFEST } from './assets/sunete/manifest';
-import { NOTES, cellColor, cellPitch, freqToMidi, type Tuning } from './src/core/golden';
+import { cellColor, cellPitch, freqToMidi, noteLabel, type Tuning } from './src/core/golden';
 import { DEFAULT_INSTRUMENT, instrumentById } from './src/core/instruments';
 import type { NoteEvent } from './src/core/types';
 
@@ -92,7 +92,7 @@ export default function App() {
     const id = nextId.current++;
     held.current.set(k, { voice, eventId: id });
     const ev: NoteEvent = {
-      id, col, row, label: `${NOTES[col]} (${row > 0 ? '+' : ''}${row})`,
+      id, col, row, label: noteLabel(col, row),
       freq, midiFloat: freqToMidi(freq), color: cellColor(col, row),
       startMs: Date.now(), durationMs: null, instrument,
     };

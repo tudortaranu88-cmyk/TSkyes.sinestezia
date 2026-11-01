@@ -3,7 +3,7 @@
 // Convenții: cheia Sol, măsura 4/4, 4 măsuri pe portativ, numele notelor sub portativ,
 // banda de culori (câte un dreptunghi pe notă, lățimea ∝ durata) în josul fiecărei pagini.
 
-import { midiName, type RGB } from './golden';
+import { noteLabel, type RGB } from './golden';
 import { midiToStaff, staffY, ledgerSteps, BOTTOM_LINE_STEP, TOP_LINE_STEP } from './staff';
 import type { MelodyNote } from './imageMelody';
 
@@ -138,5 +138,5 @@ function drawNote(prims: Prim[], n: MelodyNote, x: number, bottomY: number) {
     const onLine = (pos.step - BOTTOM_LINE_STEP) % 2 === 0;
     prims.push({ k: 'dot', cx: x + rx + 7, cy: onLine ? y - GAP / 2 : y, r: 2.6 });
   }
-  prims.push({ k: 'text', x, y: bottomY + GAP * 4.2, text: midiName(n.midi), size: 13, align: 'center', gray: true });
+  prims.push({ k: 'text', x, y: bottomY + GAP * 4.2, text: noteLabel(n.col, n.row), size: 13, align: 'center', gray: true });
 }

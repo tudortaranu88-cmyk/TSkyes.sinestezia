@@ -67,7 +67,7 @@ export function Level3({ engine, injected }: Props) {
   // tabloul-spirală (doar spirala, ca la export)
   const scene = useMemo(() => {
     if (!box.w || !events.length) return null;
-    return buildScene({ width: box.w, height: box.h, events, nowMs: 1e12, insertPhase: 1, pxPerSec: 60, fill: 0.9 });
+    return buildScene({ width: box.w, height: box.h, events, nowMs: 1e12, insertPhase: 1, pxPerSec: 60, fill: 0.98, cover: true });
   }, [box, events]);
 
   const poly = (pts: { x: number; y: number }[]) => {

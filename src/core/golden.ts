@@ -2,6 +2,19 @@
 // 8 coloane (Do3..Do4) × 21 rânduri (-10..+10). Rândul 0 = notele fundamentale.
 
 export const NOTES = ['Do3', 'Re3', 'Mi3', 'Fa3', 'Sol3', 'La3', 'Si3', 'Do4'] as const;
+
+// Numele afișate: rândul 0 = fundamentalele fără cifră; ultimul Do (octava de sus) poartă un apostrof.
+export const NOTE_LABELS = ['Do', 'Re', 'Mi', 'Fa', 'Sol', 'La', 'Si', "Do'"] as const;
+
+/** Sufixul rândului: 0 → '', pozitiv → „+n”, negativ → „-n”. */
+export function rowSuffix(row: number): string {
+  return row === 0 ? '' : row > 0 ? `+${row}` : `${row}`;
+}
+
+/** Numele afișat al celulei (coloana c, rândul r): nume de bază + sufixul rândului. Ex.: Do, Re+2, Do'-3. */
+export function noteLabel(c: number, r: number): string {
+  return NOTE_LABELS[c] + rowSuffix(r);
+}
 export const BASE_FREQS = [261.63, 293.66, 329.63, 349.23, 392.0, 440.0, 493.88, 523.25];
 export const BASE_MIDI = [60, 62, 64, 65, 67, 69, 71, 72]; // convenția aplicației: Do3 = MIDI 60
 export const BASE_COLORS: [number, number, number][] = [
