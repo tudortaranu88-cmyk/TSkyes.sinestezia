@@ -16,7 +16,10 @@ interface Props {
   subtitle: string;
   imageLabel: string;
   imageKinds: { id: string; label: string }[];
-  exportImage: (kind: string) => Promise<ExportedFile[]>;
+  imageStyles?: { id: string; label: string }[];   // opțional: alegerea stilului (spirală / floare) înainte de format
+  imageStyle?: string;                               // valoare controlată din exterior (ex. previzualizarea Nivelului 3)
+  onImageStyleChange?: (id: string) => void;
+  exportImage: (kind: string, style: string) => Promise<ExportedFile[]>;
   exportAudio: (kind: AudioKind, onProgress?: (p: number) => void) => Promise<ExportedFile>;
   onClose: () => void;
 }
@@ -27,8 +30,11 @@ const AUDIO_KINDS: { id: AudioKind; label: string }[] = [
   { id: 'mp3', label: 'MP3' }, { id: 'wav', label: 'WAV' }, { id: 'aac', label: 'AAC' },
 ];
 
-export function SaveSheet({ visible, title = 'Salvează', subtitle, imageLabel, imageKinds, exportImage, exportAudio, onClose }: Props) {
+export function SaveSheet({ visible, title = 'Salvează', subtitle, imageLabel, imageKinds, imageStyles, imageStyle, onImageStyleChange, exportImage, exportAudio, onClose }: Props) {
   const [imgKind, setImgKind] = useState<string>(imageKinds[0]?.id ?? 'png');
+  const [styleInternal, setStyleInternal] = useState<string>(imageStyles?.[0]?.id ?? 'floare');
+  const imgStyle = imageStyle ?? styleInternal;                 // controlat din exterior sau stare proprie
+  const setImgStyle = onImageStyleChange ?? setStyleInternal;
   const [audKind, setAudKind] = useState<AudioKind>('mp3');
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ text: string; ok: boolean } | null>(null);
@@ -39,7 +45,7 @@ export function SaveSheet({ visible, title = 'Salvează', subtitle, imageLabel, 
     await new Promise(r => setTimeout(r, 30)); // lasă indicatorul să apară înainte de calcul
     try {
       const progress = (p: number) => setMsg({ text: `Se codează ${audKind.toUpperCase()}… ${Math.round(p * 100)}%`, ok: true });
-      const files = what === 'image' ? await exportImage(imgKind) : [await exportAudio(audKind, progress)];
+      const files = what === 'image' ? await exportImage(imgKind, imgStyle) : [await exportAudio(audKind, progress)];
       if (action === 'save') {
         for (const f of files) await saveToDevice(f.uri);
         setMsg({
@@ -91,6 +97,9 @@ export function SaveSheet({ visible, title = 'Salvează', subtitle, imageLabel, 
         <Text style={styles.sub}>{subtitle}</Text>
 
         <Text style={styles.section}>{imageLabel}</Text>
+        {imageStyles && imageStyles.length > 1 && (
+          <View style={styles.styleRow}><Chips items={imageStyles} value={imgStyle} onChange={setImgStyle} /></View>
+        )}
         <Chips items={imageKinds} value={imgKind} onChange={setImgKind} />
         <Actions what="image" />
 
@@ -118,7 +127,8 @@ const styles = StyleSheet.create({
   close: { color: '#8a8a99', fontSize: 18 },
   sub: { color: '#8a8a99', fontSize: 12, marginTop: 2 },
   section: { color: '#e6e6ee', fontSize: 13, fontWeight: '700', marginTop: 16, marginBottom: 8 },
-  chips: { flexDirection: 'row', gap: 8 },
+  styleRow: { marginBottom: 8 },
+  chips: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },
   chip: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: 14, borderWidth: 1, borderColor: '#44445a' },
   chipOn: { backgroundColor: '#ffd700', borderColor: '#ffd700' },
   chipTxt: { color: '#c9c9d6', fontSize: 12, fontWeight: '700' },

@@ -1,6 +1,6 @@
 // Exportul compoziției curente: imaginea spiralei (PNG / JPEG / TIFF) și melodia (MP3 / WAV / AAC).
 
-import { exportTablouImage, type ImageKind } from '../render/exportImage';
+import { exportTablouImage, type ImageKind, type TablouStyle } from '../render/exportImage';
 import { renderMix, type RenderNote, type SampleSet } from '../core/audioRender';
 import { encodeWav, toBase64 } from '../core/encoders';
 import { encodeMp3 } from '../audio/mp3';
@@ -12,8 +12,8 @@ import type { NoteEvent } from '../core/types';
 export type AudioKind = 'mp3' | 'wav' | 'aac';
 export const SR = 44100;
 
-export async function exportImageFile(events: NoteEvent[], kind: ImageKind): Promise<{ uri: string; ext: string }> {
-  const b64 = exportTablouImage(events, kind);
+export async function exportImageFile(events: NoteEvent[], kind: ImageKind, style: TablouStyle = 'floare'): Promise<{ uri: string; ext: string }> {
+  const b64 = exportTablouImage(events, kind, style);
   const uri = await writeBase64(stampName(kind), b64);
   return { uri, ext: kind };
 }

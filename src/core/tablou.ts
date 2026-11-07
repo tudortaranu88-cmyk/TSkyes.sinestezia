@@ -7,15 +7,20 @@ import { GOLDEN_ANGLE } from './imageMelody';
 
 export interface Dot { x: number; y: number; r: number }
 
+// Distanța medie între vecini în acest aranjament ≈ NN_K · R/√n (măsurat, stabil pentru orice n;
+// interesant, NN_K ≈ φ). O rază de punct = NN_K/2 · R/√n face punctele să se atingă; `overlap`
+// le mărește cu acel procent, ca să se suprapună și să nu rămână negru între ele.
+export const NN_K = 1.68;
+
 /**
  * Pozițiile celor `n` puncte ale tabloului într-o zonă width × height.
  * Compoziție rotundă, înscrisă (R = latura scurtă / 2 · fill), centrată.
- * Raza unui punct scade cu √n, astfel încât punctele să se atingă indiferent de densitate.
+ * `overlap` = cât se suprapun punctele peste simpla atingere (0,07 = 7%).
  */
-export function sunflowerDots(n: number, width: number, height: number, fill = 0.92, dotScale = 0.85): Dot[] {
+export function sunflowerDots(n: number, width: number, height: number, fill = 0.92, overlap = 0.07): Dot[] {
   const cx = width / 2, cy = height / 2;
   const R = (Math.min(width, height) / 2) * fill;
-  const dotR = n > 0 ? (dotScale * R) / Math.sqrt(n) : 0;
+  const dotR = n > 0 ? ((NN_K / 2) * (1 + overlap) * R) / Math.sqrt(n) : 0;
   const out: Dot[] = [];
   for (let i = 0; i < n; i++) {
     const rad = R * Math.sqrt((i + 0.5) / n);

@@ -1,17 +1,19 @@
 // NIVEL 3 – încarci una sau mai multe partituri generate de aplicație (PNG/JPEG); aplicația le
-// citește banda de culori, reconstruiește melodia și reface tabloul (toate notele ca puncte de
-// culoare, floarea-soarelui), pe care îl poți salva (PNG/JPEG/TIFF) și, opțional, asculta.
+// citește banda de culori, reconstruiește melodia și reface tabloul, pe care îl poți salva
+// (PNG/JPEG/TIFF) și, opțional, asculta. Tabloul are două stiluri, la alegere: floarea-soarelui
+// (toate notele ca puncte de culoare) sau spirala de aur. Toggle-ul schimbă și previzualizarea.
 
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { View, Text, Pressable, StyleSheet, ActivityIndicator, LayoutChangeEvent } from 'react-native';
-import { Canvas, Circle } from '@shopify/react-native-skia';
+import { Canvas, Circle, Path, Skia } from '@shopify/react-native-skia';
 import { SaveSheet, type ExportedFile } from '../components/SaveSheet';
 import { decodeScores, type ScorePixels } from '../core/scoreDecode';
 import { melodyToEvents, melodyBeats, type MelodyNote } from '../core/imageMelody';
 import { sunflowerDots } from '../core/tablou';
+import { buildScene } from '../core/scene';
 import { rgbToCss } from '../core/golden';
 import { renderLevel2Mix } from '../core/level2Mix';
-import { exportTablouImage, type ImageKind } from '../render/exportImage';
+import { exportTablouImage, TABLOU_STYLES, type ImageKind, type TablouStyle } from '../render/exportImage';
 import { exportMixFile, type AudioKind } from '../io/exportComposition';
 import { stampName, writeBase64 } from '../io/files';
 import { pickScoreImages, type ImageSource } from '../io/imageSource';
@@ -33,6 +35,7 @@ export function Level3({ engine, injected }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [saveOpen, setSaveOpen] = useState(false);
   const [box, setBox] = useState({ w: 0, h: 0 });
+  const [style, setStyle] = useState<TablouStyle>('floare');
   const stopper = useRef<(() => void) | null>(null);
 
   const decode = useCallback((pages: ScorePixels[]) => {
@@ -64,11 +67,22 @@ export function Level3({ engine, injected }: Props) {
 
   const events = useMemo(() => melodyToEvents(melody, PLAY_BPM, 'pian', 0), [melody]);
 
-  // tabloul: toate notele ca puncte de culoare (floarea-soarelui), la fel ca imaginea salvată
+  // previzualizarea tabloului = exact imaginea care se salvează (același stil ales)
   const dots = useMemo(() => {
-    if (!box.w || !melody.length) return null;
+    if (style !== 'floare' || !box.w || !melody.length) return null;
     return sunflowerDots(melody.length, box.w, box.h).map((d, i) => ({ ...d, color: melody[i].color }));
-  }, [box, melody]);
+  }, [style, box, melody]);
+
+  const scene = useMemo(() => {
+    if (style !== 'spirala' || !box.w || !events.length) return null;
+    return buildScene({ width: box.w, height: box.h, events, nowMs: 1e12, insertPhase: 1, pxPerSec: 60, fill: 0.98, cover: true });
+  }, [style, box, events]);
+
+  const poly = (pts: { x: number; y: number }[]) => {
+    const p = Skia.Path.Make();
+    pts.forEach((pt, i) => (i ? p.lineTo(pt.x, pt.y) : p.moveTo(pt.x, pt.y)));
+    return p;
+  };
 
   const stop = useCallback(() => { stopper.current?.(); stopper.current = null; setPlaying(false); }, []);
 
@@ -84,8 +98,8 @@ export function Level3({ engine, injected }: Props) {
     setTimeout(() => stop(), (mix.length / sr) * 1000 + 200);
   }, [engine, melody, playing, stop]);
 
-  const exportImage = async (kind: string): Promise<ExportedFile[]> => {
-    const b64 = exportTablouImage(events, kind as ImageKind);
+  const exportImage = async (kind: string, st: string): Promise<ExportedFile[]> => {
+    const b64 = exportTablouImage(events, kind as ImageKind, st as TablouStyle);
     return [{ uri: await writeBase64(stampName(kind, '_tablou'), b64), ext: kind }];
   };
   const exportAudio = (kind: AudioKind, onProgress?: (p: number) => void) =>
@@ -97,9 +111,20 @@ export function Level3({ engine, injected }: Props) {
   return (
     <>
       <View style={styles.top} onLayout={onLayout}>
-        {dots ? (
+        {melody.length ? (
           <Canvas style={StyleSheet.absoluteFill}>
-            {dots.map((d, i) => (
+            {scene && scene.arcs.map((a, i) => (
+              <Path key={`h${i}`} path={poly(a.points)} style="stroke" strokeCap="round"
+                strokeWidth={a.strokeWidth * 1.35} color={`rgba(255,255,255,${0.18 * a.alpha})`} />
+            ))}
+            {scene && scene.arcs.map((a, i) => (
+              <Path key={`a${i}`} path={poly(a.points)} style="stroke" strokeCap="round"
+                strokeWidth={a.strokeWidth} color={rgbToCss(a.color, a.alpha)} />
+            ))}
+            {scene && scene.nodes.map((n, i) => (
+              <Circle key={`c${i}`} cx={n.x} cy={n.y} r={n.radius} color={rgbToCss(n.color, n.alpha)} />
+            ))}
+            {dots && dots.map((d, i) => (
               <Circle key={i} cx={d.x} cy={d.y} r={d.r} color={rgbToCss(d.color)} />
             ))}
           </Canvas>
@@ -117,6 +142,16 @@ export function Level3({ engine, injected }: Props) {
       </View>
       <View style={styles.divider} />
       <View style={styles.panel}>
+        {melody.length > 0 && (
+          <View style={styles.styleRow}>
+            {TABLOU_STYLES.map(s => (
+              <Pressable key={s.id} onPress={() => setStyle(s.id)}
+                style={[styles.styleChip, style === s.id && styles.styleChipOn]}>
+                <Text style={[styles.styleTxt, style === s.id && styles.styleTxtOn]}>{s.label}</Text>
+              </Pressable>
+            ))}
+          </View>
+        )}
         <View style={styles.row}>
           <Btn label={melody.length ? 'Alte partituri' : 'Alege partituri'} onPress={choose} disabled={loading} />
           <Btn label={playing ? '■ Oprește' : '▶ Ascultă'} onPress={play} disabled={!melody.length} />
@@ -134,8 +169,11 @@ export function Level3({ engine, injected }: Props) {
         visible={saveOpen}
         title="Salvează tabloul"
         subtitle={`${melody.length} note · din ${pageCount} ${pageCount === 1 ? 'pagină' : 'pagini'}`}
-        imageLabel="Tabloul (spirala)"
+        imageLabel="Tabloul"
         imageKinds={KINDS}
+        imageStyles={TABLOU_STYLES}
+        imageStyle={style}
+        onImageStyleChange={(id) => setStyle(id as TablouStyle)}
         exportImage={exportImage}
         exportAudio={exportAudio}
         onClose={() => setSaveOpen(false)}
@@ -157,6 +195,11 @@ const styles = StyleSheet.create({
   divider: { height: StyleSheet.hairlineWidth, backgroundColor: '#333' },
   panel: { backgroundColor: '#181822', padding: 12, gap: 8 },
   row: { flexDirection: 'row', gap: 8 },
+  styleRow: { flexDirection: 'row', gap: 8 },
+  styleChip: { flex: 1, paddingVertical: 7, borderRadius: 14, borderWidth: 1, borderColor: '#44445a', alignItems: 'center' },
+  styleChipOn: { backgroundColor: '#ffd700', borderColor: '#ffd700' },
+  styleTxt: { color: '#c9c9d6', fontSize: 12, fontWeight: '700' },
+  styleTxtOn: { color: '#111' },
   info: { color: '#c9c9d6', fontSize: 12 },
   error: { color: '#ff7a6b', fontSize: 12 },
   btn: { flex: 1, paddingVertical: 10, borderRadius: 10, borderWidth: 1, borderColor: '#ffd700', alignItems: 'center', paddingHorizontal: 4 },

@@ -114,19 +114,23 @@ test('scenă cover (export A4): vârful atinge jumătatea diagonalei → colțur
   assert.ok(half * 0.98 > Math.min(W, H) / 2, 'raza depășește latura scurtă → spirala intră în colțuri');
 });
 
-import { sunflowerDots } from '../src/core/tablou';
+import { sunflowerDots, NN_K } from '../src/core/tablou';
 
 test('tablou floarea-soarelui: toate notele devin puncte, în discul înscris', () => {
   const W = 1240, H = 1754, fill = 0.92;
   for (const n of [1, 12, 150, 600]) {
-    const dots = sunflowerDots(n, W, H, fill);
+    const dots = sunflowerDots(n, W, H, fill);        // overlap implicit 0,07
     assert.equal(dots.length, n, 'fiecare notă are un punct');
     const R = (Math.min(W, H) / 2) * fill, cx = W / 2, cy = H / 2;
-    for (const d of dots) assert.ok(Math.hypot(d.x - cx, d.y - cy) <= R + 1e-6, 'punctul stă în disc');
-    // raza punctului scade cu √n (punctele se ating la orice densitate)
-    close(dots[0].r, (0.85 * R) / Math.sqrt(n));
+    for (const d of dots) assert.ok(Math.hypot(d.x - cx, d.y - cy) <= R + 1e-6, 'centrul punctului stă în disc');
+    // raza = jumătate din distanța între vecini (NN_K·R/√n), mărită cu 7% (suprapunere)
+    close(dots[0].r, ((NN_K / 2) * 1.07 * R) / Math.sqrt(n));
     assert.ok(dots[0].r > 0);
   }
+  // suprapunere mai mare → puncte mai mari
+  const a = sunflowerDots(100, W, H, 0.92, 0.07)[0].r;
+  const b = sunflowerDots(100, W, H, 0.92, 0.35)[0].r;
+  assert.ok(b > a, 'overlap mai mare → rază mai mare');
   // primul punct e lângă centru, ultimul aproape de margine
   const d = sunflowerDots(100, W, H, 0.92);
   const R = (Math.min(W, H) / 2) * 0.92;

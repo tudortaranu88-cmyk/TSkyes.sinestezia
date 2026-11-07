@@ -130,10 +130,12 @@ export async function runSelfTest3(pages: ScorePixels[], expected: number, sampl
     log(`decodat ${pages.length} pagini → ${melody.length} note (asteptat ${expected}) ${Date.now() - t} ms`);
     if (melody.length !== expected) log(`AVERTISMENT numar de note diferit`);
     const events = melodyToEvents(melody, 105, 'pian', 0);
-    for (const kind of ['png', 'jpeg', 'tiff'] as const) {
-      const tt = Date.now();
-      const b64 = exportTablouImage(events, kind, 1024);
-      log(`tablou ${kind} ok ${Math.round((b64.length * 3) / 4)} bytes ${Date.now() - tt} ms`);
+    for (const st of ['floare', 'spirala'] as const) {
+      for (const kind of ['png', 'jpeg', 'tiff'] as const) {
+        const tt = Date.now();
+        const b64 = exportTablouImage(events, kind, st, 1024);
+        log(`tablou ${st} ${kind} ok ${Math.round((b64.length * 3) / 4)} bytes ${Date.now() - tt} ms`);
+      }
     }
   } catch (e: any) {
     log(`FAIL ${e?.message ?? e}`);
