@@ -7,7 +7,11 @@ pe mail. Folosește contul Google pe care îl ai deja — fără conturi noi, f�
 
 1. Intră pe **https://script.google.com** (logat cu iconarmunte@gmail.com) → **New project**.
 2. Șterge tot codul din fișierul `Code.gs` și **lipește** conținutul din `Code.gs` de aici.
-3. În partea de sus, înlocuiește `SCHIMBA-MA` cu **codul tău secret** (știut doar de tine). Salvează (💾).
+3. **Nu modifica nimic în cod pentru parolă.** În stânga apasă **⚙️ Project Settings** →
+   secțiunea **Script properties** → **Add script property**:
+   - **Property:** `SECRET_CODE` (exact așa, cu majuscule)
+   - **Value:** codul tău secret (știut doar de tine)
+   - **Save script properties**
 4. Sus dreapta: **Deploy → New deployment**.
 5. La „Select type” (roata ⚙️) alege **Web app**.
 6. Setează:
@@ -22,8 +26,8 @@ pe mail. Folosește contul Google pe care îl ai deja — fără conturi noi, f�
 Gata. Eu îl pun în aplicație, construiesc un APK cu poarta activă și îl testez.
 
 ## Dacă vrei să schimbi codul secret mai târziu
-Deschizi proiectul → schimbi `SECRET_CODE` → **Deploy → Manage deployments → Edit (creion) →
-Version: New version → Deploy**. Adresa rămâne aceeași.
+Deschizi proiectul → **⚙️ Project Settings → Script properties** → editezi `SECRET_CODE` și
+salvezi. Nu trebuie redeployat, parola nouă se aplică imediat. Adresa rămâne aceeași.
 
 ## Note
 - Codul secret stă doar aici, în proiectul tău, nu în aplicație — nu poate fi extras din APK.

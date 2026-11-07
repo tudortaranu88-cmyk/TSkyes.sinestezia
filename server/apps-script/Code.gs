@@ -8,12 +8,11 @@
  *   { "action": "verify", "requestId": "...", "otp": "123456" }
  *        → dacă codul de 6 cifre e corect, răspunde { "ok": true }
  *
- * ┌─────────────────────────────────────────────────────────────────────────┐
- * │  SINGURUL lucru pe care trebuie să-l schimbi: pune mai jos codul tău      │
- * │  secret, în locul lui SCHIMBA-MA. Codul NU ajunge niciodată în aplicație. │
- * └─────────────────────────────────────────────────────────────────────────┘
+ * CODUL SECRET NU SE SCRIE ÎN ACEST FIȘIER. Îl pui o singură dată în:
+ *   Project Settings (⚙️) → Script properties → Add script property
+ *   Property: SECRET_CODE      Value: codul tău secret
+ * Codul rămâne doar în proiectul tău Google și nu ajunge niciodată în aplicație.
  */
-const SECRET_CODE = 'SCHIMBA-MA';                 // ← pune aici codul tău secret (știut doar de tine)
 const MAIL_TO     = 'iconarmunte@gmail.com';      // adresa pe care primești codul de confirmare
 
 // Reglaje (le poți lăsa așa)
@@ -21,6 +20,10 @@ const OTP_TTL_SEC = 600;   // codul de 6 cifre expiră în 10 minute
 const MAX_FAILS   = 5;     // câte coduri secrete greșite se acceptă...
 const LOCK_MIN    = 15;    // ...înainte de o blocare temporară (minute)
 const MAX_OTP_TRY = 5;     // câte încercări la codul de 6 cifre
+
+function getSecret() {
+  return PropertiesService.getScriptProperties().getProperty('SECRET_CODE') || '';
+}
 
 function doPost(e) {
   try {
@@ -43,7 +46,10 @@ function handleRequest(body) {
   const cache = CacheService.getScriptCache();
   if (cache.get('lock')) return json({ ok: false, error: 'Prea multe încercări. Așteaptă câteva minute.' });
 
-  if (String(body.code || '') !== SECRET_CODE) {
+  const secret = getSecret();
+  if (!secret) return json({ ok: false, error: 'Serverul nu are încă setat codul secret (SECRET_CODE).' });
+
+  if (String(body.code || '') !== secret) {
     const fails = Number(cache.get('fails') || 0) + 1;
     cache.put('fails', String(fails), LOCK_MIN * 60);
     if (fails >= MAX_FAILS) { cache.put('lock', '1', LOCK_MIN * 60); cache.remove('fails'); }
