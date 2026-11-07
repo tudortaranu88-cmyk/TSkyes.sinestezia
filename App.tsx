@@ -18,6 +18,8 @@ import { TABLOU_STYLES, type ImageKind, type TablouStyle } from './src/render/ex
 import { demoComposition, runSelfTest, runSelfTest2, runSelfTest3, demoScorePages, runAudioProbe } from './src/io/selfTest';
 import { Level2 } from './src/screens/Level2';
 import { Level3 } from './src/screens/Level3';
+import { LockScreen } from './src/screens/LockScreen';
+import { gateEnabled } from './src/auth/accessGate';
 import { demoPixels, sourceFromPixels, type ImageSource } from './src/io/imageSource';
 import type { ScorePixels } from './src/core/scoreDecode';
 import { AudioEngine } from './src/audio/AudioEngine';
@@ -41,6 +43,7 @@ export default function App() {
   const [saveOpen, setSaveOpen] = useState(false);
   const [l2Injected, setL2Injected] = useState<ImageSource | null>(null);
   const [l3Injected, setL3Injected] = useState<ScorePixels[] | null>(null);
+  const [unlocked, setUnlocked] = useState(!gateEnabled);   // poarta dezactivată ⇒ pornește deblocat
 
   useEffect(() => {
     const e = new AudioEngine();
@@ -52,6 +55,8 @@ export default function App() {
   useEffect(() => {
     const handle = (url: string | null) => {
       if (!url || !(url.includes('selftest') || url.includes('audioprobe'))) return;
+      setUnlocked(true);   // autotestele ocolesc poarta de acces
+
       if (url.includes('audioprobe')) { runAudioProbe(engine.current); return; }
       if (url.includes('selftest3')) {
         const { pages, noteCount } = demoScorePages();
@@ -108,6 +113,15 @@ export default function App() {
     const end = Date.now();
     setEvents(prev => prev.map(e => (e.id === h.eventId ? { ...e, durationMs: end - e.startMs } : e)));
   }, []);
+
+  if (gateEnabled && !unlocked) {
+    return (
+      <SafeAreaView style={styles.root} edges={['top', 'bottom']}>
+        <StatusBar style="light" />
+        <LockScreen onUnlock={() => setUnlocked(true)} />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.root} edges={['top', 'bottom']}>
