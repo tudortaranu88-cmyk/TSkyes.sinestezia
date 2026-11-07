@@ -12,6 +12,9 @@ export interface Dot { x: number; y: number; r: number }
 // le mărește cu acel procent, ca să se suprapună și să nu rămână negru între ele.
 export const NN_K = 1.68;
 
+// Transparența punctelor: 15% transparent → opacitate 85%. Punctele suprapuse se văd unul prin altul.
+export const DOT_OPACITY = 0.85;
+
 /**
  * Pozițiile celor `n` puncte ale tabloului într-o zonă width × height.
  * Compoziție rotundă, înscrisă (R = latura scurtă / 2 · fill), centrată.

@@ -6,7 +6,7 @@
 import { Skia, ImageFormat, ColorType, AlphaType, PaintStyle, StrokeCap } from '@shopify/react-native-skia';
 import { buildScene } from '../core/scene';
 import { rgbToCss } from '../core/golden';
-import { sunflowerDots } from '../core/tablou';
+import { sunflowerDots, DOT_OPACITY } from '../core/tablou';
 import { encodeTiff, toBase64 } from '../core/encoders';
 import type { NoteEvent } from '../core/types';
 
@@ -39,7 +39,7 @@ function renderFloare(events: NoteEvent[], width: number, height: number) {
   paint.setAntiAlias(true);
   paint.setStyle(PaintStyle.Fill);
   for (let i = 0; i < events.length; i++) {                 // centru → exterior (noile puncte deasupra)
-    paint.setColor(Skia.Color(rgbToCss(events[i].color)));
+    paint.setColor(Skia.Color(rgbToCss(events[i].color, DOT_OPACITY)));
     canvas.drawCircle(dots[i].x, dots[i].y, dots[i].r, paint);
   }
   surface.flush();

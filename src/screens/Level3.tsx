@@ -9,7 +9,7 @@ import { Canvas, Circle, Path, Skia } from '@shopify/react-native-skia';
 import { SaveSheet, type ExportedFile } from '../components/SaveSheet';
 import { decodeScores, type ScorePixels } from '../core/scoreDecode';
 import { melodyToEvents, melodyBeats, type MelodyNote } from '../core/imageMelody';
-import { sunflowerDots } from '../core/tablou';
+import { sunflowerDots, DOT_OPACITY } from '../core/tablou';
 import { buildScene } from '../core/scene';
 import { rgbToCss } from '../core/golden';
 import { renderLevel2Mix } from '../core/level2Mix';
@@ -125,7 +125,7 @@ export function Level3({ engine, injected }: Props) {
               <Circle key={`c${i}`} cx={n.x} cy={n.y} r={n.radius} color={rgbToCss(n.color, n.alpha)} />
             ))}
             {dots && dots.map((d, i) => (
-              <Circle key={i} cx={d.x} cy={d.y} r={d.r} color={rgbToCss(d.color)} />
+              <Circle key={i} cx={d.x} cy={d.y} r={d.r} color={rgbToCss(d.color, DOT_OPACITY)} />
             ))}
           </Canvas>
         ) : (
