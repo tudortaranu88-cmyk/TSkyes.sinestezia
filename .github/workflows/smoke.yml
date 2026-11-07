@@ -28,6 +28,8 @@ jobs:
       - uses: gradle/actions/setup-gradle@v5
 
       - name: Build APK x86_64 pentru emulator
+        env:
+          EXPO_PUBLIC_DISABLE_LOCK: '1'   # poarta de acces e ocolită la testele automate
         run: |
           npm install --no-audit --no-fund
           npx expo install --fix
