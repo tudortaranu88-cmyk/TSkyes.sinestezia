@@ -8,11 +8,11 @@
     "newArchEnabled": true,
     "backgroundColor": "#0e0e12",
     "android": {
-      "package": "com.tskyes.sinestezia",
+      "package": "com.tskyes.musiccolor",
       "edgeToEdgeEnabled": true
     },
     "ios": {
-      "bundleIdentifier": "com.tskyes.sinestezia"
+      "bundleIdentifier": "com.tskyes.musiccolor"
     },
     "scheme": "musiccolor",
     "plugins": [
@@ -36,7 +36,8 @@
           "microphonePermission": false
         }
       ],
-      "./plugins/withConfigChanges"
+      "./plugins/withConfigChanges",
+      "./plugins/withTrimPermissions"
     ]
   }
 }

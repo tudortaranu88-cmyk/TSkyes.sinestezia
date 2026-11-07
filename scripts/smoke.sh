@@ -2,7 +2,7 @@
 # Instalează APK-ul pe emulator, pornește aplicația, o folosește puțin și salvează capturi + loguri.
 set +e
 OUT=smoke
-PKG=com.tskyes.sinestezia
+PKG=com.tskyes.musiccolor
 mkdir -p $OUT
 shot() { adb exec-out screencap -p > "$OUT/$1.png"; }
 # atinge elementul cu textul dat (primul găsit în ierarhia UI)
