@@ -1,0 +1,14 @@
+Starting: Intent { cmp=com.tskyes.sinestezia/.MainActivity }
+Status: ok
+LaunchState: COLD
+Activity: com.tskyes.sinestezia/.MainActivity
+TotalTime: 2834
+WaitTime: 2865
+Complete
+Starting: Intent { act=android.intent.action.VIEW dat=musiccolor://selftest/... pkg=com.tskyes.sinestezia }
+Starting: Intent { act=android.intent.action.VIEW dat=musiccolor://audioprobe/... pkg=com.tskyes.sinestezia }
+Warning: Activity not started, intent has been delivered to currently running top-most instance.
+Starting: Intent { act=android.intent.action.VIEW dat=musiccolor://selftest2/... pkg=com.tskyes.sinestezia }
+Warning: Activity not started, intent has been delivered to currently running top-most instance.
+Starting: Intent { act=android.intent.action.VIEW dat=musiccolor://selftest3/... pkg=com.tskyes.sinestezia }
+Warning: Activity not started, intent has been delivered to currently running top-most instance.

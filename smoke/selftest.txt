@@ -1,0 +1,22 @@
+SELFTEST png ok 160030 bytes 252 ms
+SELFTEST jpeg ok 139958 bytes 77 ms
+SELFTEST tiff ok 17799336 bytes 2491 ms
+SELFTEST mp3 ok 109505 bytes 2355 ms
+SELFTEST wav ok 599804 bytes 245 ms
+SELFTEST aac ok 111716 bytes 500 ms
+SELFTEST done
+SELFTEST2 melodie 256 celule 158 note
+SELFTEST2 partitura png ok 129189 bytes 129 ms (3 pagini)
+SELFTEST2 partitura salvata in galerie
+SELFTEST2 partitura jpeg ok 179499 bytes 80 ms (3 pagini)
+SELFTEST2 wav ok 14222294 bytes 5836 ms
+SELFTEST2 aac ok 2611511 bytes 7590 ms
+SELFTEST2 done
+SELFTEST3 decodat 1 pagini → 40 note (asteptat 40) 3 ms
+SELFTEST3 tablou floare png ok 117399 bytes 54 ms
+SELFTEST3 tablou floare jpeg ok 93330 bytes 25 ms
+SELFTEST3 tablou floare tiff ok 4448424 bytes 507 ms
+SELFTEST3 tablou spirala png ok 63768 bytes 49 ms
+SELFTEST3 tablou spirala jpeg ok 44388 bytes 23 ms
+SELFTEST3 tablou spirala tiff ok 4448424 bytes 505 ms
+SELFTEST3 done

@@ -1,0 +1,25 @@
+== selector imagine (pornire normală)
+nu am găsit: N2
+nu am găsit: Alege imagine
+nu am găsit: N1
+== instrumente
+nu am găsit: ‹
+nu am găsit: Vioara
+== salvare
+nu am găsit: Salvează
+nu am găsit: Salvează în telefon
+nu am găsit: Allow
+nu am găsit: Permite
+nu am găsit: ALLOW
+== autotest export
+== sonda audio
+== nivelul 2
+atins: 125 366 185 384
+atins: 125 366 184 384
+atins: 311 481 316 503
+atins: 261 432 288 449
+atins: 142 437 248 454
+atins: 226 366 279 384
+== nivelul 3
+atins: 129 574 189 592
+atins: 225 574 298 588

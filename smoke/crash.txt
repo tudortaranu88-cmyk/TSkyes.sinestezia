@@ -1,0 +1,35 @@
+--------- beginning of crash
+11-07 10:26:56.023  3366  3551 F libc    : Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 3551 (hades), pid 3366 (kyes.sinestezia)
+11-07 10:26:56.996  4830  4830 F DEBUG   : *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+11-07 10:26:56.996  4830  4830 F DEBUG   : Build fingerprint: 'google/sdk_gphone64_x86_64/emu64xa:14/UE1A.230829.050/12077443:userdebug/dev-keys'
+11-07 10:26:56.996  4830  4830 F DEBUG   : Revision: '0'
+11-07 10:26:56.996  4830  4830 F DEBUG   : ABI: 'x86_64'
+11-07 10:26:56.996  4830  4830 F DEBUG   : Timestamp: 2026-11-07 10:26:56.404632371+0000
+11-07 10:26:56.996  4830  4830 F DEBUG   : Process uptime: 35s
+11-07 10:26:56.996  4830  4830 F DEBUG   : Cmdline: com.tskyes.sinestezia
+11-07 10:26:56.996  4830  4830 F DEBUG   : pid: 3366, tid: 3551, name: hades  >>> com.tskyes.sinestezia <<<
+11-07 10:26:56.996  4830  4830 F DEBUG   : uid: 10192
+11-07 10:26:56.996  4830  4830 F DEBUG   : signal 6 (SIGABRT), code -1 (SI_QUEUE), fault addr --------
+11-07 10:26:56.996  4830  4830 F DEBUG   : Abort message: 'terminating due to uncaught exception of type std::runtime_error: Unable to retrieve jni environment. Is the thread attached?'
+11-07 10:26:56.996  4830  4830 F DEBUG   :     rax 0000000000000000  rbx 000079956deb7898  rcx 000079989d0cb610  rdx 0000000000000006
+11-07 10:26:56.996  4830  4830 F DEBUG   :     r8  0000000000000000  r9  0000000000000000  r10 000079956deb78a0  r11 0000000000000217
+11-07 10:26:56.996  4830  4830 F DEBUG   :     r12 000079956deb7a70  r13 0000003000000008  r14 0000000000000d26  r15 0000000000000ddf
+11-07 10:26:56.997  4830  4830 F DEBUG   :     rdi 0000000000000d26  rsi 0000000000000ddf
+11-07 10:26:56.997  4830  4830 F DEBUG   :     rbp 000079956deb7ac0  rsp 000079956deb7890  rip 000079989d0cb610
+11-07 10:26:56.997  4830  4830 F DEBUG   : 15 total frames
+11-07 10:26:56.997  4830  4830 F DEBUG   : backtrace:
+11-07 10:26:56.997  4830  4830 F DEBUG   :       #00 pc 0000000000061610  /apex/com.android.runtime/lib64/bionic/libc.so (abort+192) (BuildId: fa337969c798946280caa45e2d71a2e7)
+11-07 10:26:56.997  4830  4830 F DEBUG   :       #01 pc 000000000009dc6f  /data/app/~~7p1i63AfdJsn3pfsIzBJnA==/com.tskyes.sinestezia-AP7dJoadJY9j3kPl2hsI1g==/base.apk!libc++_shared.so (offset 0xc20000) (BuildId: 734ab2eaa203afbb89147d313e46146617bd1a2c)
+11-07 10:26:56.997  4830  4830 F DEBUG   :       #02 pc 000000000009cb0a  /data/app/~~7p1i63AfdJsn3pfsIzBJnA==/com.tskyes.sinestezia-AP7dJoadJY9j3kPl2hsI1g==/base.apk!libc++_shared.so (offset 0xc20000) (BuildId: 734ab2eaa203afbb89147d313e46146617bd1a2c)
+11-07 10:26:56.997  4830  4830 F DEBUG   :       #03 pc 000000000009cf12  /data/app/~~7p1i63AfdJsn3pfsIzBJnA==/com.tskyes.sinestezia-AP7dJoadJY9j3kPl2hsI1g==/base.apk!libc++_shared.so (offset 0xc20000) (BuildId: 734ab2eaa203afbb89147d313e46146617bd1a2c)
+11-07 10:26:56.997  4830  4830 F DEBUG   :       #04 pc 000000000009cec7  /data/app/~~7p1i63AfdJsn3pfsIzBJnA==/com.tskyes.sinestezia-AP7dJoadJY9j3kPl2hsI1g==/base.apk!libc++_shared.so (offset 0xc20000) (std::terminate()+55) (BuildId: 734ab2eaa203afbb89147d313e46146617bd1a2c)
+11-07 10:26:56.997  4830  4830 F DEBUG   :       #05 pc 00000000000bd54d  /data/app/~~7p1i63AfdJsn3pfsIzBJnA==/com.tskyes.sinestezia-AP7dJoadJY9j3kPl2hsI1g==/base.apk!libreact-native-audio-api.so (offset 0x12b8000) (BuildId: 4bc27fceb04e57c554b96631cabd483f26f465e7)
+11-07 10:26:56.997  4830  4830 F DEBUG   :       #06 pc 00000000001546bb  /data/app/~~7p1i63AfdJsn3pfsIzBJnA==/com.tskyes.sinestezia-AP7dJoadJY9j3kPl2hsI1g==/base.apk!libreact-native-audio-api.so (offset 0x12b8000) (audioapi::AudioContext::~AudioContext()+139) (BuildId: 4bc27fceb04e57c554b96631cabd483f26f465e7)
+11-07 10:26:56.997  4830  4830 F DEBUG   :       #07 pc 000000000015432f  /data/app/~~7p1i63AfdJsn3pfsIzBJnA==/com.tskyes.sinestezia-AP7dJoadJY9j3kPl2hsI1g==/base.apk!libreact-native-audio-api.so (offset 0x12b8000) (audioapi::BaseAudioContextHostObject::~BaseAudioContextHostObject()+159) (BuildId: 4bc27fceb04e57c554b96631cabd483f26f465e7)
+11-07 10:26:56.997  4830  4830 F DEBUG   :       #08 pc 00000000000a323e  /data/app/~~7p1i63AfdJsn3pfsIzBJnA==/com.tskyes.sinestezia-AP7dJoadJY9j3kPl2hsI1g==/base.apk!libhermes.so (offset 0xf0c000) (BuildId: be1718215827d9f1a8e4c5e326f3ffb7a473f1fd)
+11-07 10:26:56.997  4830  4830 F DEBUG   :       #09 pc 00000000000ace0c  /data/app/~~7p1i63AfdJsn3pfsIzBJnA==/com.tskyes.sinestezia-AP7dJoadJY9j3kPl2hsI1g==/base.apk!libhermes.so (offset 0xf0c000) (BuildId: be1718215827d9f1a8e4c5e326f3ffb7a473f1fd)
+11-07 10:26:56.997  4830  4830 F DEBUG   :       #10 pc 000000000016fa5c  /data/app/~~7p1i63AfdJsn3pfsIzBJnA==/com.tskyes.sinestezia-AP7dJoadJY9j3kPl2hsI1g==/base.apk!libhermes.so (offset 0xf0c000) (BuildId: be1718215827d9f1a8e4c5e326f3ffb7a473f1fd)
+11-07 10:26:56.997  4830  4830 F DEBUG   :       #11 pc 000000000017457a  /data/app/~~7p1i63AfdJsn3pfsIzBJnA==/com.tskyes.sinestezia-AP7dJoadJY9j3kPl2hsI1g==/base.apk!libhermes.so (offset 0xf0c000) (BuildId: be1718215827d9f1a8e4c5e326f3ffb7a473f1fd)
+11-07 10:26:56.997  4830  4830 F DEBUG   :       #12 pc 0000000000173f52  /data/app/~~7p1i63AfdJsn3pfsIzBJnA==/com.tskyes.sinestezia-AP7dJoadJY9j3kPl2hsI1g==/base.apk!libhermes.so (offset 0xf0c000) (BuildId: be1718215827d9f1a8e4c5e326f3ffb7a473f1fd)
+11-07 10:26:56.997  4830  4830 F DEBUG   :       #13 pc 00000000000cd06a  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+58) (BuildId: fa337969c798946280caa45e2d71a2e7)
+11-07 10:26:56.997  4830  4830 F DEBUG   :       #14 pc 0000000000062d88  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+56) (BuildId: fa337969c798946280caa45e2d71a2e7)
