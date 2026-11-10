@@ -1,0 +1,64 @@
+name: iOS (compilare simulator)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Instalare dependențe JS
+        run: npm install --no-audit --no-fund
+
+      - name: Aliniere versiuni cu SDK-ul Expo
+        run: npx expo install --fix
+
+      - name: Verificare tipuri și teste core
+        run: |
+          npx tsc --noEmit
+          npm test
+
+      - name: Expo prebuild (iOS)
+        run: npx expo prebuild --platform ios --no-install --clean
+
+      - name: Pods
+        working-directory: ios
+        run: pod install
+
+      - name: Compilare pentru simulator (fără semnare)
+        working-directory: ios
+        run: |
+          WS=$(ls -d *.xcworkspace | head -1)
+          SCHEME=$(xcodebuild -workspace "$WS" -list -json | python3 -c "import json,sys; print(json.load(sys.stdin)['workspace']['schemes'][0])")
+          echo "Schema: $SCHEME"
+          xcodebuild -workspace "$WS" -scheme "$SCHEME" -configuration Debug \
+            -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath build CODE_SIGNING_ALLOWED=NO build | tail -60
+
+      - name: Împachetare aplicație simulator
+        run: |
+          APP=$(find ios/build/Build/Products/Debug-iphonesimulator -maxdepth 1 -name "*.app" | head -1)
+          echo "App: $APP"
+          mkdir -p out && cp -R "$APP" out/
+          cd out && zip -qr ../music-and-color-simulator.zip .
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: music-and-color-simulator
+          path: music-and-color-simulator.zip

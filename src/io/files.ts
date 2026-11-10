@@ -1,5 +1,6 @@
 // Scrierea fișierelor, salvarea în telefon (galerie / muzică) și partajarea (WhatsApp, e-mail…).
 
+import { Platform } from 'react-native';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as MediaLibrary from 'expo-media-library';
 import * as Sharing from 'expo-sharing';
@@ -26,7 +27,16 @@ export async function writeBase64(name: string, b64: string): Promise<string> {
   return uri;
 }
 
+/**
+ * Salvează în telefon. Pe Android: galeria / Muzica. Pe iPhone, Fotografiile primesc doar PNG și JPEG;
+ * melodiile și TIFF-ul se trimit prin foaia de partajare („Salvează în Fișiere”).
+ */
 export async function saveToDevice(uri: string): Promise<void> {
+  const ext = (uri.split('?')[0].split('.').pop() ?? '').toLowerCase();
+  if (Platform.OS === 'ios' && !['png', 'jpg', 'jpeg'].includes(ext)) {
+    await shareFile(uri, MIME[ext === 'jpg' ? 'jpeg' : ext] ?? 'application/octet-stream');
+    return;
+  }
   const perm = await MediaLibrary.requestPermissionsAsync(true, ['photo', 'audio']);
   if (!perm.granted) throw new Error('Permisiunea de salvare a fost refuzată');
   await MediaLibrary.createAssetAsync(uri);
