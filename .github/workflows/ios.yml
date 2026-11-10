@@ -41,7 +41,7 @@ jobs:
         working-directory: ios
         run: pod install
 
-      - name: Compilare pentru simulator (fără semnare)
+      - name: Compilare pentru iPhone (Release, fără semnare)
         working-directory: ios
         shell: bash -o pipefail {0}
         run: |
@@ -50,18 +50,20 @@ jobs:
           SCHEME="${PROJ%.xcodeproj}"
           WS=$(ls -d *.xcworkspace | head -1)
           echo "Proiect: $PROJ · schemă: $SCHEME"
-          xcodebuild -workspace "$WS" -scheme "$SCHEME" -configuration Debug \
-            -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
+          xcodebuild -workspace "$WS" -scheme "$SCHEME" -configuration Release \
+            -sdk iphoneos -destination 'generic/platform=iOS' \
             -derivedDataPath build CODE_SIGNING_ALLOWED=NO build 2>&1 | tail -80
 
-      - name: Împachetare aplicație simulator
+      - name: Împachetare .ipa (nesemnat)
         run: |
-          APP=$(find ios/build/Build/Products/Debug-iphonesimulator -maxdepth 1 -name "*.app" | head -1)
+          APP=$(find ios/build/Build/Products/Release-iphoneos -maxdepth 1 -name "*.app" | head -1)
           echo "App: $APP"
-          mkdir -p out && cp -R "$APP" out/
-          cd out && zip -qr ../music-and-color-simulator.zip .
+          rm -rf ipa && mkdir -p ipa/Payload
+          cp -R "$APP" ipa/Payload/
+          cd ipa && zip -qr ../MusicColor-unsigned.ipa Payload
+          ls -la ../MusicColor-unsigned.ipa
 
       - uses: actions/upload-artifact@v4
         with:
-          name: music-and-color-simulator
-          path: music-and-color-simulator.zip
+          name: music-and-color-iphone
+          path: MusicColor-unsigned.ipa
