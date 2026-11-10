@@ -68,7 +68,7 @@ jobs:
           name: music-and-color-iphone
           path: MusicColor-unsigned.ipa
 
-      - name: Publicare .ipa pe ramura build-output
+      - name: Publicare .ipa pe ramura build-output-iphone
         if: success()
         run: |
           set -e
@@ -76,9 +76,9 @@ jobs:
           cp MusicColor-unsigned.ipa "$out/"
           echo "run ${{ github.run_number }} · ${{ github.sha }} · iPhone (nesemnat, de instalat cu Sideloadly)" > "$out/STATUS.txt"
           cd "$out"
-          git init -q -b build-output
+          git init -q -b build-output-iphone
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
           git add -A
           git commit -qm "iPhone ${{ github.run_number }}"
-          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" build-output
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" build-output-iphone
