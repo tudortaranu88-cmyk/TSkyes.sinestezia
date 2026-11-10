@@ -43,13 +43,16 @@ jobs:
 
       - name: Compilare pentru simulator (fără semnare)
         working-directory: ios
+        shell: bash -o pipefail {0}
         run: |
+          # Schema aplicației are același nume ca proiectul ei (nu schemele pentru module, ex. AacEncoder)
+          PROJ=$(ls -d *.xcodeproj | head -1)
+          SCHEME="${PROJ%.xcodeproj}"
           WS=$(ls -d *.xcworkspace | head -1)
-          SCHEME=$(xcodebuild -workspace "$WS" -list -json | python3 -c "import json,sys; print(json.load(sys.stdin)['workspace']['schemes'][0])")
-          echo "Schema: $SCHEME"
+          echo "Proiect: $PROJ · schemă: $SCHEME"
           xcodebuild -workspace "$WS" -scheme "$SCHEME" -configuration Debug \
             -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
-            -derivedDataPath build CODE_SIGNING_ALLOWED=NO build | tail -60
+            -derivedDataPath build CODE_SIGNING_ALLOWED=NO build 2>&1 | tail -80
 
       - name: Împachetare aplicație simulator
         run: |
