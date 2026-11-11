@@ -79,6 +79,37 @@ export class AudioEngine {
     return list.length;
   }
 
+  /**
+   * Decodează un fișier audio ales de utilizator (WAV, MP3 și ce mai știe decodorul nativ) în mono float32.
+   * Semnătura decodorului diferă între versiunile bibliotecii, așa că se încearcă pe rând variantele.
+   */
+  async decodeFile(uri: string): Promise<{ data: Float32Array; sampleRate: number }> {
+    const ctx = this.ctx as any;
+    let path = uri.replace(/^file:\/\//, '');
+    try { path = decodeURIComponent(path); } catch { /* rămâne calea brută */ }
+    const tries: (() => Promise<any>)[] = [
+      async () => (typeof ctx.decodeAudioDataSource === 'function' ? ctx.decodeAudioDataSource(path) : null),
+      async () => (typeof ctx.decodeAudioData === 'function' ? ctx.decodeAudioData(path) : null),
+      async () => ctx.decodeAudioData(await (await fetch(uri)).arrayBuffer()),
+    ];
+    let buf: any = null;
+    let last: any = null;
+    for (const t of tries) {
+      try { buf = await t(); } catch (e) { last = e; buf = null; }
+      if (buf && buf.length > 0) break;
+      buf = null;
+    }
+    if (!buf) throw new Error(`Fișierul audio nu a putut fi decodat${last?.message ? ` (${last.message})` : ''}`);
+    const n = buf.length as number;
+    const ch = (buf.numberOfChannels as number) || 1;
+    const data = new Float32Array(n);
+    for (let c = 0; c < ch; c++) {
+      const d = buf.getChannelData(c) as Float32Array;
+      for (let i = 0; i < n; i++) data[i] += d[i] / ch;
+    }
+    return { data, sampleRate: buf.sampleRate as number };
+  }
+
   get sampleRate(): number { return (this.ctx as any).sampleRate ?? 44100; }
 
   /** Pornește contextul audio dacă e suspendat. Întoarce starea lui. */

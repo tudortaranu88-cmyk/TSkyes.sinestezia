@@ -5,7 +5,7 @@
 // Nivel 2: imagine → melodie + partitură. Nivel 3: partitură → tablou (src/screens/Level3.tsx).
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, Alert, Linking } from 'react-native';
+import { View, Text, Pressable, StyleSheet, Alert, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { Visualizer } from './src/components/Visualizer';
@@ -15,7 +15,7 @@ import { Header, type Level } from './src/components/Header';
 import { SaveSheet } from './src/components/SaveSheet';
 import { exportImageFile, exportAudioFile } from './src/io/exportComposition';
 import { TABLOU_STYLES, type ImageKind, type TablouStyle } from './src/render/exportImage';
-import { demoComposition, runSelfTest, runSelfTest2, runSelfTest3, demoScorePages, runAudioProbe } from './src/io/selfTest';
+import { demoComposition, runSelfTest, runSelfTest2, runSelfTest3, runSelfTest4, demoScorePages, runAudioProbe } from './src/io/selfTest';
 import { Level2 } from './src/screens/Level2';
 import { Level3 } from './src/screens/Level3';
 import { LockScreen } from './src/screens/LockScreen';
@@ -24,7 +24,7 @@ import { demoPixels, sourceFromPixels, type ImageSource } from './src/io/imageSo
 import type { ScorePixels } from './src/core/scoreDecode';
 import { AudioEngine } from './src/audio/AudioEngine';
 import { SAMPLE_MANIFEST } from './assets/sunete/manifest';
-import { cellColor, cellPitch, freqToMidi, noteLabel, type Tuning } from './src/core/golden';
+import { cellColor, cellPitch, freqToMidi, noteLabel, PALETTES, type PaletteId, type Tuning } from './src/core/golden';
 import { DEFAULT_INSTRUMENT, instrumentById } from './src/core/instruments';
 import type { NoteEvent } from './src/core/types';
 
@@ -36,6 +36,7 @@ const keyOf = (col: number, row: number) => `${row}:${col}`;
 export default function App() {
   const [level, setLevel] = useState<Level>(1);
   const [instrument, setInstrument] = useState(DEFAULT_INSTRUMENT);
+  const [palette, setPalette] = useState<PaletteId>('aurie');
   const [events, setEvents] = useState<NoteEvent[]>([]);
   const engine = useRef<AudioEngine | null>(null);
   const held = useRef(new Map<string, { voice: number; eventId: number }>());
@@ -43,6 +44,7 @@ export default function App() {
   const [saveOpen, setSaveOpen] = useState(false);
   const [l2Injected, setL2Injected] = useState<ImageSource | null>(null);
   const [l3Injected, setL3Injected] = useState<ScorePixels[] | null>(null);
+  const [l2Audio, setL2Audio] = useState<NoteEvent[] | null>(null);
   const [unlocked, setUnlocked] = useState(!gateEnabled);   // poarta dezactivată ⇒ pornește deblocat
 
   useEffect(() => {
@@ -58,6 +60,11 @@ export default function App() {
       setUnlocked(true);   // autotestele ocolesc poarta de acces
 
       if (url.includes('audioprobe')) { runAudioProbe(engine.current); return; }
+      if (url.includes('selftest4')) {
+        setLevel(2);
+        runSelfTest4(engine.current).then(ev => { if (ev.length) setL2Audio(ev); });
+        return;
+      }
       if (url.includes('selftest3')) {
         const { pages, noteCount } = demoScorePages();
         setLevel(3);
@@ -98,11 +105,11 @@ export default function App() {
     held.current.set(k, { voice, eventId: id });
     const ev: NoteEvent = {
       id, col, row, label: noteLabel(col, row),
-      freq, midiFloat: freqToMidi(freq), color: cellColor(col, row),
+      freq, midiFloat: freqToMidi(freq), color: cellColor(col, row, palette),
       startMs: Date.now(), durationMs: null, instrument,
     };
     setEvents(prev => [...prev, ev]);
-  }, [instrument]);
+  }, [instrument, palette]);
 
   const onPressOut = useCallback((col: number, row: number) => {
     const k = keyOf(col, row);
@@ -134,12 +141,24 @@ export default function App() {
           </View>
           <View style={styles.divider} />
           <View style={[styles.half, styles.controls]}>
-            <Keyboard onPressIn={onPressIn} onPressOut={onPressOut} />
+            <View style={styles.keysCol}>
+              <View style={styles.paletteRow}>
+                <Text style={styles.paletteLbl}>Paletă</Text>
+                {PALETTES.map(p => (
+                  <Pressable key={p.id} onPress={() => setPalette(p.id)} hitSlop={4}
+                    style={[styles.paletteChip, palette === p.id && styles.paletteChipOn]}>
+                    <Text style={[styles.paletteTxt, palette === p.id && styles.paletteTxtOn]}>{p.label}</Text>
+                  </Pressable>
+                ))}
+              </View>
+              <Keyboard onPressIn={onPressIn} onPressOut={onPressOut} palette={palette} />
+            </View>
             <InstrumentBar selected={instrument} onSelect={setInstrument} />
           </View>
         </>
       ) : level === 2 ? (
-        <Level2 engine={engine} instrument={instrument} onInstrumentChange={setInstrument} injected={l2Injected} />
+        <Level2 engine={engine} instrument={instrument} onInstrumentChange={setInstrument} injected={l2Injected}
+          palette={palette} injectedAudio={l2Audio} />
       ) : (
         <Level3 engine={engine} injected={l3Injected} />
       )}
@@ -163,6 +182,13 @@ const styles = StyleSheet.create({
   half: { flex: 1 },               // două jumătăți egale
   controls: { flexDirection: 'row', backgroundColor: '#181822', paddingVertical: 6, paddingLeft: 6 },
   divider: { height: StyleSheet.hairlineWidth, backgroundColor: '#333' },
+  keysCol: { flex: 1 },
+  paletteRow: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingBottom: 4, paddingLeft: 24 },
+  paletteLbl: { color: '#8a8a99', fontSize: 10, fontWeight: '700', marginRight: 2 },
+  paletteChip: { paddingHorizontal: 10, paddingVertical: 2, borderRadius: 10, borderWidth: 1, borderColor: '#44445a' },
+  paletteChipOn: { backgroundColor: '#ffd700', borderColor: '#ffd700' },
+  paletteTxt: { color: '#c9c9d6', fontSize: 11, fontWeight: '700' },
+  paletteTxtOn: { color: '#111' },
   soon: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 8 },
   soonTitle: { color: '#ffd700', fontSize: 20, fontWeight: '700' },
   soonTxt: { color: '#8a8a99', fontSize: 14 },

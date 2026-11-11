@@ -63,9 +63,33 @@ export function cellPitch(c: number, r: number, tuning: Tuning): { freq: number;
   return { freq: midiToFreq(k), midi: k };
 }
 
+// ----- Palete de culori (selectorul din Nivelul 1). Culorile de mai jos sunt rândul 0; celelalte
+// rânduri se obțin la fel pentru orice paletă: pozitive → spre alb, negative → spre negru. -----
+export type PaletteId = 'aurie' | 'cmyk' | 'ral';
+
+export const PALETTES: { id: PaletteId; label: string; colors: RGB[]; names: string[] }[] = [
+  { id: 'aurie', label: 'Aurie', colors: BASE_COLORS, names: [] },
+  {
+    // cernelurile de tipar și amestecurile lor (valori sRGB aproximative pentru 100% cerneală)
+    id: 'cmyk', label: 'CMYK',
+    colors: [[237, 28, 36], [255, 242, 0], [0, 166, 81], [0, 174, 239], [46, 49, 146], [236, 0, 140], [88, 89, 91], [255, 255, 255]],
+    names: ['M100 Y100', 'Y100', 'C100 Y100', 'C100', 'C100 M100', 'M100', 'K70', 'hârtie'],
+  },
+  {
+    // RAL Classic (valori sRGB aproximative ale cartelei)
+    id: 'ral', label: 'RAL',
+    colors: [[204, 6, 5], [226, 83, 3], [247, 181, 0], [87, 166, 57], [0, 131, 81], [34, 113, 179], [108, 70, 117], [241, 236, 225]],
+    names: ['RAL 3020', 'RAL 2004', 'RAL 1023', 'RAL 6018', 'RAL 6024', 'RAL 5015', 'RAL 4005', 'RAL 9010'],
+  },
+];
+
+export function paletteColors(id: PaletteId = 'aurie'): RGB[] {
+  return (PALETTES.find(p => p.id === id) ?? PALETTES[0]).colors;
+}
+
 /** Culoarea celulei: rânduri pozitive → spre alb, negative → spre negru (identic cu DAW-ul). */
-export function cellColor(c: number, r: number): RGB {
-  let [R, G, B] = BASE_COLORS[c];
+export function cellColor(c: number, r: number, palette: PaletteId = 'aurie'): RGB {
+  let [R, G, B] = paletteColors(palette)[c];
   if (r > 0) {
     const w = Math.pow(r / 10, 0.85) * 0.7;
     R = Math.round(R + (255 - R) * w); G = Math.round(G + (255 - G) * w); B = Math.round(B + (255 - B) * w);

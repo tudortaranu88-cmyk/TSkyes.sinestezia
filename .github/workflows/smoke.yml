@@ -61,6 +61,7 @@ jobs:
           if ! grep -q 'SELFTEST done' smoke/selftest.txt; then echo "::error::Autotestul de export nu s-a terminat"; exit 1; fi
           if ! grep -q 'SELFTEST2 done' smoke/selftest.txt; then echo "::error::Autotestul Nivelului 2 nu s-a terminat"; exit 1; fi
           if ! grep -q 'SELFTEST3 done' smoke/selftest.txt; then echo "::error::Autotestul Nivelului 3 nu s-a terminat"; exit 1; fi
+          if ! grep -q 'SELFTEST4 done' smoke/selftest.txt; then echo "::error::Autotestul audio → imagine nu s-a terminat"; exit 1; fi
           if grep -q 'unregistered ActivityResultLauncher' smoke/logcat.txt; then echo "::error::Selectorul de imagini nu s-a deschis"; exit 1; fi
           cat smoke/audioprobe.txt || true
           if grep -q 'AUDIOPROBE done' smoke/audioprobe.txt && grep -qE 'peak=0\.0000' smoke/audioprobe.txt; then echo "::warning::Sonda audio nu a măsurat semnal pe emulator (emulatorul rulează cu)"; fi

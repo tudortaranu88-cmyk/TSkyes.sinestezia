@@ -9,7 +9,9 @@ import { InstrumentBar } from '../components/InstrumentBar';
 import { SaveSheet, type ExportedFile } from '../components/SaveSheet';
 import { readingCells, sampleColors, buildMelody, melodyBeats, type ReadPath, type MelodyNote } from '../core/imageMelody';
 import { layoutScore } from '../core/scoreLayout';
-import { noteLabel, rgbToCss } from '../core/golden';
+import { noteLabel, rgbToCss, type PaletteId } from '../core/golden';
+import { AudioTablou } from './AudioTablou';
+import type { NoteEvent } from '../core/types';
 import { instrumentById } from '../core/instruments';
 import { DRUM_PATTERNS, type DrumId } from '../core/drums';
 import { renderLevel2Mix } from '../core/level2Mix';
@@ -30,9 +32,12 @@ interface Props {
   instrument: string;
   onInstrumentChange: (id: string) => void;
   injected?: ImageSource | null;
+  palette?: PaletteId;                 // paleta aleasă la Nivelul 1 (colorează tabloul din audio)
+  injectedAudio?: NoteEvent[] | null;  // autotest: note deja detectate
 }
 
-export function Level2({ engine, instrument, onInstrumentChange, injected }: Props) {
+export function Level2({ engine, instrument, onInstrumentChange, injected, palette = 'aurie', injectedAudio }: Props) {
+  const [mode, setMode] = useState<'imagine' | 'audio'>('imagine');
   const [src, setSrc] = useState<ImageSource | null>(null);
   const [path, setPath] = useState<ReadPath>('spirala');
   const [density, setDensity] = useState(256);
@@ -48,7 +53,8 @@ export function Level2({ engine, instrument, onInstrumentChange, injected }: Pro
   const stopper = useRef<(() => void) | null>(null);
   const timer = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  useEffect(() => { if (injected) setSrc(injected); }, [injected]);
+  useEffect(() => { if (injected) { setSrc(injected); setMode('imagine'); } }, [injected]);
+  useEffect(() => { if (injectedAudio?.length) setMode('audio'); }, [injectedAudio]);
 
   const cells = useMemo(() => (src ? readingCells(src.width, src.height, density, path) : []), [src, density, path]);
   const melody = useMemo(() => (src ? buildMelody(sampleColors(src.rgba, src.width, src.height, cells)) : []), [src, cells]);
@@ -149,6 +155,20 @@ export function Level2({ engine, instrument, onInstrumentChange, injected }: Pro
   const onLayout = (e: LayoutChangeEvent) => setBox({ w: e.nativeEvent.layout.width, h: e.nativeEvent.layout.height });
   const drumLabel = drum ? DRUM_PATTERNS.find(p => p.id === drum)?.label : null;
 
+  const modeSwitch = (
+    <View style={styles.row}>
+      <Chip label="Din imagine" on={mode === 'imagine'} onPress={() => setMode('imagine')} />
+      <Chip label="Din fișier audio" on={mode === 'audio'} onPress={() => { stop(); setMode('audio'); }} />
+    </View>
+  );
+
+  if (mode === 'audio') {
+    return (
+      <AudioTablou engine={engine} instrument={instrument} onInstrumentChange={onInstrumentChange}
+        palette={palette} injected={injectedAudio} modeSwitch={modeSwitch} />
+    );
+  }
+
   return (
     <>
       <View style={styles.top} onLayout={onLayout}>
@@ -185,6 +205,7 @@ export function Level2({ engine, instrument, onInstrumentChange, injected }: Pro
       <View style={styles.divider} />
       <View style={styles.controls}>
         <ScrollView style={styles.panelScroll} contentContainerStyle={styles.panel} showsVerticalScrollIndicator={false}>
+          {modeSwitch}
           <View style={styles.row}>
             <Btn label={src ? 'Altă imagine' : 'Alege imagine'} onPress={choose} disabled={loading} />
             <Btn

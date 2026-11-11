@@ -142,3 +142,51 @@ export async function runSelfTest3(pages: ScorePixels[], expected: number, sampl
   }
   log('done');
 }
+
+// ---------- Nivelul 2, din fișier audio (musiccolor://selftest4) ----------
+// Randează o melodie cunoscută, o scrie ca WAV și ca MP3, o decodează înapoi cu decodorul aplicației,
+// îi caută notele și face tabloul în ambele stiluri. Verifică astfel tot lanțul audio → imagine.
+import { renderMix } from '../core/audioRender';
+import { encodeWav, toBase64 } from '../core/encoders';
+import { encodeMp3 } from '../audio/mp3';
+import { midiToFreq } from '../core/golden';
+import { detectNotes, notesToEvents } from '../core/audioMelody';
+import { decodeAudio } from './audioSource';
+import type { AudioEngine } from '../audio/AudioEngine';
+
+export async function runSelfTest4(engine: AudioEngine | null): Promise<NoteEvent[]> {
+  const log = (s: string) => console.log(`SELFTEST4 ${s}`);
+  let shown: NoteEvent[] = [];
+  try {
+    if (!engine) throw new Error('motor audio indisponibil');
+    const seq = [60, 62, 64, 65, 67, 69, 71, 72, 67, 64, 60, 55];
+    const SR = 44100;
+    const mix = renderMix(seq.map((m, i) => ({ startSec: 0.1 + i * 0.5, durSec: 0.4, freq: midiToFreq(m), instrument: 'vioara' })), { sampleRate: SR });
+    const files: [string, string][] = [
+      ['wav', await writeBase64('_selftest4.wav', toBase64(encodeWav(mix, SR)))],
+      ['mp3', await writeBase64('_selftest4.mp3', toBase64(await encodeMp3(mix, SR, 128)))],
+    ];
+    for (const [kind, uri] of files) {
+      try {
+        const t = Date.now();
+        const pcm = await decodeAudio(engine, uri, `test.${kind}`);
+        const notes = detectNotes(pcm.data, pcm.sampleRate);
+        const same = notes.length === seq.length && notes.every((n, i) => n.midi === seq[i]);
+        log(`${kind} decodat sr=${pcm.sampleRate} ${(pcm.data.length / pcm.sampleRate).toFixed(1)}s → ${notes.length} note (asteptat ${seq.length}) ${same ? 'identice' : 'DIFERITE: ' + notes.map(n => n.midi).join(',')} ${Date.now() - t} ms`);
+        if (!same) log(`FAIL ${kind}: notele detectate difera`);
+        if (!shown.length) shown = notesToEvents(notes, 'cmyk', 'pian', Date.now());
+      } catch (e: any) {
+        log(`FAIL ${kind}: ${e?.message ?? e}`);
+      }
+    }
+    for (const st of ['floare', 'spirala'] as const) {
+      const tt = Date.now();
+      const b64 = exportTablouImage(shown, 'png', st, 1024);
+      log(`tablou ${st} png ok ${Math.round((b64.length * 3) / 4)} bytes ${Date.now() - tt} ms`);
+    }
+  } catch (e: any) {
+    log(`FAIL ${e?.message ?? e}`);
+  }
+  log('done');
+  return shown;
+}

@@ -8,7 +8,7 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test test/core.test.ts test/encoders.test.ts test/level2.test.ts test/level3.test.ts"
+    "test": "tsx --test test/core.test.ts test/encoders.test.ts test/level2.test.ts test/level3.test.ts test/audio.test.ts"
   },
   "dependencies": {
     "@breezystack/lamejs": "^1.2.7",
@@ -16,6 +16,7 @@
     "aac-encoder": "file:./modules/aac-encoder",
     "expo": "~54.0.0",
     "expo-asset": "~12.0.9",
+    "expo-document-picker": "~14.0.7",
     "expo-file-system": "~19.0.17",
     "expo-image-manipulator": "~14.0.7",
     "expo-image-picker": "~17.0.8",

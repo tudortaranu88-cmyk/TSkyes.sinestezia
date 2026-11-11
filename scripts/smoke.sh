@@ -72,6 +72,18 @@ adb shell ls /sdcard/DCIM > $OUT/dcim.txt 2>&1
 F=$(adb shell ls /sdcard/DCIM | tr -d '\r' | grep partitura | head -1)
 [ -n "$F" ] && adb pull "/sdcard/DCIM/$F" $OUT/partitura-android.png >/dev/null 2>&1
 
+echo "== nivelul 2 din audio" >> $OUT/pasi.txt
+adb shell am start -a android.intent.action.VIEW -d "musiccolor://selftest4" $PKG >> $OUT/start.txt 2>&1
+for i in $(seq 1 60); do adb logcat -d | grep -q "SELFTEST4 done" && break; sleep 2; done
+sleep 2; shot 13a-audio-floare
+tap_text "Spirală"; sleep 2; shot 13b-audio-spirala
+tap_text "Alege fișier audio" || tap_text "Alt fișier audio"; sleep 4; shot 13c-selector-audio
+adb shell input keyevent KEYCODE_BACK; sleep 2
+tap_text "N1"; sleep 1.5
+tap_text "CMYK"; sleep 1; shot 13d-paleta-cmyk
+tap_text "RAL"; sleep 1; shot 13e-paleta-ral
+tap_text "Aurie"; sleep 1
+
 echo "== nivelul 3" >> $OUT/pasi.txt
 adb shell am start -a android.intent.action.VIEW -d "musiccolor://selftest3" $PKG >> $OUT/start.txt 2>&1
 for i in $(seq 1 60); do adb logcat -d | grep -q "SELFTEST3 done" && break; sleep 2; done
