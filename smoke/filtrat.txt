@@ -1,0 +1,481 @@
+11-12 16:47:05.324   522   754 W system_server: Core platform API violation: Llibcore/io/Memory;->pokeByte(JB)V from Lcom/android/wifi/x/com/google/protobuf/UnsafeUtil; using reflection
+11-12 16:47:05.324   522   754 W system_server: Core platform API violation: Llibcore/io/Memory;->peekByte(J)B from Lcom/android/wifi/x/com/google/protobuf/UnsafeUtil; using reflection
+11-12 16:47:07.442  2835  3000 I ReactNativeJS: Running "main"
+11-12 16:47:07.446  2835  3000 I ReactNativeJS: Running "main"
+11-12 16:47:07.750  3075  3075 D nativeloader: InitLlndkLibrariesProduct: libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libRS.so:libandroid_net.so:libbinder_ndk.so:libc.so:libcgrouprc.so:libclang_rt.asan-x86_64-android.so:libcom.android.tethering.connectivity_native.so:libdl.so:libft2.so:liblog.so:libm.so:libmediandk.so:libnativewindow.so:libneuralnetworks.so:libselinux.so:libsync.so:libvndksupport.so:libvulkan.so
+11-12 16:47:07.751  3075  3075 D nativeloader: InitVndkspLibrariesProduct: android.hardware.common-V2-ndk.so:android.hardware.common.fmq-V1-ndk.so:android.hardware.graphics.allocator-V2-ndk.so:android.hardware.graphics.common-V4-ndk.so:android.hardware.graphics.common@1.0.so:android.hardware.graphics.common@1.1.so:android.hardware.graphics.common@1.2.so:android.hardware.graphics.composer3-V1-ndk.so:android.hardware.graphics.mapper@2.0.so:android.hardware.graphics.mapper@2.1.so:android.hardware.graphics.mapper@3.0.so:android.hardware.graphics.mapper@4.0.so:android.hardware.renderscript@1.0.so:android.hidl.memory.token@1.0.so:android.hidl.memory@1.0-impl.so:android.hidl.memory@1.0.so:android.hidl.safe_union@1.0.so:libRSCpuRef.so:libRSDriver.so:libRS_internal.so:libbase.so:libbcinfo.so:libblas.so:libc++.so:libcompiler_rt.so:libcutils.so:libdmabufheap.so:libgralloctypes.so:libhardware.so:libhidlbase.so:libhidlmemory.so:libion.so:libjsoncpp.so:liblzma.so:libprocessgroup.so:libunwindstack.so:libutils.so:libutilscallstack.so:libz.so
+11-12 16:47:08.592  3151  3151 D nativeloader: InitLlndkLibrariesProduct: libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libRS.so:libandroid_net.so:libbinder_ndk.so:libc.so:libcgrouprc.so:libclang_rt.asan-x86_64-android.so:libcom.android.tethering.connectivity_native.so:libdl.so:libft2.so:liblog.so:libm.so:libmediandk.so:libnativewindow.so:libneuralnetworks.so:libselinux.so:libsync.so:libvndksupport.so:libvulkan.so
+11-12 16:47:08.592  3151  3151 D nativeloader: InitVndkspLibrariesProduct: android.hardware.common-V2-ndk.so:android.hardware.common.fmq-V1-ndk.so:android.hardware.graphics.allocator-V2-ndk.so:android.hardware.graphics.common-V4-ndk.so:android.hardware.graphics.common@1.0.so:android.hardware.graphics.common@1.1.so:android.hardware.graphics.common@1.2.so:android.hardware.graphics.composer3-V1-ndk.so:android.hardware.graphics.mapper@2.0.so:android.hardware.graphics.mapper@2.1.so:android.hardware.graphics.mapper@3.0.so:android.hardware.graphics.mapper@4.0.so:android.hardware.renderscript@1.0.so:android.hidl.memory.token@1.0.so:android.hidl.memory@1.0-impl.so:android.hidl.memory@1.0.so:android.hidl.safe_union@1.0.so:libRSCpuRef.so:libRSDriver.so:libRS_internal.so:libbase.so:libbcinfo.so:libblas.so:libc++.so:libcompiler_rt.so:libcutils.so:libdmabufheap.so:libgralloctypes.so:libhardware.so:libhidlbase.so:libhidlmemory.so:libion.so:libjsoncpp.so:liblzma.so:libprocessgroup.so:libunwindstack.so:libutils.so:libutilscallstack.so:libz.so
+11-12 16:47:10.968  3476  3476 D nativeloader: InitLlndkLibrariesProduct: libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libRS.so:libandroid_net.so:libbinder_ndk.so:libc.so:libcgrouprc.so:libclang_rt.asan-x86_64-android.so:libcom.android.tethering.connectivity_native.so:libdl.so:libft2.so:liblog.so:libm.so:libmediandk.so:libnativewindow.so:libneuralnetworks.so:libselinux.so:libsync.so:libvndksupport.so:libvulkan.so
+11-12 16:47:10.968  3476  3476 D nativeloader: InitVndkspLibrariesProduct: android.hardware.common-V2-ndk.so:android.hardware.common.fmq-V1-ndk.so:android.hardware.graphics.allocator-V2-ndk.so:android.hardware.graphics.common-V4-ndk.so:android.hardware.graphics.common@1.0.so:android.hardware.graphics.common@1.1.so:android.hardware.graphics.common@1.2.so:android.hardware.graphics.composer3-V1-ndk.so:android.hardware.graphics.mapper@2.0.so:android.hardware.graphics.mapper@2.1.so:android.hardware.graphics.mapper@3.0.so:android.hardware.graphics.mapper@4.0.so:android.hardware.renderscript@1.0.so:android.hidl.memory.token@1.0.so:android.hidl.memory@1.0-impl.so:android.hidl.memory@1.0.so:android.hidl.safe_union@1.0.so:libRSCpuRef.so:libRSDriver.so:libRS_internal.so:libbase.so:libbcinfo.so:libblas.so:libc++.so:libcompiler_rt.so:libcutils.so:libdmabufheap.so:libgralloctypes.so:libhardware.so:libhidlbase.so:libhidlmemory.so:libion.so:libjsoncpp.so:liblzma.so:libprocessgroup.so:libunwindstack.so:libutils.so:libutilscallstack.so:libz.so
+11-12 16:47:11.764  1027  1377 W droid.bluetooth: Core platform API violation: Llibcore/io/Memory;->pokeByte(JB)V from Lcom/google/protobuf/UnsafeUtil; using reflection
+11-12 16:47:11.764  1027  1377 W droid.bluetooth: Core platform API violation: Llibcore/io/Memory;->peekByte(J)B from Lcom/google/protobuf/UnsafeUtil; using reflection
+11-12 16:47:13.581  3637  3637 D nativeloader: InitLlndkLibrariesProduct: libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libRS.so:libandroid_net.so:libbinder_ndk.so:libc.so:libcgrouprc.so:libclang_rt.asan-x86_64-android.so:libcom.android.tethering.connectivity_native.so:libdl.so:libft2.so:liblog.so:libm.so:libmediandk.so:libnativewindow.so:libneuralnetworks.so:libselinux.so:libsync.so:libvndksupport.so:libvulkan.so
+11-12 16:47:13.581  3637  3637 D nativeloader: InitVndkspLibrariesProduct: android.hardware.common-V2-ndk.so:android.hardware.common.fmq-V1-ndk.so:android.hardware.graphics.allocator-V2-ndk.so:android.hardware.graphics.common-V4-ndk.so:android.hardware.graphics.common@1.0.so:android.hardware.graphics.common@1.1.so:android.hardware.graphics.common@1.2.so:android.hardware.graphics.composer3-V1-ndk.so:android.hardware.graphics.mapper@2.0.so:android.hardware.graphics.mapper@2.1.so:android.hardware.graphics.mapper@3.0.so:android.hardware.graphics.mapper@4.0.so:android.hardware.renderscript@1.0.so:android.hidl.memory.token@1.0.so:android.hidl.memory@1.0-impl.so:android.hidl.memory@1.0.so:android.hidl.safe_union@1.0.so:libRSCpuRef.so:libRSDriver.so:libRS_internal.so:libbase.so:libbcinfo.so:libblas.so:libc++.so:libcompiler_rt.so:libcutils.so:libdmabufheap.so:libgralloctypes.so:libhardware.so:libhidlbase.so:libhidlmemory.so:libion.so:libjsoncpp.so:liblzma.so:libprocessgroup.so:libunwindstack.so:libutils.so:libutilscallstack.so:libz.so
+11-12 16:47:14.530   522   594 W system_server: Core platform API violation: Llibcore/io/Memory;->pokeByte(JB)V from Lcom/android/permission/jarjar/com/google/protobuf/UnsafeUtil; using reflection
+11-12 16:47:14.530   522   594 W system_server: Core platform API violation: Llibcore/io/Memory;->peekByte(J)B from Lcom/android/permission/jarjar/com/google/protobuf/UnsafeUtil; using reflection
+11-12 16:47:16.185  3809  3809 D nativeloader:   com_android_tethering: libandroid_net_connectivity_com_android_net_module_util_jni.so:libcronet.114.0.5735.84.so:libframework-connectivity-jni.so:libframework-connectivity-tiramisu-jni.so:libservice-connectivity.so
+11-12 16:47:17.050  1469  3146 W libc    : Access denied finding property "ro.hardware.chipname"
+11-12 16:47:17.412  3919  3919 D nativeloader: InitLlndkLibrariesProduct: libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libRS.so:libandroid_net.so:libbinder_ndk.so:libc.so:libcgrouprc.so:libclang_rt.asan-x86_64-android.so:libcom.android.tethering.connectivity_native.so:libdl.so:libft2.so:liblog.so:libm.so:libmediandk.so:libnativewindow.so:libneuralnetworks.so:libselinux.so:libsync.so:libvndksupport.so:libvulkan.so
+11-12 16:47:17.414  3919  3919 D nativeloader: InitVndkspLibrariesProduct: android.hardware.common-V2-ndk.so:android.hardware.common.fmq-V1-ndk.so:android.hardware.graphics.allocator-V2-ndk.so:android.hardware.graphics.common-V4-ndk.so:android.hardware.graphics.common@1.0.so:android.hardware.graphics.common@1.1.so:android.hardware.graphics.common@1.2.so:android.hardware.graphics.composer3-V1-ndk.so:android.hardware.graphics.mapper@2.0.so:android.hardware.graphics.mapper@2.1.so:android.hardware.graphics.mapper@3.0.so:android.hardware.graphics.mapper@4.0.so:android.hardware.renderscript@1.0.so:android.hidl.memory.token@1.0.so:android.hidl.memory@1.0-impl.so:android.hidl.memory@1.0.so:android.hidl.safe_union@1.0.so:libRSCpuRef.so:libRSDriver.so:libRS_internal.so:libbase.so:libbcinfo.so:libblas.so:libc++.so:libcompiler_rt.so:libcutils.so:libdmabufheap.so:libgralloctypes.so:libhardware.so:libhidlbase.so:libhidlmemory.so:libion.so:libjsoncpp.so:liblzma.so:libprocessgroup.so:libunwindstack.so:libutils.so:libutilscallstack.so:libz.so
+11-12 16:47:17.985  3947  3947 D nativeloader: InitLlndkLibrariesProduct: libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libRS.so:libandroid_net.so:libbinder_ndk.so:libc.so:libcgrouprc.so:libclang_rt.asan-x86_64-android.so:libcom.android.tethering.connectivity_native.so:libdl.so:libft2.so:liblog.so:libm.so:libmediandk.so:libnativewindow.so:libneuralnetworks.so:libselinux.so:libsync.so:libvndksupport.so:libvulkan.so
+11-12 16:47:17.986  3947  3947 D nativeloader: InitVndkspLibrariesProduct: android.hardware.common-V2-ndk.so:android.hardware.common.fmq-V1-ndk.so:android.hardware.graphics.allocator-V2-ndk.so:android.hardware.graphics.common-V4-ndk.so:android.hardware.graphics.common@1.0.so:android.hardware.graphics.common@1.1.so:android.hardware.graphics.common@1.2.so:android.hardware.graphics.composer3-V1-ndk.so:android.hardware.graphics.mapper@2.0.so:android.hardware.graphics.mapper@2.1.so:android.hardware.graphics.mapper@3.0.so:android.hardware.graphics.mapper@4.0.so:android.hardware.renderscript@1.0.so:android.hidl.memory.token@1.0.so:android.hidl.memory@1.0-impl.so:android.hidl.memory@1.0.so:android.hidl.safe_union@1.0.so:libRSCpuRef.so:libRSDriver.so:libRS_internal.so:libbase.so:libbcinfo.so:libblas.so:libc++.so:libcompiler_rt.so:libcutils.so:libdmabufheap.so:libgralloctypes.so:libhardware.so:libhidlbase.so:libhidlmemory.so:libion.so:libjsoncpp.so:liblzma.so:libprocessgroup.so:libunwindstack.so:libutils.so:libutilscallstack.so:libz.so
+11-12 16:47:18.303  3999  3999 D nativeloader: InitLlndkLibrariesProduct: libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libRS.so:libandroid_net.so:libbinder_ndk.so:libc.so:libcgrouprc.so:libclang_rt.asan-x86_64-android.so:libcom.android.tethering.connectivity_native.so:libdl.so:libft2.so:liblog.so:libm.so:libmediandk.so:libnativewindow.so:libneuralnetworks.so:libselinux.so:libsync.so:libvndksupport.so:libvulkan.so
+11-12 16:47:18.303  3999  3999 D nativeloader: InitVndkspLibrariesProduct: android.hardware.common-V2-ndk.so:android.hardware.common.fmq-V1-ndk.so:android.hardware.graphics.allocator-V2-ndk.so:android.hardware.graphics.common-V4-ndk.so:android.hardware.graphics.common@1.0.so:android.hardware.graphics.common@1.1.so:android.hardware.graphics.common@1.2.so:android.hardware.graphics.composer3-V1-ndk.so:android.hardware.graphics.mapper@2.0.so:android.hardware.graphics.mapper@2.1.so:android.hardware.graphics.mapper@3.0.so:android.hardware.graphics.mapper@4.0.so:android.hardware.renderscript@1.0.so:android.hidl.memory.token@1.0.so:android.hidl.memory@1.0-impl.so:android.hidl.memory@1.0.so:android.hidl.safe_union@1.0.so:libRSCpuRef.so:libRSDriver.so:libRS_internal.so:libbase.so:libbcinfo.so:libblas.so:libc++.so:libcompiler_rt.so:libcutils.so:libdmabufheap.so:libgralloctypes.so:libhardware.so:libhidlbase.so:libhidlmemory.so:libion.so:libjsoncpp.so:liblzma.so:libprocessgroup.so:libunwindstack.so:libutils.so:libutilscallstack.so:libz.so
+11-12 16:47:18.650  4040  4040 D nativeloader: InitLlndkLibrariesProduct: libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libRS.so:libandroid_net.so:libbinder_ndk.so:libc.so:libcgrouprc.so:libclang_rt.asan-x86_64-android.so:libcom.android.tethering.connectivity_native.so:libdl.so:libft2.so:liblog.so:libm.so:libmediandk.so:libnativewindow.so:libneuralnetworks.so:libselinux.so:libsync.so:libvndksupport.so:libvulkan.so
+11-12 16:47:18.651  4040  4040 D nativeloader: InitVndkspLibrariesProduct: android.hardware.common-V2-ndk.so:android.hardware.common.fmq-V1-ndk.so:android.hardware.graphics.allocator-V2-ndk.so:android.hardware.graphics.common-V4-ndk.so:android.hardware.graphics.common@1.0.so:android.hardware.graphics.common@1.1.so:android.hardware.graphics.common@1.2.so:android.hardware.graphics.composer3-V1-ndk.so:android.hardware.graphics.mapper@2.0.so:android.hardware.graphics.mapper@2.1.so:android.hardware.graphics.mapper@3.0.so:android.hardware.graphics.mapper@4.0.so:android.hardware.renderscript@1.0.so:android.hidl.memory.token@1.0.so:android.hidl.memory@1.0-impl.so:android.hidl.memory@1.0.so:android.hidl.safe_union@1.0.so:libRSCpuRef.so:libRSDriver.so:libRS_internal.so:libbase.so:libbcinfo.so:libblas.so:libc++.so:libcompiler_rt.so:libcutils.so:libdmabufheap.so:libgralloctypes.so:libhardware.so:libhidlbase.so:libhidlmemory.so:libion.so:libjsoncpp.so:liblzma.so:libprocessgroup.so:libunwindstack.so:libutils.so:libutilscallstack.so:libz.so
+11-12 16:47:19.331  1742  1742 W SnapshotHandler: 	at libcore.io.IoBridge.open(IoBridge.java:574)
+11-12 16:47:19.331  1742  1742 W SnapshotHandler: 	at libcore.io.Linux.open(Native Method)
+11-12 16:47:19.331  1742  1742 W SnapshotHandler: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:47:19.331  1742  1742 W SnapshotHandler: 	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:274)
+11-12 16:47:19.331  1742  1742 W SnapshotHandler: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:47:19.331  1742  1742 W SnapshotHandler: 	at libcore.io.IoBridge.open(IoBridge.java:560)
+11-12 16:47:19.392  1742  2756 W SnapshotHandler: 	at libcore.io.IoBridge.open(IoBridge.java:574)
+11-12 16:47:19.392  1742  2756 W SnapshotHandler: 	at libcore.io.Linux.open(Native Method)
+11-12 16:47:19.392  1742  2756 W SnapshotHandler: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:47:19.392  1742  2756 W SnapshotHandler: 	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:274)
+11-12 16:47:19.392  1742  2756 W SnapshotHandler: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:47:19.392  1742  2756 W SnapshotHandler: 	at libcore.io.IoBridge.open(IoBridge.java:560)
+11-12 16:47:19.693  4111  4111 D nativeloader: InitLlndkLibrariesProduct: libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libRS.so:libandroid_net.so:libbinder_ndk.so:libc.so:libcgrouprc.so:libclang_rt.asan-x86_64-android.so:libcom.android.tethering.connectivity_native.so:libdl.so:libft2.so:liblog.so:libm.so:libmediandk.so:libnativewindow.so:libneuralnetworks.so:libselinux.so:libsync.so:libvndksupport.so:libvulkan.so
+11-12 16:47:19.694  4111  4111 D nativeloader: InitVndkspLibrariesProduct: android.hardware.common-V2-ndk.so:android.hardware.common.fmq-V1-ndk.so:android.hardware.graphics.allocator-V2-ndk.so:android.hardware.graphics.common-V4-ndk.so:android.hardware.graphics.common@1.0.so:android.hardware.graphics.common@1.1.so:android.hardware.graphics.common@1.2.so:android.hardware.graphics.composer3-V1-ndk.so:android.hardware.graphics.mapper@2.0.so:android.hardware.graphics.mapper@2.1.so:android.hardware.graphics.mapper@3.0.so:android.hardware.graphics.mapper@4.0.so:android.hardware.renderscript@1.0.so:android.hidl.memory.token@1.0.so:android.hidl.memory@1.0-impl.so:android.hidl.memory@1.0.so:android.hidl.safe_union@1.0.so:libRSCpuRef.so:libRSDriver.so:libRS_internal.so:libbase.so:libbcinfo.so:libblas.so:libc++.so:libcompiler_rt.so:libcutils.so:libdmabufheap.so:libgralloctypes.so:libhardware.so:libhidlbase.so:libhidlmemory.so:libion.so:libjsoncpp.so:liblzma.so:libprocessgroup.so:libunwindstack.so:libutils.so:libutilscallstack.so:libz.so
+11-12 16:47:20.068  3151  3227 W libc    : Access denied finding property "persist.adb.tls_server.enable"
+11-12 16:47:20.074  3151  3227 W libc    : Access denied finding property "service.adb.tls.port"
+11-12 16:47:20.538  1052  1076 W libc    : Access denied finding property "ro.vendor.aware_available"
+11-12 16:47:20.571  1052  1076 W libc    : Access denied finding property "ro.vendor.aware_available"
+11-12 16:47:20.903  1052  1076 W libc    : Access denied finding property "ro.vendor.aware_available"
+11-12 16:47:20.987  1052  1076 W libc    : Access denied finding property "ro.vendor.aware_available"
+11-12 16:47:21.647  1052  1076 W libc    : Access denied finding property "ro.vendor.aware_available"
+11-12 16:47:21.653  1052  1076 W libc    : Access denied finding property "ro.vendor.aware_available"
+11-12 16:47:21.762  1052  1076 W libc    : Access denied finding property "ro.vendor.aware_available"
+11-12 16:47:21.792   522   893 W FileUtils: 	at libcore.io.Linux.chmod(Native Method)
+11-12 16:47:21.792   522   893 W FileUtils: 	at libcore.io.ForwardingOs.chmod(ForwardingOs.java:165)
+11-12 16:47:21.792   522   893 W FileUtils: 	at libcore.io.BlockGuardOs.chmod(BlockGuardOs.java:83)
+11-12 16:47:22.727  3151  3227 W libc    : Access denied finding property "persist.adb.tls_server.enable"
+11-12 16:47:22.727  3151  3227 W libc    : Access denied finding property "service.adb.tls.port"
+11-12 16:47:23.168   835   929 W ssioncontroller: Core platform API violation: Llibcore/io/Memory;->pokeByte(JB)V from Lcom/google/protobuf/UnsafeUtil; using reflection
+11-12 16:47:23.168   835   929 W ssioncontroller: Core platform API violation: Llibcore/io/Memory;->peekByte(J)B from Lcom/google/protobuf/UnsafeUtil; using reflection
+11-12 16:47:23.353  4309  4309 D nativeloader: InitLlndkLibrariesProduct: libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libRS.so:libandroid_net.so:libbinder_ndk.so:libc.so:libcgrouprc.so:libclang_rt.asan-x86_64-android.so:libcom.android.tethering.connectivity_native.so:libdl.so:libft2.so:liblog.so:libm.so:libmediandk.so:libnativewindow.so:libneuralnetworks.so:libselinux.so:libsync.so:libvndksupport.so:libvulkan.so
+11-12 16:47:23.354  4309  4309 D nativeloader: InitVndkspLibrariesProduct: android.hardware.common-V2-ndk.so:android.hardware.common.fmq-V1-ndk.so:android.hardware.graphics.allocator-V2-ndk.so:android.hardware.graphics.common-V4-ndk.so:android.hardware.graphics.common@1.0.so:android.hardware.graphics.common@1.1.so:android.hardware.graphics.common@1.2.so:android.hardware.graphics.composer3-V1-ndk.so:android.hardware.graphics.mapper@2.0.so:android.hardware.graphics.mapper@2.1.so:android.hardware.graphics.mapper@3.0.so:android.hardware.graphics.mapper@4.0.so:android.hardware.renderscript@1.0.so:android.hidl.memory.token@1.0.so:android.hidl.memory@1.0-impl.so:android.hidl.memory@1.0.so:android.hidl.safe_union@1.0.so:libRSCpuRef.so:libRSDriver.so:libRS_internal.so:libbase.so:libbcinfo.so:libblas.so:libc++.so:libcompiler_rt.so:libcutils.so:libdmabufheap.so:libgralloctypes.so:libhardware.so:libhidlbase.so:libhidlmemory.so:libion.so:libjsoncpp.so:liblzma.so:libprocessgroup.so:libunwindstack.so:libutils.so:libutilscallstack.so:libz.so
+11-12 16:47:23.482  4332  4332 D nativeloader:   com_android_tethering: libandroid_net_connectivity_com_android_net_module_util_jni.so:libcronet.114.0.5735.84.so:libframework-connectivity-jni.so:libframework-connectivity-tiramisu-jni.so:libservice-connectivity.so
+11-12 16:47:23.488  4321  4321 D nativeloader: InitLlndkLibrariesProduct: libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libRS.so:libandroid_net.so:libbinder_ndk.so:libc.so:libcgrouprc.so:libclang_rt.asan-x86_64-android.so:libcom.android.tethering.connectivity_native.so:libdl.so:libft2.so:liblog.so:libm.so:libmediandk.so:libnativewindow.so:libneuralnetworks.so:libselinux.so:libsync.so:libvndksupport.so:libvulkan.so
+11-12 16:47:23.489  4321  4321 D nativeloader: InitVndkspLibrariesProduct: android.hardware.common-V2-ndk.so:android.hardware.common.fmq-V1-ndk.so:android.hardware.graphics.allocator-V2-ndk.so:android.hardware.graphics.common-V4-ndk.so:android.hardware.graphics.common@1.0.so:android.hardware.graphics.common@1.1.so:android.hardware.graphics.common@1.2.so:android.hardware.graphics.composer3-V1-ndk.so:android.hardware.graphics.mapper@2.0.so:android.hardware.graphics.mapper@2.1.so:android.hardware.graphics.mapper@3.0.so:android.hardware.graphics.mapper@4.0.so:android.hardware.renderscript@1.0.so:android.hidl.memory.token@1.0.so:android.hidl.memory@1.0-impl.so:android.hidl.memory@1.0.so:android.hidl.safe_union@1.0.so:libRSCpuRef.so:libRSDriver.so:libRS_internal.so:libbase.so:libbcinfo.so:libblas.so:libc++.so:libcompiler_rt.so:libcutils.so:libdmabufheap.so:libgralloctypes.so:libhardware.so:libhidlbase.so:libhidlmemory.so:libion.so:libjsoncpp.so:liblzma.so:libprocessgroup.so:libunwindstack.so:libutils.so:libutilscallstack.so:libz.so
+11-12 16:47:23.899  4341  4341 D nativeloader: InitLlndkLibrariesProduct: libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libRS.so:libandroid_net.so:libbinder_ndk.so:libc.so:libcgrouprc.so:libclang_rt.asan-x86_64-android.so:libcom.android.tethering.connectivity_native.so:libdl.so:libft2.so:liblog.so:libm.so:libmediandk.so:libnativewindow.so:libneuralnetworks.so:libselinux.so:libsync.so:libvndksupport.so:libvulkan.so
+11-12 16:47:23.900  4341  4341 D nativeloader: InitVndkspLibrariesProduct: android.hardware.common-V2-ndk.so:android.hardware.common.fmq-V1-ndk.so:android.hardware.graphics.allocator-V2-ndk.so:android.hardware.graphics.common-V4-ndk.so:android.hardware.graphics.common@1.0.so:android.hardware.graphics.common@1.1.so:android.hardware.graphics.common@1.2.so:android.hardware.graphics.composer3-V1-ndk.so:android.hardware.graphics.mapper@2.0.so:android.hardware.graphics.mapper@2.1.so:android.hardware.graphics.mapper@3.0.so:android.hardware.graphics.mapper@4.0.so:android.hardware.renderscript@1.0.so:android.hidl.memory.token@1.0.so:android.hidl.memory@1.0-impl.so:android.hidl.memory@1.0.so:android.hidl.safe_union@1.0.so:libRSCpuRef.so:libRSDriver.so:libRS_internal.so:libbase.so:libbcinfo.so:libblas.so:libc++.so:libcompiler_rt.so:libcutils.so:libdmabufheap.so:libgralloctypes.so:libhardware.so:libhidlbase.so:libhidlmemory.so:libion.so:libjsoncpp.so:liblzma.so:libprocessgroup.so:libunwindstack.so:libutils.so:libutilscallstack.so:libz.so
+11-12 16:47:24.670  1406  1491 I SemanticLocation: 	at libcore.io.IoBridge.open(IoBridge.java:574)
+11-12 16:47:24.670  1406  1491 I SemanticLocation: 	at libcore.io.Linux.open(Native Method)
+11-12 16:47:24.670  1406  1491 I SemanticLocation: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:47:24.670  1406  1491 I SemanticLocation: 	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:274)
+11-12 16:47:24.670  1406  1491 I SemanticLocation: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:47:24.670  1406  1491 I SemanticLocation: 	at libcore.io.IoBridge.open(IoBridge.java:560)
+11-12 16:47:24.695  1406  1491 I SemanticLocation: 	at libcore.io.IoBridge.open(IoBridge.java:574)
+11-12 16:47:24.695  1406  1491 I SemanticLocation: 	at libcore.io.Linux.open(Native Method)
+11-12 16:47:24.695  1406  1491 I SemanticLocation: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:47:24.695  1406  1491 I SemanticLocation: 	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:274)
+11-12 16:47:24.695  1406  1491 I SemanticLocation: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:47:24.695  1406  1491 I SemanticLocation: 	at libcore.io.IoBridge.open(IoBridge.java:560)
+11-12 16:47:25.381  1406  1491 I SemanticLocation: 	at libcore.io.IoBridge.open(IoBridge.java:574)
+11-12 16:47:25.381  1406  1491 I SemanticLocation: 	at libcore.io.Linux.open(Native Method)
+11-12 16:47:25.381  1406  1491 I SemanticLocation: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:47:25.381  1406  1491 I SemanticLocation: 	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:274)
+11-12 16:47:25.381  1406  1491 I SemanticLocation: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:47:25.381  1406  1491 I SemanticLocation: 	at libcore.io.IoBridge.open(IoBridge.java:560)
+11-12 16:47:26.418  3151  3227 W libc    : Access denied finding property "persist.adb.tls_server.enable"
+11-12 16:47:26.418  3151  3227 W libc    : Access denied finding property "service.adb.tls.port"
+11-12 16:47:27.783  1469  3473 W libc    : Access denied finding property "ro.hardware.chipname"
+11-12 16:47:28.612  3151  3227 W libc    : Access denied finding property "persist.adb.tls_server.enable"
+11-12 16:47:28.618  3151  3227 W libc    : Access denied finding property "service.adb.tls.port"
+11-12 16:47:28.627  1406  2629 I SemanticLocation: 	at libcore.io.IoBridge.open(IoBridge.java:574)
+11-12 16:47:28.627  1406  2629 I SemanticLocation: 	at libcore.io.Linux.open(Native Method)
+11-12 16:47:28.627  1406  2629 I SemanticLocation: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:47:28.627  1406  2629 I SemanticLocation: 	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:274)
+11-12 16:47:28.627  1406  2629 I SemanticLocation: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:47:28.627  1406  2629 I SemanticLocation: 	at libcore.io.IoBridge.open(IoBridge.java:560)
+11-12 16:47:28.927  1406  2629 I SemanticLocation: 	at libcore.io.IoBridge.open(IoBridge.java:574)
+11-12 16:47:28.927  1406  2629 I SemanticLocation: 	at libcore.io.Linux.open(Native Method)
+11-12 16:47:28.927  1406  2629 I SemanticLocation: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:47:28.927  1406  2629 I SemanticLocation: 	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:274)
+11-12 16:47:28.927  1406  2629 I SemanticLocation: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:47:28.927  1406  2629 I SemanticLocation: 	at libcore.io.IoBridge.open(IoBridge.java:560)
+11-12 16:47:29.629  3151  3612 W libc    : Access denied finding property "persist.adb.tls_server.enable"
+11-12 16:47:29.634  3151  3612 W libc    : Access denied finding property "service.adb.tls.port"
+11-12 16:47:31.452  3151  3227 W libc    : Access denied finding property "persist.adb.tls_server.enable"
+11-12 16:47:31.469  3151  3227 W libc    : Access denied finding property "service.adb.tls.port"
+11-12 16:47:32.260  3151  3227 W libc    : Access denied finding property "persist.adb.tls_server.enable"
+11-12 16:47:32.260  3151  3227 W libc    : Access denied finding property "service.adb.tls.port"
+11-12 16:47:33.246  1052  1076 W libc    : Access denied finding property "ro.vendor.aware_available"
+11-12 16:47:33.334   522  2151 E RecoverySnapshotStorage: 	at libcore.io.IoBridge.open(IoBridge.java:574)
+11-12 16:47:33.334   522  2151 E RecoverySnapshotStorage: 	at libcore.io.Linux.open(Native Method)
+11-12 16:47:33.334   522  2151 E RecoverySnapshotStorage: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:47:33.334   522  2151 E RecoverySnapshotStorage: 	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:274)
+11-12 16:47:33.334   522  2151 E RecoverySnapshotStorage: 	at libcore.io.IoBridge.open(IoBridge.java:560)
+11-12 16:47:33.384  1052  1076 W libc    : Access denied finding property "ro.vendor.aware_available"
+11-12 16:47:33.527  1052  1076 W libc    : Access denied finding property "ro.vendor.aware_available"
+11-12 16:47:34.056   522  1001 E RecoverySnapshotStorage: 	at libcore.io.IoBridge.open(IoBridge.java:574)
+11-12 16:47:34.056   522  1001 E RecoverySnapshotStorage: 	at libcore.io.Linux.open(Native Method)
+11-12 16:47:34.056   522  1001 E RecoverySnapshotStorage: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:47:34.056   522  1001 E RecoverySnapshotStorage: 	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:274)
+11-12 16:47:34.056   522  1001 E RecoverySnapshotStorage: 	at libcore.io.IoBridge.open(IoBridge.java:560)
+11-12 16:47:34.110  3151  3227 W libc    : Access denied finding property "persist.adb.tls_server.enable"
+11-12 16:47:34.135  3151  3227 W libc    : Access denied finding property "service.adb.tls.port"
+11-12 16:47:34.583   522   748 E RecoverySnapshotStorage: 	at libcore.io.IoBridge.open(IoBridge.java:574)
+11-12 16:47:34.583   522   748 E RecoverySnapshotStorage: 	at libcore.io.Linux.open(Native Method)
+11-12 16:47:34.583   522   748 E RecoverySnapshotStorage: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:47:34.583   522   748 E RecoverySnapshotStorage: 	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:274)
+11-12 16:47:34.583   522   748 E RecoverySnapshotStorage: 	at libcore.io.IoBridge.open(IoBridge.java:560)
+11-12 16:47:34.678  3151  4285 W libc    : Access denied finding property "persist.adb.tls_server.enable"
+11-12 16:47:34.678  3151  4285 W libc    : Access denied finding property "service.adb.tls.port"
+11-12 16:47:36.429   522  2135 E RecoverySnapshotStorage: 	at libcore.io.IoBridge.open(IoBridge.java:574)
+11-12 16:47:36.429   522  2135 E RecoverySnapshotStorage: 	at libcore.io.Linux.open(Native Method)
+11-12 16:47:36.429   522  2135 E RecoverySnapshotStorage: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:47:36.429   522  2135 E RecoverySnapshotStorage: 	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:274)
+11-12 16:47:36.429   522  2135 E RecoverySnapshotStorage: 	at libcore.io.IoBridge.open(IoBridge.java:560)
+11-12 16:47:36.620  3151  4285 W libc    : Access denied finding property "persist.adb.tls_server.enable"
+11-12 16:47:36.630  3151  4285 W libc    : Access denied finding property "service.adb.tls.port"
+11-12 16:47:39.766  4740  4740 D nativeloader: InitLlndkLibrariesProduct: libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libRS.so:libandroid_net.so:libbinder_ndk.so:libc.so:libcgrouprc.so:libclang_rt.asan-x86_64-android.so:libcom.android.tethering.connectivity_native.so:libdl.so:libft2.so:liblog.so:libm.so:libmediandk.so:libnativewindow.so:libneuralnetworks.so:libselinux.so:libsync.so:libvndksupport.so:libvulkan.so
+11-12 16:47:39.767  4740  4740 D nativeloader: InitVndkspLibrariesProduct: android.hardware.common-V2-ndk.so:android.hardware.common.fmq-V1-ndk.so:android.hardware.graphics.allocator-V2-ndk.so:android.hardware.graphics.common-V4-ndk.so:android.hardware.graphics.common@1.0.so:android.hardware.graphics.common@1.1.so:android.hardware.graphics.common@1.2.so:android.hardware.graphics.composer3-V1-ndk.so:android.hardware.graphics.mapper@2.0.so:android.hardware.graphics.mapper@2.1.so:android.hardware.graphics.mapper@3.0.so:android.hardware.graphics.mapper@4.0.so:android.hardware.renderscript@1.0.so:android.hidl.memory.token@1.0.so:android.hidl.memory@1.0-impl.so:android.hidl.memory@1.0.so:android.hidl.safe_union@1.0.so:libRSCpuRef.so:libRSDriver.so:libRS_internal.so:libbase.so:libbcinfo.so:libblas.so:libc++.so:libcompiler_rt.so:libcutils.so:libdmabufheap.so:libgralloctypes.so:libhardware.so:libhidlbase.so:libhidlmemory.so:libion.so:libjsoncpp.so:liblzma.so:libprocessgroup.so:libunwindstack.so:libutils.so:libutilscallstack.so:libz.so
+11-12 16:47:40.760  4812  4812 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-12 16:47:40.788  4812  4812 I AndroidRuntime: Using default boot image
+11-12 16:47:40.788  4812  4812 I AndroidRuntime: Leaving lock profiling enabled
+11-12 16:47:40.999  4812  4812 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-12 16:47:41.107  4812  4812 W libc    : Access denied finding property "ro.product.name_for_attestation"
+11-12 16:47:41.107  4812  4812 W libc    : Access denied finding property "ro.product.brand_for_attestation"
+11-12 16:47:41.107  4812  4812 W libc    : Access denied finding property "ro.product.model_for_attestation"
+11-12 16:47:41.108  4812  4812 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-12 16:47:41.738  3151  3193 W libc    : Access denied finding property "persist.adb.tls_server.enable"
+11-12 16:47:41.738  3151  3193 W libc    : Access denied finding property "service.adb.tls.port"
+11-12 16:47:42.724  4856  4856 D nativeloader: InitLlndkLibrariesProduct: libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libRS.so:libandroid_net.so:libbinder_ndk.so:libc.so:libcgrouprc.so:libclang_rt.asan-x86_64-android.so:libcom.android.tethering.connectivity_native.so:libdl.so:libft2.so:liblog.so:libm.so:libmediandk.so:libnativewindow.so:libneuralnetworks.so:libselinux.so:libsync.so:libvndksupport.so:libvulkan.so
+11-12 16:47:42.724  4856  4856 D nativeloader: InitVndkspLibrariesProduct: android.hardware.common-V2-ndk.so:android.hardware.common.fmq-V1-ndk.so:android.hardware.graphics.allocator-V2-ndk.so:android.hardware.graphics.common-V4-ndk.so:android.hardware.graphics.common@1.0.so:android.hardware.graphics.common@1.1.so:android.hardware.graphics.common@1.2.so:android.hardware.graphics.composer3-V1-ndk.so:android.hardware.graphics.mapper@2.0.so:android.hardware.graphics.mapper@2.1.so:android.hardware.graphics.mapper@3.0.so:android.hardware.graphics.mapper@4.0.so:android.hardware.renderscript@1.0.so:android.hidl.memory.token@1.0.so:android.hidl.memory@1.0-impl.so:android.hidl.memory@1.0.so:android.hidl.safe_union@1.0.so:libRSCpuRef.so:libRSDriver.so:libRS_internal.so:libbase.so:libbcinfo.so:libblas.so:libc++.so:libcompiler_rt.so:libcutils.so:libdmabufheap.so:libgralloctypes.so:libhardware.so:libhidlbase.so:libhidlmemory.so:libion.so:libjsoncpp.so:liblzma.so:libprocessgroup.so:libunwindstack.so:libutils.so:libutilscallstack.so:libz.so
+11-12 16:47:45.452  4812  4812 D AndroidRuntime: Shutting down VM
+11-12 16:47:48.218  4972  4972 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-12 16:47:48.224  4972  4972 I AndroidRuntime: Using default boot image
+11-12 16:47:48.224  4972  4972 I AndroidRuntime: Leaving lock profiling enabled
+11-12 16:47:48.360  4972  4972 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-12 16:47:48.413  4972  4972 W libc    : Access denied finding property "ro.product.name_for_attestation"
+11-12 16:47:48.414  4972  4972 W libc    : Access denied finding property "ro.product.brand_for_attestation"
+11-12 16:47:48.414  4972  4972 W libc    : Access denied finding property "ro.product.model_for_attestation"
+11-12 16:47:48.415  4972  4972 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-12 16:47:49.585  4972  4972 D AndroidRuntime: Shutting down VM
+11-12 16:47:51.250  5054  5054 D nativeloader:   com_android_tethering: libandroid_net_connectivity_com_android_net_module_util_jni.so:libcronet.114.0.5735.84.so:libframework-connectivity-jni.so:libframework-connectivity-tiramisu-jni.so:libservice-connectivity.so
+11-12 16:47:52.290  1052  1077 W libc    : Access denied finding property "ro.vendor.aware_available"
+11-12 16:47:52.344  1052  4210 W libc    : Access denied finding property "ro.vendor.aware_available"
+11-12 16:47:52.367  1052  1077 W libc    : Access denied finding property "ro.vendor.aware_available"
+11-12 16:47:52.382  1052  1077 W libc    : Access denied finding property "ro.vendor.aware_available"
+11-12 16:47:52.382  1052  1077 W libc    : Access denied finding property "ro.vendor.aware_available"
+11-12 16:47:52.391  1052  1077 W libc    : Access denied finding property "ro.vendor.aware_available"
+11-12 16:47:52.578  1052  1077 W libc    : Access denied finding property "ro.vendor.aware_available"
+11-12 16:47:53.684  5122  5122 D nativeloader: InitLlndkLibrariesProduct: libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libRS.so:libandroid_net.so:libbinder_ndk.so:libc.so:libcgrouprc.so:libclang_rt.asan-x86_64-android.so:libcom.android.tethering.connectivity_native.so:libdl.so:libft2.so:liblog.so:libm.so:libmediandk.so:libnativewindow.so:libneuralnetworks.so:libselinux.so:libsync.so:libvndksupport.so:libvulkan.so
+11-12 16:47:53.689  5122  5122 D nativeloader: InitVndkspLibrariesProduct: android.hardware.common-V2-ndk.so:android.hardware.common.fmq-V1-ndk.so:android.hardware.graphics.allocator-V2-ndk.so:android.hardware.graphics.common-V4-ndk.so:android.hardware.graphics.common@1.0.so:android.hardware.graphics.common@1.1.so:android.hardware.graphics.common@1.2.so:android.hardware.graphics.composer3-V1-ndk.so:android.hardware.graphics.mapper@2.0.so:android.hardware.graphics.mapper@2.1.so:android.hardware.graphics.mapper@3.0.so:android.hardware.graphics.mapper@4.0.so:android.hardware.renderscript@1.0.so:android.hidl.memory.token@1.0.so:android.hidl.memory@1.0-impl.so:android.hidl.memory@1.0.so:android.hidl.safe_union@1.0.so:libRSCpuRef.so:libRSDriver.so:libRS_internal.so:libbase.so:libbcinfo.so:libblas.so:libc++.so:libcompiler_rt.so:libcutils.so:libdmabufheap.so:libgralloctypes.so:libhardware.so:libhidlbase.so:libhidlmemory.so:libion.so:libjsoncpp.so:liblzma.so:libprocessgroup.so:libunwindstack.so:libutils.so:libutilscallstack.so:libz.so
+11-12 16:47:54.054  1052  4210 W libc    : Access denied finding property "ro.vendor.aware_available"
+11-12 16:47:54.133  1052  4210 W libc    : Access denied finding property "ro.vendor.aware_available"
+11-12 16:47:54.211  1052  4210 W libc    : Access denied finding property "ro.vendor.aware_available"
+11-12 16:47:54.212  1052  4210 W libc    : Access denied finding property "ro.vendor.aware_available"
+11-12 16:47:54.252  1052  4210 W libc    : Access denied finding property "ro.vendor.aware_available"
+11-12 16:47:54.465  1052  4210 W libc    : Access denied finding property "ro.vendor.aware_available"
+11-12 16:47:57.059  5217  5217 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-12 16:47:57.072  5217  5217 I AndroidRuntime: Using default boot image
+11-12 16:47:57.072  5217  5217 I AndroidRuntime: Leaving lock profiling enabled
+11-12 16:47:57.223  5217  5217 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-12 16:47:57.297  5217  5217 W libc    : Access denied finding property "ro.product.name_for_attestation"
+11-12 16:47:57.297  5217  5217 W libc    : Access denied finding property "ro.product.brand_for_attestation"
+11-12 16:47:57.297  5217  5217 W libc    : Access denied finding property "ro.product.model_for_attestation"
+11-12 16:47:57.298  5217  5217 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-12 16:47:57.338  1078  1078 I ContentCaptureHelper: Setting logging level to DEBUG
+11-12 16:47:58.480  5217  5217 D AndroidRuntime: Shutting down VM
+11-12 16:48:01.001  5343  5343 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-12 16:48:01.015  5343  5343 I AndroidRuntime: Using default boot image
+11-12 16:48:01.015  5343  5343 I AndroidRuntime: Leaving lock profiling enabled
+11-12 16:48:01.102  5343  5343 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-12 16:48:01.141  5343  5343 W libc    : Access denied finding property "ro.product.name_for_attestation"
+11-12 16:48:01.141  5343  5343 W libc    : Access denied finding property "ro.product.brand_for_attestation"
+11-12 16:48:01.141  5343  5343 W libc    : Access denied finding property "ro.product.model_for_attestation"
+11-12 16:48:01.142  5343  5343 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-12 16:48:03.682  5343  5343 D AndroidRuntime: Shutting down VM
+11-12 16:48:05.681  3151  5372 W libc    : Access denied finding property "persist.adb.tls_server.enable"
+11-12 16:48:05.681  3151  5372 W libc    : Access denied finding property "service.adb.tls.port"
+11-12 16:48:06.379  3151  3193 W libc    : Access denied finding property "persist.adb.tls_server.enable"
+11-12 16:48:06.383  3151  3193 W libc    : Access denied finding property "service.adb.tls.port"
+11-12 16:48:06.497  5417  5417 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-12 16:48:06.503  5417  5417 I AndroidRuntime: Using default boot image
+11-12 16:48:06.507  5417  5417 I AndroidRuntime: Leaving lock profiling enabled
+11-12 16:48:06.629  5417  5417 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-12 16:48:06.686  5417  5417 W libc    : Access denied finding property "ro.product.name_for_attestation"
+11-12 16:48:06.692  5417  5417 W libc    : Access denied finding property "ro.product.brand_for_attestation"
+11-12 16:48:06.692  5417  5417 W libc    : Access denied finding property "ro.product.model_for_attestation"
+11-12 16:48:06.693  5417  5417 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-12 16:48:10.401  5417  5417 D AndroidRuntime: Shutting down VM
+11-12 16:48:14.172  5502  5502 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-12 16:48:14.177  5502  5502 I AndroidRuntime: Using default boot image
+11-12 16:48:14.177  5502  5502 I AndroidRuntime: Leaving lock profiling enabled
+11-12 16:48:14.333  5502  5502 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-12 16:48:14.381  5502  5502 W libc    : Access denied finding property "ro.product.name_for_attestation"
+11-12 16:48:14.384  5502  5502 W libc    : Access denied finding property "ro.product.brand_for_attestation"
+11-12 16:48:14.385  5502  5502 W libc    : Access denied finding property "ro.product.model_for_attestation"
+11-12 16:48:14.385  5502  5502 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-12 16:48:16.381  5549  5549 D nativeloader: InitLlndkLibrariesProduct: libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libRS.so:libandroid_net.so:libbinder_ndk.so:libc.so:libcgrouprc.so:libclang_rt.asan-x86_64-android.so:libcom.android.tethering.connectivity_native.so:libdl.so:libft2.so:liblog.so:libm.so:libmediandk.so:libnativewindow.so:libneuralnetworks.so:libselinux.so:libsync.so:libvndksupport.so:libvulkan.so
+11-12 16:48:16.384  5549  5549 D nativeloader: InitVndkspLibrariesProduct: android.hardware.common-V2-ndk.so:android.hardware.common.fmq-V1-ndk.so:android.hardware.graphics.allocator-V2-ndk.so:android.hardware.graphics.common-V4-ndk.so:android.hardware.graphics.common@1.0.so:android.hardware.graphics.common@1.1.so:android.hardware.graphics.common@1.2.so:android.hardware.graphics.composer3-V1-ndk.so:android.hardware.graphics.mapper@2.0.so:android.hardware.graphics.mapper@2.1.so:android.hardware.graphics.mapper@3.0.so:android.hardware.graphics.mapper@4.0.so:android.hardware.renderscript@1.0.so:android.hidl.memory.token@1.0.so:android.hidl.memory@1.0-impl.so:android.hidl.memory@1.0.so:android.hidl.safe_union@1.0.so:libRSCpuRef.so:libRSDriver.so:libRS_internal.so:libbase.so:libbcinfo.so:libblas.so:libc++.so:libcompiler_rt.so:libcutils.so:libdmabufheap.so:libgralloctypes.so:libhardware.so:libhidlbase.so:libhidlmemory.so:libion.so:libjsoncpp.so:liblzma.so:libprocessgroup.so:libunwindstack.so:libutils.so:libutilscallstack.so:libz.so
+11-12 16:48:16.958  5609  5609 D nativeloader: InitLlndkLibrariesProduct: libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libRS.so:libandroid_net.so:libbinder_ndk.so:libc.so:libcgrouprc.so:libclang_rt.asan-x86_64-android.so:libcom.android.tethering.connectivity_native.so:libdl.so:libft2.so:liblog.so:libm.so:libmediandk.so:libnativewindow.so:libneuralnetworks.so:libselinux.so:libsync.so:libvndksupport.so:libvulkan.so
+11-12 16:48:16.964  5609  5609 D nativeloader: InitVndkspLibrariesProduct: android.hardware.common-V2-ndk.so:android.hardware.common.fmq-V1-ndk.so:android.hardware.graphics.allocator-V2-ndk.so:android.hardware.graphics.common-V4-ndk.so:android.hardware.graphics.common@1.0.so:android.hardware.graphics.common@1.1.so:android.hardware.graphics.common@1.2.so:android.hardware.graphics.composer3-V1-ndk.so:android.hardware.graphics.mapper@2.0.so:android.hardware.graphics.mapper@2.1.so:android.hardware.graphics.mapper@3.0.so:android.hardware.graphics.mapper@4.0.so:android.hardware.renderscript@1.0.so:android.hidl.memory.token@1.0.so:android.hidl.memory@1.0-impl.so:android.hidl.memory@1.0.so:android.hidl.safe_union@1.0.so:libRSCpuRef.so:libRSDriver.so:libRS_internal.so:libbase.so:libbcinfo.so:libblas.so:libc++.so:libcompiler_rt.so:libcutils.so:libdmabufheap.so:libgralloctypes.so:libhardware.so:libhidlbase.so:libhidlmemory.so:libion.so:libjsoncpp.so:liblzma.so:libprocessgroup.so:libunwindstack.so:libutils.so:libutilscallstack.so:libz.so
+11-12 16:48:17.028  5502  5502 D AndroidRuntime: Shutting down VM
+11-12 16:48:19.031  5549  5633 I SemanticLocation: 	at libcore.io.IoBridge.open(IoBridge.java:574)
+11-12 16:48:19.031  5549  5633 I SemanticLocation: 	at libcore.io.Linux.open(Native Method)
+11-12 16:48:19.031  5549  5633 I SemanticLocation: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:48:19.031  5549  5633 I SemanticLocation: 	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:274)
+11-12 16:48:19.031  5549  5633 I SemanticLocation: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:48:19.031  5549  5633 I SemanticLocation: 	at libcore.io.IoBridge.open(IoBridge.java:560)
+11-12 16:48:19.920  5806  5806 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-12 16:48:19.924  5806  5806 I AndroidRuntime: Using default boot image
+11-12 16:48:19.925  5806  5806 I AndroidRuntime: Leaving lock profiling enabled
+11-12 16:48:20.053  5806  5806 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-12 16:48:20.115  5806  5806 W libc    : Access denied finding property "ro.product.name_for_attestation"
+11-12 16:48:20.115  5806  5806 W libc    : Access denied finding property "ro.product.brand_for_attestation"
+11-12 16:48:20.115  5806  5806 W libc    : Access denied finding property "ro.product.model_for_attestation"
+11-12 16:48:20.116  5806  5806 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-12 16:48:20.207  5795  5795 D nativeloader: InitLlndkLibrariesProduct: libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libRS.so:libandroid_net.so:libbinder_ndk.so:libc.so:libcgrouprc.so:libclang_rt.asan-x86_64-android.so:libcom.android.tethering.connectivity_native.so:libdl.so:libft2.so:liblog.so:libm.so:libmediandk.so:libnativewindow.so:libneuralnetworks.so:libselinux.so:libsync.so:libvndksupport.so:libvulkan.so
+11-12 16:48:20.207  5795  5795 D nativeloader: InitVndkspLibrariesProduct: android.hardware.common-V2-ndk.so:android.hardware.common.fmq-V1-ndk.so:android.hardware.graphics.allocator-V2-ndk.so:android.hardware.graphics.common-V4-ndk.so:android.hardware.graphics.common@1.0.so:android.hardware.graphics.common@1.1.so:android.hardware.graphics.common@1.2.so:android.hardware.graphics.composer3-V1-ndk.so:android.hardware.graphics.mapper@2.0.so:android.hardware.graphics.mapper@2.1.so:android.hardware.graphics.mapper@3.0.so:android.hardware.graphics.mapper@4.0.so:android.hardware.renderscript@1.0.so:android.hidl.memory.token@1.0.so:android.hidl.memory@1.0-impl.so:android.hidl.memory@1.0.so:android.hidl.safe_union@1.0.so:libRSCpuRef.so:libRSDriver.so:libRS_internal.so:libbase.so:libbcinfo.so:libblas.so:libc++.so:libcompiler_rt.so:libcutils.so:libdmabufheap.so:libgralloctypes.so:libhardware.so:libhidlbase.so:libhidlmemory.so:libion.so:libjsoncpp.so:liblzma.so:libprocessgroup.so:libunwindstack.so:libutils.so:libutilscallstack.so:libz.so
+11-12 16:48:20.556  3151  4761 W libc    : Access denied finding property "persist.adb.tls_server.enable"
+11-12 16:48:20.556  3151  4761 W libc    : Access denied finding property "service.adb.tls.port"
+11-12 16:48:20.601  5549  5580 I SemanticLocation: 	at libcore.io.IoBridge.open(IoBridge.java:574)
+11-12 16:48:20.601  5549  5580 I SemanticLocation: 	at libcore.io.Linux.open(Native Method)
+11-12 16:48:20.601  5549  5580 I SemanticLocation: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:48:20.601  5549  5580 I SemanticLocation: 	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:274)
+11-12 16:48:20.601  5549  5580 I SemanticLocation: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:48:20.601  5549  5580 I SemanticLocation: 	at libcore.io.IoBridge.open(IoBridge.java:560)
+11-12 16:48:21.234  5806  5806 D AndroidRuntime: Shutting down VM
+11-12 16:48:28.728  5902  5902 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-12 16:48:28.744  5902  5902 I AndroidRuntime: Using default boot image
+11-12 16:48:28.744  5902  5902 I AndroidRuntime: Leaving lock profiling enabled
+11-12 16:48:28.968  5902  5902 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-12 16:48:29.050  5902  5902 W libc    : Access denied finding property "ro.product.name_for_attestation"
+11-12 16:48:29.050  5902  5902 W libc    : Access denied finding property "ro.product.brand_for_attestation"
+11-12 16:48:29.050  5902  5902 W libc    : Access denied finding property "ro.product.model_for_attestation"
+11-12 16:48:29.051  5902  5902 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-12 16:48:30.148  5902  5902 D AndroidRuntime: Shutting down VM
+11-12 16:48:30.233   522   885 E RecoverySnapshotStorage: 	at libcore.io.IoBridge.open(IoBridge.java:574)
+11-12 16:48:30.233   522   885 E RecoverySnapshotStorage: 	at libcore.io.Linux.open(Native Method)
+11-12 16:48:30.233   522   885 E RecoverySnapshotStorage: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:48:30.233   522   885 E RecoverySnapshotStorage: 	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:274)
+11-12 16:48:30.233   522   885 E RecoverySnapshotStorage: 	at libcore.io.IoBridge.open(IoBridge.java:560)
+11-12 16:48:31.222  5973  5973 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-12 16:48:31.227  5973  5973 I AndroidRuntime: Using default boot image
+11-12 16:48:31.227  5973  5973 I AndroidRuntime: Leaving lock profiling enabled
+11-12 16:48:31.299  3151  4761 W libc    : Access denied finding property "persist.adb.tls_server.enable"
+11-12 16:48:31.299  3151  4761 W libc    : Access denied finding property "service.adb.tls.port"
+11-12 16:48:31.341  5973  5973 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-12 16:48:31.388  5973  5973 W libc    : Access denied finding property "ro.product.name_for_attestation"
+11-12 16:48:31.395  5973  5973 W libc    : Access denied finding property "ro.product.brand_for_attestation"
+11-12 16:48:31.395  5973  5973 W libc    : Access denied finding property "ro.product.model_for_attestation"
+11-12 16:48:31.396  5973  5973 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-12 16:48:32.136  5609  5907 W libc    : Access denied finding property "ro.hardware.chipname"
+11-12 16:48:32.462  5973  5973 D AndroidRuntime: Shutting down VM
+11-12 16:48:33.030  5549  5594 I SemanticLocation: 	at libcore.io.IoBridge.open(IoBridge.java:574)
+11-12 16:48:33.030  5549  5594 I SemanticLocation: 	at libcore.io.Linux.open(Native Method)
+11-12 16:48:33.030  5549  5594 I SemanticLocation: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:48:33.030  5549  5594 I SemanticLocation: 	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:274)
+11-12 16:48:33.030  5549  5594 I SemanticLocation: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:48:33.030  5549  5594 I SemanticLocation: 	at libcore.io.IoBridge.open(IoBridge.java:560)
+11-12 16:48:33.167  5549  5594 I SemanticLocation: 	at libcore.io.IoBridge.open(IoBridge.java:574)
+11-12 16:48:33.167  5549  5594 I SemanticLocation: 	at libcore.io.Linux.open(Native Method)
+11-12 16:48:33.167  5549  5594 I SemanticLocation: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:48:33.167  5549  5594 I SemanticLocation: 	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:274)
+11-12 16:48:33.167  5549  5594 I SemanticLocation: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:48:33.167  5549  5594 I SemanticLocation: 	at libcore.io.IoBridge.open(IoBridge.java:560)
+11-12 16:48:33.484  6063  6063 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-12 16:48:33.493  6063  6063 I AndroidRuntime: Using default boot image
+11-12 16:48:33.493  6063  6063 I AndroidRuntime: Leaving lock profiling enabled
+11-12 16:48:33.586  6063  6063 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-12 16:48:33.636  6063  6063 W libc    : Access denied finding property "ro.product.name_for_attestation"
+11-12 16:48:33.636  6063  6063 W libc    : Access denied finding property "ro.product.brand_for_attestation"
+11-12 16:48:33.636  6063  6063 W libc    : Access denied finding property "ro.product.model_for_attestation"
+11-12 16:48:33.637  6063  6063 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-12 16:48:34.842  3151  4761 W libc    : Access denied finding property "persist.adb.tls_server.enable"
+11-12 16:48:34.842  3151  4761 W libc    : Access denied finding property "service.adb.tls.port"
+11-12 16:48:35.060  6063  6063 D AndroidRuntime: Shutting down VM
+11-12 16:48:45.806  2835  3000 I ReactNativeJS: SELFTEST png ok 160030 bytes 471 ms
+11-12 16:48:45.937  2835  3000 I ReactNativeJS: SELFTEST jpeg ok 139958 bytes 131 ms
+11-12 16:48:48.653  2835  3000 I ReactNativeJS: SELFTEST tiff ok 17799336 bytes 2716 ms
+11-12 16:48:51.858  2835  3000 I ReactNativeJS: SELFTEST mp3 ok 109505 bytes 3201 ms
+11-12 16:48:52.136  2835  3000 I ReactNativeJS: SELFTEST wav ok 599804 bytes 278 ms
+11-12 16:48:52.647  2835  3000 I ReactNativeJS: SELFTEST aac ok 111716 bytes 511 ms
+11-12 16:48:52.647  2835  3000 I ReactNativeJS: SELFTEST done
+11-12 16:48:55.012  2835  3000 I ReactNativeJS: AUDIOPROBE state=running sr=48000
+11-12 16:48:55.548  2835  3000 I ReactNativeJS: AUDIOPROBE live peak=0.0000
+11-12 16:48:56.373  2835  3000 I ReactNativeJS: AUDIOPROBE pcm peak=0.0000
+11-12 16:48:56.373  2835  3000 I ReactNativeJS: AUDIOPROBE done
+11-12 16:48:57.697  2835  3000 I ReactNativeJS: SELFTEST2 melodie 256 celule 158 note
+11-12 16:48:57.858  2835  3000 I ReactNativeJS: SELFTEST2 partitura png ok 129189 bytes 159 ms (3 pagini)
+11-12 16:48:57.964  2835  3000 I ReactNativeJS: SELFTEST2 partitura salvata in galerie
+11-12 16:48:58.065  2835  3000 I ReactNativeJS: SELFTEST2 partitura jpeg ok 179499 bytes 101 ms (3 pagini)
+11-12 16:49:04.590  2835  3000 I ReactNativeJS: SELFTEST2 wav ok 14222294 bytes 6525 ms
+11-12 16:49:11.615  2835  3000 I ReactNativeJS: SELFTEST2 aac ok 2611511 bytes 7025 ms
+11-12 16:49:11.615  2835  3000 I ReactNativeJS: SELFTEST2 done
+11-12 16:49:15.248  6302  6302 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-12 16:49:15.258  6302  6302 I AndroidRuntime: Using default boot image
+11-12 16:49:15.258  6302  6302 I AndroidRuntime: Leaving lock profiling enabled
+11-12 16:49:15.373  6302  6302 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-12 16:49:15.426  6302  6302 W libc    : Access denied finding property "ro.product.name_for_attestation"
+11-12 16:49:15.426  6302  6302 W libc    : Access denied finding property "ro.product.brand_for_attestation"
+11-12 16:49:15.426  6302  6302 W libc    : Access denied finding property "ro.product.model_for_attestation"
+11-12 16:49:15.428  6302  6302 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-12 16:49:16.497  6302  6302 D AndroidRuntime: Shutting down VM
+11-12 16:49:19.027  5609  5698 W libc    : Access denied finding property "ro.hardware.chipname"
+11-12 16:49:20.897  5549  6356 I SemanticLocation: 	at libcore.io.IoBridge.open(IoBridge.java:574)
+11-12 16:49:20.897  5549  6356 I SemanticLocation: 	at libcore.io.Linux.open(Native Method)
+11-12 16:49:20.897  5549  6356 I SemanticLocation: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:49:20.897  5549  6356 I SemanticLocation: 	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:274)
+11-12 16:49:20.897  5549  6356 I SemanticLocation: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:49:20.897  5549  6356 I SemanticLocation: 	at libcore.io.IoBridge.open(IoBridge.java:560)
+11-12 16:49:20.975  3151  6352 W libc    : Access denied finding property "persist.adb.tls_server.enable"
+11-12 16:49:20.982  3151  6352 W libc    : Access denied finding property "service.adb.tls.port"
+11-12 16:49:21.805  6414  6414 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-12 16:49:21.813  6414  6414 I AndroidRuntime: Using default boot image
+11-12 16:49:21.813  6414  6414 I AndroidRuntime: Leaving lock profiling enabled
+11-12 16:49:21.899  5549  6356 I SemanticLocation: 	at libcore.io.IoBridge.open(IoBridge.java:574)
+11-12 16:49:21.899  5549  6356 I SemanticLocation: 	at libcore.io.Linux.open(Native Method)
+11-12 16:49:21.899  5549  6356 I SemanticLocation: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:49:21.899  5549  6356 I SemanticLocation: 	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:274)
+11-12 16:49:21.899  5549  6356 I SemanticLocation: 	at libcore.io.ForwardingOs.open(ForwardingOs.java:563)
+11-12 16:49:21.899  5549  6356 I SemanticLocation: 	at libcore.io.IoBridge.open(IoBridge.java:560)
+11-12 16:49:22.050  6414  6414 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-12 16:49:22.111  6414  6414 W libc    : Access denied finding property "ro.product.name_for_attestation"
+11-12 16:49:22.111  6414  6414 W libc    : Access denied finding property "ro.product.brand_for_attestation"
+11-12 16:49:22.111  6414  6414 W libc    : Access denied finding property "ro.product.model_for_attestation"
+11-12 16:49:22.112  6414  6414 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-12 16:49:22.486  2835  3000 I ReactNativeJS: AUDIOPROBE l2 state=running sr=48000 secunde=147.5 ritm=fara
+11-12 16:49:23.189  2835  3000 I ReactNativeJS: AUDIOPROBE l2 peak=0.0000
+11-12 16:49:24.100  6414  6414 D AndroidRuntime: Shutting down VM
+11-12 16:49:26.023  6447  6447 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-12 16:49:26.027  6447  6447 I AndroidRuntime: Using default boot image
+11-12 16:49:26.027  6447  6447 I AndroidRuntime: Leaving lock profiling enabled
+11-12 16:49:26.119  6447  6447 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-12 16:49:26.151  6447  6447 W libc    : Access denied finding property "ro.product.name_for_attestation"
+11-12 16:49:26.153  6447  6447 W libc    : Access denied finding property "ro.product.brand_for_attestation"
+11-12 16:49:26.153  6447  6447 W libc    : Access denied finding property "ro.product.model_for_attestation"
+11-12 16:49:26.154  6447  6447 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-12 16:49:27.193  6447  6447 D AndroidRuntime: Shutting down VM
+11-12 16:49:29.776  6475  6475 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-12 16:49:29.780  6475  6475 I AndroidRuntime: Using default boot image
+11-12 16:49:29.780  6475  6475 I AndroidRuntime: Leaving lock profiling enabled
+11-12 16:49:29.858  6475  6475 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-12 16:49:29.896  6475  6475 W libc    : Access denied finding property "ro.product.name_for_attestation"
+11-12 16:49:29.896  6475  6475 W libc    : Access denied finding property "ro.product.brand_for_attestation"
+11-12 16:49:29.896  6475  6475 W libc    : Access denied finding property "ro.product.model_for_attestation"
+11-12 16:49:29.897  6475  6475 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-12 16:49:30.964  6475  6475 D AndroidRuntime: Shutting down VM
+11-12 16:49:32.881  6504  6504 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-12 16:49:32.884  6504  6504 I AndroidRuntime: Using default boot image
+11-12 16:49:32.884  6504  6504 I AndroidRuntime: Leaving lock profiling enabled
+11-12 16:49:32.928  6504  6504 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-12 16:49:32.949  6504  6504 W libc    : Access denied finding property "ro.product.name_for_attestation"
+11-12 16:49:32.949  6504  6504 W libc    : Access denied finding property "ro.product.brand_for_attestation"
+11-12 16:49:32.949  6504  6504 W libc    : Access denied finding property "ro.product.model_for_attestation"
+11-12 16:49:32.950  6504  6504 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-12 16:49:33.983  6504  6504 D AndroidRuntime: Shutting down VM
+11-12 16:49:37.062  6535  6535 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-12 16:49:37.065  6535  6535 I AndroidRuntime: Using default boot image
+11-12 16:49:37.065  6535  6535 I AndroidRuntime: Leaving lock profiling enabled
+11-12 16:49:37.117  6535  6535 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-12 16:49:37.156  6535  6535 W libc    : Access denied finding property "ro.product.name_for_attestation"
+11-12 16:49:37.156  6535  6535 W libc    : Access denied finding property "ro.product.brand_for_attestation"
+11-12 16:49:37.157  6535  6535 W libc    : Access denied finding property "ro.product.model_for_attestation"
+11-12 16:49:37.158  6535  6535 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-12 16:49:38.212  6535  6535 D AndroidRuntime: Shutting down VM
+11-12 16:49:45.456  2835  3000 I ReactNativeJS: SELFTEST4 wav decodat sr=48000 7.2s → 12 note (asteptat 12) identice 798 ms
+11-12 16:49:46.266  2835  3000 I ReactNativeJS: SELFTEST4 mp3 decodat sr=48000 7.2s → 12 note (asteptat 12) identice 810 ms
+11-12 16:49:46.315  2835  3000 I ReactNativeJS: SELFTEST4 tablou floare png ok 67206 bytes 49 ms
+11-12 16:49:46.367  2835  3000 I ReactNativeJS: SELFTEST4 tablou spirala png ok 61017 bytes 52 ms
+11-12 16:49:46.367  2835  3000 I ReactNativeJS: SELFTEST4 done
+11-12 16:49:48.795  6593  6593 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-12 16:49:48.798  6593  6593 I AndroidRuntime: Using default boot image
+11-12 16:49:48.798  6593  6593 I AndroidRuntime: Leaving lock profiling enabled
+11-12 16:49:48.851  6593  6593 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-12 16:49:48.892  6593  6593 W libc    : Access denied finding property "ro.product.name_for_attestation"
+11-12 16:49:48.892  6593  6593 W libc    : Access denied finding property "ro.product.brand_for_attestation"
+11-12 16:49:48.892  6593  6593 W libc    : Access denied finding property "ro.product.model_for_attestation"
+11-12 16:49:48.893  6593  6593 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-12 16:49:49.947  6593  6593 D AndroidRuntime: Shutting down VM
+11-12 16:49:53.000  6622  6622 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-12 16:49:53.004  6622  6622 I AndroidRuntime: Using default boot image
+11-12 16:49:53.004  6622  6622 I AndroidRuntime: Leaving lock profiling enabled
+11-12 16:49:53.077  6622  6622 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-12 16:49:53.116  6622  6622 W libc    : Access denied finding property "ro.product.name_for_attestation"
+11-12 16:49:53.116  6622  6622 W libc    : Access denied finding property "ro.product.brand_for_attestation"
+11-12 16:49:53.117  6622  6622 W libc    : Access denied finding property "ro.product.model_for_attestation"
+11-12 16:49:53.118  6622  6622 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-12 16:49:54.170  6622  6622 D AndroidRuntime: Shutting down VM
+11-12 16:49:55.071  6641  6641 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-12 16:49:55.074  6641  6641 I AndroidRuntime: Using default boot image
+11-12 16:49:55.074  6641  6641 I AndroidRuntime: Leaving lock profiling enabled
+11-12 16:49:55.120  6641  6641 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-12 16:49:55.143  6641  6641 W libc    : Access denied finding property "ro.product.name_for_attestation"
+11-12 16:49:55.144  6641  6641 W libc    : Access denied finding property "ro.product.brand_for_attestation"
+11-12 16:49:55.144  6641  6641 W libc    : Access denied finding property "ro.product.model_for_attestation"
+11-12 16:49:55.144  6641  6641 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-12 16:49:56.171  6641  6641 D AndroidRuntime: Shutting down VM
+11-12 16:49:57.338  6690  6690 D nativeloader: InitLlndkLibrariesProduct: libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libRS.so:libandroid_net.so:libbinder_ndk.so:libc.so:libcgrouprc.so:libclang_rt.asan-x86_64-android.so:libcom.android.tethering.connectivity_native.so:libdl.so:libft2.so:liblog.so:libm.so:libmediandk.so:libnativewindow.so:libneuralnetworks.so:libselinux.so:libsync.so:libvndksupport.so:libvulkan.so
+11-12 16:49:57.340  6690  6690 D nativeloader: InitVndkspLibrariesProduct: android.hardware.common-V2-ndk.so:android.hardware.common.fmq-V1-ndk.so:android.hardware.graphics.allocator-V2-ndk.so:android.hardware.graphics.common-V4-ndk.so:android.hardware.graphics.common@1.0.so:android.hardware.graphics.common@1.1.so:android.hardware.graphics.common@1.2.so:android.hardware.graphics.composer3-V1-ndk.so:android.hardware.graphics.mapper@2.0.so:android.hardware.graphics.mapper@2.1.so:android.hardware.graphics.mapper@3.0.so:android.hardware.graphics.mapper@4.0.so:android.hardware.renderscript@1.0.so:android.hidl.memory.token@1.0.so:android.hidl.memory@1.0-impl.so:android.hidl.memory@1.0.so:android.hidl.safe_union@1.0.so:libRSCpuRef.so:libRSDriver.so:libRS_internal.so:libbase.so:libbcinfo.so:libblas.so:libc++.so:libcompiler_rt.so:libcutils.so:libdmabufheap.so:libgralloctypes.so:libhardware.so:libhidlbase.so:libhidlmemory.so:libion.so:libjsoncpp.so:liblzma.so:libprocessgroup.so:libunwindstack.so:libutils.so:libutilscallstack.so:libz.so
+11-12 16:50:03.234  6827  6827 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-12 16:50:03.237  6827  6827 I AndroidRuntime: Using default boot image
+11-12 16:50:03.237  6827  6827 I AndroidRuntime: Leaving lock profiling enabled
+11-12 16:50:03.286  6827  6827 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-12 16:50:03.313  6827  6827 W libc    : Access denied finding property "ro.product.name_for_attestation"
+11-12 16:50:03.313  6827  6827 W libc    : Access denied finding property "ro.product.brand_for_attestation"
+11-12 16:50:03.313  6827  6827 W libc    : Access denied finding property "ro.product.model_for_attestation"
+11-12 16:50:03.314  6827  6827 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-12 16:50:04.364  6827  6827 D AndroidRuntime: Shutting down VM
+11-12 16:50:06.877  6902  6902 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-12 16:50:06.886  6902  6902 I AndroidRuntime: Using default boot image
+11-12 16:50:06.886  6902  6902 I AndroidRuntime: Leaving lock profiling enabled
+11-12 16:50:06.982  6902  6902 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-12 16:50:07.057  6902  6902 W libc    : Access denied finding property "ro.product.name_for_attestation"
+11-12 16:50:07.057  6902  6902 W libc    : Access denied finding property "ro.product.brand_for_attestation"
+11-12 16:50:07.058  6902  6902 W libc    : Access denied finding property "ro.product.model_for_attestation"
+11-12 16:50:07.060  6902  6902 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-12 16:50:09.356  3151  6935 W libc    : Access denied finding property "persist.adb.tls_server.enable"
+11-12 16:50:09.360  3151  6935 W libc    : Access denied finding property "service.adb.tls.port"
+11-12 16:50:10.280  6902  6902 D AndroidRuntime: Shutting down VM
+11-12 16:50:12.468  6956  6956 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-12 16:50:12.472  6956  6956 I AndroidRuntime: Using default boot image
+11-12 16:50:12.472  6956  6956 I AndroidRuntime: Leaving lock profiling enabled
+11-12 16:50:12.553  6956  6956 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-12 16:50:12.614  6956  6956 W libc    : Access denied finding property "ro.product.name_for_attestation"
+11-12 16:50:12.619  6956  6956 W libc    : Access denied finding property "ro.product.brand_for_attestation"
+11-12 16:50:12.619  6956  6956 W libc    : Access denied finding property "ro.product.model_for_attestation"
+11-12 16:50:12.620  6956  6956 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-12 16:50:14.752  6956  6956 D AndroidRuntime: Shutting down VM
+11-12 16:50:16.956  6988  6988 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-12 16:50:16.965  6988  6988 I AndroidRuntime: Using default boot image
+11-12 16:50:16.965  6988  6988 I AndroidRuntime: Leaving lock profiling enabled
+11-12 16:50:17.170  6988  6988 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-12 16:50:17.258  6988  6988 W libc    : Access denied finding property "ro.product.name_for_attestation"
+11-12 16:50:17.258  6988  6988 W libc    : Access denied finding property "ro.product.brand_for_attestation"
+11-12 16:50:17.259  6988  6988 W libc    : Access denied finding property "ro.product.model_for_attestation"
+11-12 16:50:17.265  6988  6988 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-12 16:50:19.385  6988  6988 D AndroidRuntime: Shutting down VM
+11-12 16:50:19.683  3151  7017 W libc    : Access denied finding property "persist.adb.tls_server.enable"
+11-12 16:50:19.683  3151  7017 W libc    : Access denied finding property "service.adb.tls.port"
+11-12 16:50:21.594  2835  3000 I ReactNativeJS: SELFTEST3 decodat 1 pagini → 40 note (asteptat 40) 3 ms
+11-12 16:50:21.658  2835  3000 I ReactNativeJS: SELFTEST3 tablou floare png ok 117399 bytes 64 ms
+11-12 16:50:21.707  2835  3000 I ReactNativeJS: SELFTEST3 tablou floare jpeg ok 93330 bytes 49 ms
+11-12 16:50:22.244  2835  3000 I ReactNativeJS: SELFTEST3 tablou floare tiff ok 4448424 bytes 535 ms
+11-12 16:50:22.292  2835  3000 I ReactNativeJS: SELFTEST3 tablou spirala png ok 63768 bytes 48 ms
+11-12 16:50:22.317  2835  3000 I ReactNativeJS: SELFTEST3 tablou spirala jpeg ok 44388 bytes 25 ms
+11-12 16:50:22.849  2835  3000 I ReactNativeJS: SELFTEST3 tablou spirala tiff ok 4448424 bytes 530 ms
+11-12 16:50:22.849  2835  3000 I ReactNativeJS: SELFTEST3 done
+11-12 16:50:25.866  7047  7047 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-12 16:50:25.872  7047  7047 I AndroidRuntime: Using default boot image
+11-12 16:50:25.872  7047  7047 I AndroidRuntime: Leaving lock profiling enabled
+11-12 16:50:25.995  7047  7047 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-12 16:50:26.036  7047  7047 W libc    : Access denied finding property "ro.product.name_for_attestation"
+11-12 16:50:26.037  7047  7047 W libc    : Access denied finding property "ro.product.brand_for_attestation"
+11-12 16:50:26.037  7047  7047 W libc    : Access denied finding property "ro.product.model_for_attestation"
+11-12 16:50:26.038  7047  7047 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-12 16:50:27.071  7047  7047 D AndroidRuntime: Shutting down VM
+11-12 16:50:31.108  7078  7078 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-12 16:50:31.112  7078  7078 I AndroidRuntime: Using default boot image
+11-12 16:50:31.112  7078  7078 I AndroidRuntime: Leaving lock profiling enabled
+11-12 16:50:31.188  7078  7078 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-12 16:50:31.224  7078  7078 W libc    : Access denied finding property "ro.product.name_for_attestation"
+11-12 16:50:31.225  7078  7078 W libc    : Access denied finding property "ro.product.brand_for_attestation"
+11-12 16:50:31.225  7078  7078 W libc    : Access denied finding property "ro.product.model_for_attestation"
+11-12 16:50:31.226  7078  7078 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-12 16:50:32.272  7078  7078 D AndroidRuntime: Shutting down VM

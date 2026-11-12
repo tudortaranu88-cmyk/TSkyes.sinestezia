@@ -1,0 +1,17 @@
+Starting: Intent { cmp=com.tskyes.musiccolor/.MainActivity }
+Status: ok
+LaunchState: COLD
+Activity: com.tskyes.musiccolor/.MainActivity
+TotalTime: 1988
+WaitTime: 2017
+Complete
+Starting: Intent { act=android.intent.action.VIEW dat=musiccolor://selftest/... pkg=com.tskyes.musiccolor }
+Warning: Activity not started, intent has been delivered to currently running top-most instance.
+Starting: Intent { act=android.intent.action.VIEW dat=musiccolor://audioprobe/... pkg=com.tskyes.musiccolor }
+Warning: Activity not started, intent has been delivered to currently running top-most instance.
+Starting: Intent { act=android.intent.action.VIEW dat=musiccolor://selftest2/... pkg=com.tskyes.musiccolor }
+Warning: Activity not started, intent has been delivered to currently running top-most instance.
+Starting: Intent { act=android.intent.action.VIEW dat=musiccolor://selftest4/... pkg=com.tskyes.musiccolor }
+Warning: Activity not started, intent has been delivered to currently running top-most instance.
+Starting: Intent { act=android.intent.action.VIEW dat=musiccolor://selftest3/... pkg=com.tskyes.musiccolor }
+Warning: Activity not started, intent has been delivered to currently running top-most instance.

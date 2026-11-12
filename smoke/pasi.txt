@@ -1,0 +1,33 @@
+== selector imagine (pornire normală)
+atins: 256 29 269 43
+atins: 19 403 94 420
+atins: 223 29 236 43
+== instrumente
+atins: 311 478 316 500
+atins: 257 591 291 608
+== salvare
+atins: 255 58 301 73
+atins: 31 410 141 428
+nu am găsit: Allow
+nu am găsit: Permite
+nu am găsit: ALLOW
+== autotest export
+== sonda audio
+== nivelul 2
+atins: 125 403 185 421
+atins: 125 403 184 421
+atins: 311 481 316 503
+atins: 261 424 288 441
+atins: 142 474 248 491
+atins: 226 403 279 421
+== nivelul 2 din audio
+atins: 142 473 178 490
+nu am găsit: Alege fișier audio
+atins: 18 403 95 420
+atins: 223 29 236 43
+atins: 130 348 161 363
+atins: 189 348 209 363
+atins: 76 348 102 363
+== nivelul 3
+atins: 129 574 189 592
+atins: 225 574 298 588
