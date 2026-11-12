@@ -13,6 +13,7 @@ import type { SampleSet } from '../core/audioRender';
 
 export interface InstrumentCfg {
   samples: Partial<Record<number, number>>; // coloană (0..7) → require('...wav')
+  tuned?: { midi: number; mod: number }[];  // sample pe pitch real măsurat (MIDI, A4=69=440 Hz) → require('...wav')
   loop?: boolean;
   loopStart?: number;
   loopEnd?: number;
@@ -73,6 +74,16 @@ export class AudioEngine {
         list.push({ col, freq: BASE_FREQS[col], buf: await this.decodeAsset(mod) });
       } catch (e) {
         console.warn(`Sample ${name}/${col} neîncărcat`, e);
+      }
+    }
+    // Sample-uri tag-uite pe pitch real (MIDI) – registru liber, nu doar cele 8 coloane.
+    // noteOn alege automat sample-ul cel mai apropiat și îl transpune prin playbackRate.
+    for (const t of cfg.tuned ?? []) {
+      try {
+        const freq = 440 * Math.pow(2, (t.midi - 69) / 12);
+        list.push({ col: -1, freq, buf: await this.decodeAsset(t.mod) });
+      } catch (e) {
+        console.warn(`Sample ${name}/midi${t.midi} neîncărcat`, e);
       }
     }
     this.bank[name] = { cfg, list };
