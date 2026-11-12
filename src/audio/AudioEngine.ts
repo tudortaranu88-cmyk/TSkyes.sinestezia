@@ -199,8 +199,12 @@ export class AudioEngine {
       src.playbackRate.value = freq / best.freq;
       if (cfg.loop) {
         const d = best.buf.duration;
+        // Bucla pornește de la 0 (toată înregistrarea). react-native-audio-api 0.8.4 are un defect:
+        // cu loopStart > 0 și playbackRate ≠ 1, redarea începe înaintea buclei, poziția de citire
+        // devine negativă și firul audio cade cu SIGSEGV (processWithInterpolation).
+        // cfg.loopStart rămâne folosit doar la randarea offline (audioRender.ts).
         src.loop = true;
-        src.loopStart = Math.min(cfg.loopStart ?? 0.3, d * 0.5);
+        src.loopStart = 0;
         src.loopEnd = Math.min(d, cfg.loopEnd ?? d - 0.05);
       }
       const peak = cfg.gain ?? 0.8;
