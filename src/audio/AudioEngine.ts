@@ -65,6 +65,17 @@ export class AudioEngine {
     return this.ctx.decodeAudioData(data);
   }
 
+  private requested = new Set<string>();
+
+  /** Încarcă o singură dată fiecare instrument din manifest (App se poate remonta în același proces). */
+  loadManifest(manifest: Record<string, InstrumentCfg>): void {
+    for (const [name, cfg] of Object.entries(manifest)) {
+      if (this.requested.has(name)) continue;
+      this.requested.add(name);
+      this.loadInstrument(name, cfg);
+    }
+  }
+
   async loadInstrument(name: string, cfg: InstrumentCfg): Promise<number> {
     const list: Loaded = [];
     for (const [colStr, mod] of Object.entries(cfg.samples)) {
@@ -222,4 +233,15 @@ export class AudioEngine {
     v.src.stop(t + v.release + 0.02);
     this.voices.delete(id);
   }
+}
+
+// O singură instanță pe proces. Dacă App se remontează (ex. un deep-link care recreează activitatea),
+// un al doilea `new AudioContext()` ar lăsa primul fără referință; GC-ul Hermes îl distruge apoi pe
+// firul „hades”, care nu are JNI, iar react-native-audio-api oprește aplicația cu SIGABRT
+// („Unable to retrieve jni environment”). Referința de aici ține contextul în viață cât trăiește procesul.
+let shared: AudioEngine | null = null;
+
+export function getAudioEngine(): AudioEngine {
+  if (!shared) shared = new AudioEngine();
+  return shared;
 }

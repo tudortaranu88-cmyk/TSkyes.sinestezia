@@ -22,7 +22,7 @@ import { LockScreen } from './src/screens/LockScreen';
 import { gateEnabled } from './src/auth/accessGate';
 import { demoPixels, sourceFromPixels, type ImageSource } from './src/io/imageSource';
 import type { ScorePixels } from './src/core/scoreDecode';
-import { AudioEngine } from './src/audio/AudioEngine';
+import { getAudioEngine, type AudioEngine } from './src/audio/AudioEngine';
 import { SAMPLE_MANIFEST } from './assets/sunete/manifest';
 import { cellColor, cellPitch, freqToMidi, noteLabel, PALETTES, type PaletteId, type Tuning } from './src/core/golden';
 import { DEFAULT_INSTRUMENT, instrumentById } from './src/core/instruments';
@@ -48,9 +48,9 @@ export default function App() {
   const [unlocked, setUnlocked] = useState(!gateEnabled);   // poarta dezactivată ⇒ pornește deblocat
 
   useEffect(() => {
-    const e = new AudioEngine();
+    const e = getAudioEngine();   // un singur AudioContext pe proces (vezi AudioEngine.ts)
     engine.current = e;
-    Object.entries(SAMPLE_MANIFEST).forEach(([name, cfg]) => e.loadInstrument(name, cfg));
+    e.loadManifest(SAMPLE_MANIFEST);
   }, []);
 
   // autotest pentru verificarea automată (musiccolor://selftest)
