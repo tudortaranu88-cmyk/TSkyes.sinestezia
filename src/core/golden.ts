@@ -87,9 +87,24 @@ export function paletteColors(id: PaletteId = 'aurie'): RGB[] {
   return (PALETTES.find(p => p.id === id) ?? PALETTES[0]).colors;
 }
 
-/** Culoarea celulei: rânduri pozitive → spre alb, negative → spre negru (identic cu DAW-ul). */
+/**
+ * Culoarea celulei: rânduri pozitive → spre alb, negative → spre negru.
+ * Aurie: curba din DAW. CMYK și RAL: rândul 0 = culoarea originală, iar fiecare rând deschide
+ * (+) sau închide (−) nuanța cu 1,618% față de rândul anterior – același pas ca frecvențele.
+ */
 export function cellColor(c: number, r: number, palette: PaletteId = 'aurie'): RGB {
   let [R, G, B] = paletteColors(palette)[c];
+  if (palette !== 'aurie' && r !== 0) {
+    const n = Math.abs(r);
+    if (r > 0) {
+      const w = Math.pow(1 + GOLDEN_RATE, n) - 1;   // +1 → 1,618% spre alb
+      R = Math.round(R + (255 - R) * w); G = Math.round(G + (255 - G) * w); B = Math.round(B + (255 - B) * w);
+    } else {
+      const k = Math.pow(1 - GOLDEN_RATE, n);       // −1 → 1,618% spre negru
+      R = Math.round(R * k); G = Math.round(G * k); B = Math.round(B * k);
+    }
+    return [R, G, B];
+  }
   if (r > 0) {
     const w = Math.pow(r / 10, 0.85) * 0.7;
     R = Math.round(R + (255 - R) * w); G = Math.round(G + (255 - G) * w); B = Math.round(B + (255 - B) * w);
