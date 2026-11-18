@@ -1,0 +1,9 @@
+/sdcard/DCIM:
+total 160
+-rwxrwx--- 1 u0_a186 media_rw 156015 2026-11-18 17:47 MusicColor_20261118_174710.png
+
+/sdcard/Music:
+total 0
+
+/sdcard/Pictures:
+total 0

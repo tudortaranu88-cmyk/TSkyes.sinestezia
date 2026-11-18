@@ -1,0 +1,6 @@
+AUDIOPROBE state=running sr=48000
+AUDIOPROBE live peak=0.0000
+AUDIOPROBE pcm peak=0.0000
+AUDIOPROBE done
+AUDIOPROBE l2 state=running sr=48000 secunde=147.5 ritm=fara
+AUDIOPROBE l2 peak=0.0000
