@@ -1,0 +1,296 @@
+
+> sinestezia@0.1.0 test
+> tsx --test test/core.test.ts test/encoders.test.ts test/level2.test.ts test/level3.test.ts test/audio.test.ts
+
+TAP version 13
+# Subtest: WAV: codare → decodare păstrează semnalul și rata
+ok 1 - WAV: codare → decodare păstrează semnalul și rata
+  ---
+  duration_ms: 20.566415
+  type: 'test'
+  ...
+# Subtest: WAV stereo pe 24 de biți se citește ca mono
+ok 2 - WAV stereo pe 24 de biți se citește ca mono
+  ---
+  duration_ms: 3.551368
+  type: 'test'
+  ...
+# Subtest: fișier care nu e WAV → eroare clară
+ok 3 - fișier care nu e WAV → eroare clară
+  ---
+  duration_ms: 0.690437
+  type: 'test'
+  ...
+# Subtest: detectează gama Do–Do (tonuri cu armonice)
+ok 4 - detectează gama Do–Do (tonuri cu armonice)
+  ---
+  duration_ms: 92.515768
+  type: 'test'
+  ...
+# Subtest: detectează note grave și acute, ignoră liniștea
+ok 5 - detectează note grave și acute, ignoră liniștea
+  ---
+  duration_ms: 25.948621
+  type: 'test'
+  ...
+# Subtest: melodie randată de aplicație (pian sintetizat) → aceleași note
+ok 6 - melodie randată de aplicație (pian sintetizat) → aceleași note
+  ---
+  duration_ms: 55.212157
+  type: 'test'
+  ...
+# Subtest: fișier lung: numărul de ferestre e plafonat
+ok 7 - fișier lung: numărul de ferestre e plafonat
+  ---
+  duration_ms: 351.171313
+  type: 'test'
+  ...
+# Subtest: nota → celula claviaturii
+ok 8 - nota → celula claviaturii
+  ---
+  duration_ms: 0.311545
+  type: 'test'
+  ...
+# Subtest: evenimentele iau culoarea paletei alese și pot fi recolorate
+ok 9 - evenimentele iau culoarea paletei alese și pot fi recolorate
+  ---
+  duration_ms: 6.846535
+  type: 'test'
+  ...
+# Subtest: palete: trei, câte 8 culori distincte; cea aurie e neschimbată
+ok 10 - palete: trei, câte 8 culori distincte; cea aurie e neschimbată
+  ---
+  duration_ms: 3.575553
+  type: 'test'
+  ...
+# Subtest: φ și rata de creștere
+ok 11 - φ și rata de creștere
+  ---
+  duration_ms: 1.696195
+  type: 'test'
+  ...
+# Subtest: raporturi stricte de aur între note consecutive (u = 0..14)
+ok 12 - raporturi stricte de aur între note consecutive (u = 0..14)
+  ---
+  duration_ms: 1.24597
+  type: 'test'
+  ...
+# Subtest: lungimea arcului: formula exactă = integrare numerică
+ok 13 - lungimea arcului: formula exactă = integrare numerică
+  ---
+  duration_ms: 41.231464
+  type: 'test'
+  ...
+# Subtest: curbura: formula = estimare numerică din 3 puncte
+ok 14 - curbura: formula = estimare numerică din 3 puncte
+  ---
+  duration_ms: 0.291899
+  type: 'test'
+  ...
+# Subtest: orientare: pleacă în SUS, apoi se curbează spre STÂNGA
+ok 15 - orientare: pleacă în SUS, apoi se curbează spre STÂNGA
+  ---
+  duration_ms: 0.262353
+  type: 'test'
+  ...
+# Subtest: încadrare: 9 note vizibile până la marginea cea mai apropiată
+ok 16 - încadrare: 9 note vizibile până la marginea cea mai apropiată
+  ---
+  duration_ms: 0.254718
+  type: 'test'
+  ...
+# Subtest: portativ: Mi = linia de jos, Fa = linia de sus, Do = linie suplimentară
+ok 17 - portativ: Mi = linia de jos, Fa = linia de sus, Do = linie suplimentară
+  ---
+  duration_ms: 1.138998
+  type: 'test'
+  ...
+# Subtest: matricea aurie: identică cu DAW-ul
+ok 18 - matricea aurie: identică cu DAW-ul
+  ---
+  duration_ms: 0.347713
+  type: 'test'
+  ...
+# Subtest: scenă: zoom continuu la sosirea unei note noi (fără salt)
+ok 19 - scenă: zoom continuu la sosirea unei note noi (fără salt)
+  ---
+  duration_ms: 3.451771
+  type: 'test'
+  ...
+# Subtest: scenă: raporturile φ se păstrează și în scena randată
+ok 20 - scenă: raporturile φ se păstrează și în scena randată
+  ---
+  duration_ms: 0.676269
+  type: 'test'
+  ...
+# Subtest: scenă: zoom out – vârful notei celei mai noi stă la marginea zonei, oricâte note ar fi
+ok 21 - scenă: zoom out – vârful notei celei mai noi stă la marginea zonei, oricâte note ar fi
+  ---
+  duration_ms: 1.103412
+  type: 'test'
+  ...
+# Subtest: scenă cover (export A4): vârful atinge jumătatea diagonalei → colțurile se umplu
+ok 22 - scenă cover (export A4): vârful atinge jumătatea diagonalei → colțurile se umplu
+  ---
+  duration_ms: 0.404089
+  type: 'test'
+  ...
+# Subtest: tablou floarea-soarelui: toate notele devin puncte, în discul înscris
+ok 23 - tablou floarea-soarelui: toate notele devin puncte, în discul înscris
+  ---
+  duration_ms: 1.291395
+  type: 'test'
+  ...
+# Subtest: denumirea notelor: rândul 0 fără cifră, sufix pe rânduri, Do' la octava de sus
+ok 24 - denumirea notelor: rândul 0 fără cifră, sufix pe rânduri, Do' la octava de sus
+  ---
+  duration_ms: 0.224822
+  type: 'test'
+  ...
+# Subtest: Base64 identic cu Buffer (toate lungimile de rest)
+ok 25 - Base64 identic cu Buffer (toate lungimile de rest)
+  ---
+  duration_ms: 9.787507
+  type: 'test'
+  ...
+# Subtest: WAV: antet RIFF corect și eșantioane PCM 16 biți
+ok 26 - WAV: antet RIFF corect și eșantioane PCM 16 biți
+  ---
+  duration_ms: 4.645973
+  type: 'test'
+  ...
+# Subtest: TIFF: antet little-endian, dimensiuni și pixeli RGB
+ok 27 - TIFF: antet little-endian, dimensiuni și pixeli RGB
+  ---
+  duration_ms: 0.608903
+  type: 'test'
+  ...
+# Subtest: randare audio: durata, fără depășiri, sunet pentru fiecare instrument
+ok 28 - randare audio: durata, fără depășiri, sunet pentru fiecare instrument
+  ---
+  duration_ms: 87.299138
+  type: 'test'
+  ...
+# Subtest: randare audio: acorduri dense sunt normalizate sub 0,98
+ok 29 - randare audio: acorduri dense sunt normalizate sub 0,98
+  ---
+  duration_ms: 28.730462
+  type: 'test'
+  ...
+# Subtest: randare audio cu sample-uri (buclă + transpunere)
+ok 30 - randare audio cu sample-uri (buclă + transpunere)
+  ---
+  duration_ms: 15.164966
+  type: 'test'
+  ...
+# Subtest: unghiul de aur = 2π/φ² ≈ 137,5°
+ok 31 - unghiul de aur = 2π/φ² ≈ 137,5°
+  ---
+  duration_ms: 1.376554
+  type: 'test'
+  ...
+# Subtest: celulele: ~N în imagine, din centru spre exterior, acoperă colțurile (ambele trasee)
+ok 32 - celulele: ~N în imagine, din centru spre exterior, acoperă colțurile (ambele trasee)
+  ---
+  duration_ms: 5.778489
+  type: 'test'
+  ...
+# Subtest: spirala continuă: celulele consecutive sunt vecine
+ok 33 - spirala continuă: celulele consecutive sunt vecine
+  ---
+  duration_ms: 0.724941
+  type: 'test'
+  ...
+# Subtest: culoarea exactă a unei celule din matrice → aceeași celulă
+ok 34 - culoarea exactă a unei celule din matrice → aceeași celulă
+  ---
+  duration_ms: 6.432788
+  type: 'test'
+  ...
+# Subtest: eșantionarea: o imagine în două culori dă culorile corecte
+ok 35 - eșantionarea: o imagine în două culori dă culorile corecte
+  ---
+  duration_ms: 1.271888
+  type: 'test'
+  ...
+# Subtest: ritm: repetițiile se unesc, fără a trece peste bara de măsură
+ok 36 - ritm: repetițiile se unesc, fără a trece peste bara de măsură
+  ---
+  duration_ms: 0.695857
+  type: 'test'
+  ...
+# Subtest: partitura: toate notele apar o singură dată, totul în pagină
+ok 37 - partitura: toate notele apar o singură dată, totul în pagină
+  ---
+  duration_ms: 35.485683
+  type: 'test'
+  ...
+# Subtest: ritmuri: tiparele au pași valizi; tresillo-ul dembow e 3+3+2
+ok 38 - ritmuri: tiparele au pași valizi; tresillo-ul dembow e 3+3+2
+  ---
+  duration_ms: 0.656954
+  type: 'test'
+  ...
+# Subtest: ritmuri: tobele se aud în mix, aliniate la tempo (fără ritm → mix mai liniștit)
+ok 39 - ritmuri: tobele se aud în mix, aliniate la tempo (fără ritm → mix mai liniștit)
+  ---
+  duration_ms: 33.354657
+  type: 'test'
+  ...
+# Subtest: melodie → note: timpi în secunde, monotoni, la tempo-ul ales
+ok 40 - melodie → note: timpi în secunde, monotoni, la tempo-ul ales
+  ---
+  duration_ms: 0.842883
+  type: 'test'
+  ...
+# Subtest: mix Nivelul 2: cu ritm se obține un fragment mai lung/energic decât fără
+ok 41 - mix Nivelul 2: cu ritm se obține un fragment mai lung/energic decât fără
+  ---
+  duration_ms: 80.188493
+  type: 'test'
+  ...
+# Subtest: ritmul auriu: pauze constante = φ × o pătrime, lovituri rare (nu continuu)
+ok 42 - ritmul auriu: pauze constante = φ × o pătrime, lovituri rare (nu continuu)
+  ---
+  duration_ms: 20.269852
+  type: 'test'
+  ...
+# Subtest: fundalul benzii (magenta) nu coincide cu nicio culoare din matrice
+ok 43 - fundalul benzii (magenta) nu coincide cu nicio culoare din matrice
+  ---
+  duration_ms: 1.686927
+  type: 'test'
+  ...
+# Subtest: banda de pe o pagină: decodarea reproduce notele paginii
+ok 44 - banda de pe o pagină: decodarea reproduce notele paginii
+  ---
+  duration_ms: 19.946568
+  type: 'test'
+  ...
+# Subtest: dus-întors complet, multi-pagină: melodia reconstruită = originalul
+ok 45 - dus-întors complet, multi-pagină: melodia reconstruită = originalul
+  ---
+  duration_ms: 111.096287
+  type: 'test'
+  ...
+# Subtest: Do4 (aproape alb) și culorile închise nu se confundă cu golurile gri
+ok 46 - Do4 (aproape alb) și culorile închise nu se confundă cu golurile gri
+  ---
+  duration_ms: 7.877901
+  type: 'test'
+  ...
+# Subtest: imagine care nu e partitură → eroare clară
+ok 47 - imagine care nu e partitură → eroare clară
+  ---
+  duration_ms: 6.132765
+  type: 'test'
+  ...
+1..47
+# tests 47
+# suites 0
+# pass 47
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1193.243519
