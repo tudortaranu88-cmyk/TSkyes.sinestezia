@@ -115,8 +115,8 @@ test('palete: trei, câte 8 culori distincte; cea aurie e neschimbată', () => {
   assert.deepEqual(cellColor(0, 0, 'ral'), [204, 6, 5]);
   const up = cellColor(4, 5, 'cmyk'), down = cellColor(4, -5, 'cmyk'), base = cellColor(4, 0, 'cmyk');
   assert.ok(up[0] > base[0] && down[0] < base[0]);
-  // CMYK/RAL: pas de 1,618% pe rând față de rândul 0
-  assert.deepEqual(cellColor(4, 1, 'cmyk'), [Math.round(46 + 209 * 0.01618), Math.round(49 + 206 * 0.01618), Math.round(146 + 109 * 0.01618)]);
-  assert.deepEqual(cellColor(4, -1, 'cmyk'), [Math.round(46 * 0.98382), Math.round(49 * 0.98382), Math.round(146 * 0.98382)]);
-  assert.deepEqual(cellColor(0, -10, 'ral'), [Math.round(204 * Math.pow(0.98382, 10)), Math.round(6 * Math.pow(0.98382, 10)), Math.round(5 * Math.pow(0.98382, 10))]);
+  // CMYK/RAL: pas de 3×1,618% pe rând față de rândul 0
+  assert.deepEqual(cellColor(4, 1, 'cmyk'), [Math.round(46 + 209 * 0.04854), Math.round(49 + 206 * 0.04854), Math.round(146 + 109 * 0.04854)]);
+  assert.deepEqual(cellColor(4, -1, 'cmyk'), [Math.round(46 * 0.95146), Math.round(49 * 0.95146), Math.round(146 * 0.95146)]);
+  assert.deepEqual(cellColor(0, -10, 'ral'), [Math.round(204 * Math.pow(0.95146, 10)), Math.round(6 * Math.pow(0.95146, 10)), Math.round(5 * Math.pow(0.95146, 10))]);
 });

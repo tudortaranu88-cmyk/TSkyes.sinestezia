@@ -22,6 +22,7 @@ export const BASE_COLORS: [number, number, number][] = [
   [0, 32, 96], [41, 18, 54], [74, 25, 66], [244, 244, 240],
 ];
 export const GOLDEN_RATE = 0.01618; // pasul microtonal al matricei (1,618%)
+export const PALETTE_STEP = 3 * GOLDEN_RATE; // CMYK/RAL: pas de 3×1,618% = 4,854% pe rând
 export const ROW_MIN = -10;
 export const ROW_MAX = 10;
 
@@ -90,17 +91,17 @@ export function paletteColors(id: PaletteId = 'aurie'): RGB[] {
 /**
  * Culoarea celulei: rânduri pozitive → spre alb, negative → spre negru.
  * Aurie: curba din DAW. CMYK și RAL: rândul 0 = culoarea originală, iar fiecare rând deschide
- * (+) sau închide (−) nuanța cu 1,618% față de rândul anterior – același pas ca frecvențele.
+ * (+) sau închide (−) nuanța cu 3×1,618% (4,854%) față de rândul anterior.
  */
 export function cellColor(c: number, r: number, palette: PaletteId = 'aurie'): RGB {
   let [R, G, B] = paletteColors(palette)[c];
   if (palette !== 'aurie' && r !== 0) {
     const n = Math.abs(r);
     if (r > 0) {
-      const w = Math.pow(1 + GOLDEN_RATE, n) - 1;   // +1 → 1,618% spre alb
+      const w = Math.pow(1 + PALETTE_STEP, n) - 1;   // +1 → 4,854% spre alb
       R = Math.round(R + (255 - R) * w); G = Math.round(G + (255 - G) * w); B = Math.round(B + (255 - B) * w);
     } else {
-      const k = Math.pow(1 - GOLDEN_RATE, n);       // −1 → 1,618% spre negru
+      const k = Math.pow(1 - PALETTE_STEP, n);       // −1 → 4,854% spre negru
       R = Math.round(R * k); G = Math.round(G * k); B = Math.round(B * k);
     }
     return [R, G, B];
