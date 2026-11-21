@@ -4,9 +4,15 @@
 // iar la partajare se deschide meniul pentru fiecare pagină, pe rând.
 
 import React, { useState } from 'react';
-import { Modal, View, Text, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
+import { Modal, View, Text, Pressable, StyleSheet, ActivityIndicator, Platform } from 'react-native';
 import type { AudioKind } from '../io/exportComposition';
+import * as Files from '../io/files';
 import { saveToDevice, shareFile, MIME } from '../io/files';
+
+// Pe calculator (Windows): un singur buton, fereastra „Salvează ca”; fără partajare.
+const DESKTOP = Platform.OS === 'web';
+const saveFilesToDisk: (uris: string[]) => Promise<string[]> = (Files as any).saveFilesToDisk;
+const dirOf = (p: string) => p.replace(/[\\/][^\\/]*$/, '');
 
 export interface ExportedFile { uri: string; ext: string }
 
@@ -46,7 +52,12 @@ export function SaveSheet({ visible, title = 'Salvează', subtitle, imageLabel, 
     try {
       const progress = (p: number) => setMsg({ text: `Se codează ${audKind.toUpperCase()}… ${Math.round(p * 100)}%`, ok: true });
       const files = what === 'image' ? await exportImage(imgKind, imgStyle) : [await exportAudio(audKind, progress)];
-      if (action === 'save') {
+      if (action === 'save' && DESKTOP) {
+        const paths = await saveFilesToDisk(files.map(f => f.uri));
+        setMsg(paths.length
+          ? { text: paths.length > 1 ? `${paths.length} fișiere salvate în ${dirOf(paths[0])}` : `Salvat: ${paths[0]}`, ok: true }
+          : { text: 'Salvarea a fost anulată.', ok: true });
+      } else if (action === 'save') {
         for (const f of files) await saveToDevice(f.uri);
         setMsg({
           text: what === 'audio' ? 'Melodia a fost salvată în telefon (Muzică).'
@@ -78,18 +89,20 @@ export function SaveSheet({ visible, title = 'Salvează', subtitle, imageLabel, 
   const Actions = ({ what }: { what: 'image' | 'audio' }) => (
     <View style={styles.actions}>
       <Pressable disabled={busy} onPress={() => run(what, 'save')} style={[styles.btn, styles.btnMain, busy && styles.off]}>
-        <Text style={styles.btnMainTxt}>Salvează în telefon</Text>
+        <Text style={styles.btnMainTxt}>{DESKTOP ? 'Salvează pe calculator' : 'Salvează în telefon'}</Text>
       </Pressable>
-      <Pressable disabled={busy} onPress={() => run(what, 'share')} style={[styles.btn, busy && styles.off]}>
-        <Text style={styles.btnTxt}>Partajează</Text>
-      </Pressable>
+      {!DESKTOP && (
+        <Pressable disabled={busy} onPress={() => run(what, 'share')} style={[styles.btn, busy && styles.off]}>
+          <Text style={styles.btnTxt}>Partajează</Text>
+        </Pressable>
+      )}
     </View>
   );
 
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
       <Pressable style={styles.backdrop} onPress={busy ? undefined : onClose} />
-      <View style={styles.sheet}>
+      <View style={[styles.sheet, DESKTOP && styles.sheetWide]}>
         <View style={styles.head}>
           <Text style={styles.title}>{title}</Text>
           <Pressable onPress={onClose} disabled={busy} hitSlop={10}><Text style={styles.close}>✕</Text></Pressable>
@@ -122,6 +135,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#181822', borderTopLeftRadius: 16, borderTopRightRadius: 16,
     padding: 16, paddingBottom: 28, borderTopWidth: 1, borderColor: '#33334a',
   },
+  // calculator: panou centrat, lățime fixă (pe ecran lat nu se întinde pe toată fereastra)
+  sheetWide: { width: 560, alignSelf: 'center', borderLeftWidth: 1, borderRightWidth: 1 },
   head: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   title: { color: '#ffd700', fontSize: 16, fontWeight: '700' },
   close: { color: '#8a8a99', fontSize: 18 },

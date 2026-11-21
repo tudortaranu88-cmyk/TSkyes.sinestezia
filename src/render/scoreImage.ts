@@ -2,7 +2,9 @@
 // Textul și cheia Sol (𝄞) trec prin Paragraph, care folosește fonturile sistemului cu fallback.
 
 import { Skia, ImageFormat, PaintStyle, StrokeCap, TextAlign, FontWeight } from '@shopify/react-native-skia';
+import { Platform } from 'react-native';
 import { rgbToCss } from '../core/golden';
+import { webFontProvider } from './webFonts';
 import type { ScorePage } from '../core/scoreLayout';
 
 export type ScoreKind = 'png' | 'jpeg';
@@ -17,8 +19,19 @@ function drawText(canvas: any, text: string, x: number, y: number, size: number,
     fontStyle: { weight: bold ? FontWeight.Bold : FontWeight.Normal },
     fontFamilies: ['sans-serif', 'Noto Music', 'Noto Sans Symbols 2', 'Noto Sans Symbols'],
   };
+  // Pe calculator, CanvasKit nu trece singur la fontul următor pentru glifele lipsă:
+  // textul cu simboluri muzicale (♩, 𝄞) folosește direct fontul de simboluri.
+  if (Platform.OS === 'web') {
+    style.fontFamilies = /[☀-➿]|\uD834/.test(text) ? ['Noto Music', 'sans-serif'] : ['sans-serif'];
+  }
   const textAlign = align === 'center' ? TextAlign.Center : align === 'right' ? TextAlign.Right : TextAlign.Left;
-  const para = Skia.ParagraphBuilder.Make({ textAlign, textStyle: style }).addText(text).build();
+  // pe calculator, fonturile vin din Windows prin webFonts.ts (CanvasKit nu are fonturi de sistem)
+  const fonts = Platform.OS === 'web' ? webFontProvider() : undefined;
+  if (Platform.OS === 'web' && !fonts) return;
+  // Pe web, react-native-skia ignoră textStyle din stilul paragrafului: îl aplicăm cu pushStyle.
+  const para = Platform.OS === 'web'
+    ? Skia.ParagraphBuilder.Make({ textAlign }, fonts).pushStyle(style).addText(text).pop().build()
+    : Skia.ParagraphBuilder.Make({ textAlign, textStyle: style }).addText(text).build();
   const boxW = 1200;
   para.layout(boxW);
   const left = align === 'center' ? x - boxW / 2 : align === 'right' ? x - boxW : x;

@@ -11,3 +11,7 @@ dist/
 test/preview.js
 npm-debug.*
 .DS_Store
+
+# Windows (desktop)
+dist-web/
+public/canvaskit.wasm

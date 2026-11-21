@@ -5,7 +5,7 @@
 // Nivel 2: imagine → melodie + partitură. Nivel 3: partitură → tablou (src/screens/Level3.tsx).
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { View, Text, Pressable, StyleSheet, Alert, Linking } from 'react-native';
+import { View, Text, Pressable, StyleSheet, Alert, Linking, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { Visualizer } from './src/components/Visualizer';
@@ -29,6 +29,7 @@ import { DEFAULT_INSTRUMENT, instrumentById } from './src/core/instruments';
 import type { NoteEvent } from './src/core/types';
 
 const TUNING: Tuning = 'tempered';
+const DESKTOP = Platform.OS === 'web';   // varianta Windows (Electron)
 const SPIRAL_KINDS = [{ id: 'png', label: 'PNG' }, { id: 'jpeg', label: 'JPEG' }, { id: 'tiff', label: 'TIFF' }];
 
 const keyOf = (col: number, row: number) => `${row}:${col}`;
@@ -90,6 +91,12 @@ export default function App() {
 
   const onNew = useCallback(() => {
     if (!events.length) return;
+    if (DESKTOP) {   // pe calculator, Alert din react-native-web nu afișează nimic
+      if (window.confirm('Începi o compoziție nouă? Imaginea și melodia curentă se șterg (salvează-le înainte, dacă vrei să le păstrezi).')) {
+        held.current.clear(); setEvents([]);
+      }
+      return;
+    }
     Alert.alert('Compoziție nouă', 'Începi o compoziție nouă? Imaginea și melodia curentă se șterg (salvează-le înainte, dacă vrei să le păstrezi).', [
       { text: 'Renunță', style: 'cancel' },
       { text: 'Începe', style: 'destructive', onPress: () => { held.current.clear(); setEvents([]); } },
@@ -135,12 +142,12 @@ export default function App() {
       <StatusBar style="light" />
       <Header level={level} instrument={instrumentById(instrument).label} onLevelChange={setLevel} />
       {level === 1 ? (
-        <>
-          <View style={styles.half}>
+        <View style={DESKTOP ? styles.wide : styles.half}>
+          <View style={DESKTOP ? styles.wideVis : styles.half}>
             <Visualizer events={events} onNew={onNew} onSave={() => setSaveOpen(true)} />
           </View>
-          <View style={styles.divider} />
-          <View style={[styles.half, styles.controls]}>
+          <View style={DESKTOP ? styles.vDivider : styles.divider} />
+          <View style={[DESKTOP ? styles.wideCtl : styles.half, styles.controls]}>
             <View style={styles.keysCol}>
               <View style={styles.paletteRow}>
                 <Text style={styles.paletteLbl}>Paletă</Text>
@@ -155,7 +162,7 @@ export default function App() {
             </View>
             <InstrumentBar selected={instrument} onSelect={setInstrument} />
           </View>
-        </>
+        </View>
       ) : level === 2 ? (
         <Level2 engine={engine} instrument={instrument} onInstrumentChange={setInstrument} injected={l2Injected}
           palette={palette} injectedAudio={l2Audio} />
@@ -180,6 +187,11 @@ export default function App() {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: '#0e0e12' },
   half: { flex: 1 },               // două jumătăți egale
+  // calculator: fereastră lată, desenul în stânga, claviatura în dreapta
+  wide: { flex: 1, flexDirection: 'row' },
+  wideVis: { flex: 1.25 },
+  wideCtl: { flex: 1 },
+  vDivider: { width: StyleSheet.hairlineWidth, backgroundColor: '#333' },
   controls: { flexDirection: 'row', backgroundColor: '#181822', paddingVertical: 6, paddingLeft: 6 },
   divider: { height: StyleSheet.hairlineWidth, backgroundColor: '#333' },
   keysCol: { flex: 1 },

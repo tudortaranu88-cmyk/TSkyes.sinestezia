@@ -58,6 +58,8 @@ export function Keyboard({ onPressIn, onPressOut, palette = 'aurie' }: Props) {
                 return (
                   <Pressable
                     key={c}
+                    // pe calculator: și un click scurt cântă (react-native-web ignoră altfel apăsările <50 ms)
+                    {...({ delayPressIn: 0 } as object)}
                     onPressIn={() => onPressIn(c, row)}
                     onPressOut={() => onPressOut(c, row)}
                     style={({ pressed }) => [

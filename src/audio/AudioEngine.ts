@@ -5,7 +5,13 @@
 // Semnătura decodeAudioData diferă între versiunile bibliotecii (cale / ArrayBuffer).
 // `decodeAsset` folosește decodeAudioDataSource(cale) dacă există, altfel citește fișierul ca ArrayBuffer.
 
-import { AudioContext } from 'react-native-audio-api';
+import { Platform } from 'react-native';
+import { AudioContext as RNAudioContext } from 'react-native-audio-api';
+
+// Pe calculator (Electron/Chromium) folosim Web Audio API-ul încorporat: învelișul web al
+// react-native-audio-api 0.8.4 nu are toți parametrii (ex. playbackRate), iar API-ul e identic.
+const AudioContext: typeof RNAudioContext =
+  Platform.OS === 'web' ? (globalThis as any).AudioContext : RNAudioContext;
 import { Asset } from 'expo-asset';
 import { BASE_FREQS } from '../core/golden';
 import { instrumentById } from '../core/instruments';

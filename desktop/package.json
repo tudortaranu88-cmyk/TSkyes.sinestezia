@@ -1,0 +1,54 @@
+{
+  "name": "music-and-color",
+  "productName": "Music and Color",
+  "version": "1.0.0",
+  "description": "Music and Color",
+  "author": "TSkyes",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win portable --x64"
+  },
+  "devDependencies": {
+    "electron": "38.2.2",
+    "electron-builder": "26.0.12"
+  },
+  "build": {
+    "appId": "com.tskyes.musiccolor",
+    "productName": "Music and Color",
+    "copyright": "TSkyes",
+    "files": [
+      "main.js",
+      "preload.js",
+      "selftest.js",
+      "app/**/*"
+    ],
+    "asar": true,
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "Music and Color.exe",
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "portable": {
+      "artifactName": "Music and Color.exe"
+    },
+    "electronLanguages": [
+      "ro",
+      "en-US"
+    ]
+  },
+  "allowScripts": {
+    "electron@38.2.2": true
+  }
+}

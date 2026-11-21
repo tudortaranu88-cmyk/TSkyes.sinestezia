@@ -4,8 +4,8 @@ import { exportTablouImage, type ImageKind, type TablouStyle } from '../render/e
 import { renderMix, type RenderNote, type SampleSet } from '../core/audioRender';
 import { encodeWav, toBase64 } from '../core/encoders';
 import { encodeMp3 } from '../audio/mp3';
-import { encodeWavToM4a } from 'aac-encoder';
-import { cachePath, stampName, writeBase64 } from './files';
+import { exportM4a } from '../audio/aac';
+import { stampName, writeBase64 } from './files';
 import { DEFAULT_INSTRUMENT } from '../core/instruments';
 import type { NoteEvent } from '../core/types';
 
@@ -36,12 +36,8 @@ export async function exportMixFile(
   if (kind === 'mp3') {
     return { uri: await writeBase64(stampName('mp3'), toBase64(await encodeMp3(mix, SR, 128, onProgress))), ext: 'mp3' };
   }
-  const wavB64 = toBase64(encodeWav(mix, SR));
-  if (kind === 'wav') return { uri: await writeBase64(stampName('wav'), wavB64), ext: 'wav' };
-  const tmp = await writeBase64('_tmp_export.wav', wavB64);
-  const out = cachePath(stampName('m4a'));
-  await encodeWavToM4a(tmp, out, 128000);
-  return { uri: out, ext: 'm4a' };
+  if (kind === 'wav') return { uri: await writeBase64(stampName('wav'), toBase64(encodeWav(mix, SR))), ext: 'wav' };
+  return { uri: await exportM4a(mix, SR), ext: 'm4a' };
 }
 
 export async function exportAudioFile(

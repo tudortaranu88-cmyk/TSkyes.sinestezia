@@ -2,7 +2,7 @@
 // Deocamdată toate nivelurile sunt deblocate (test, fără plată).
 
 import React from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Pressable, StyleSheet, Platform } from 'react-native';
 
 export type Level = 1 | 2 | 3;
 const LEVELS: Level[] = [1, 2, 3];
@@ -17,7 +17,7 @@ export function Header({ level, instrument, onLevelChange }: Props) {
   return (
     <View style={styles.root}>
       <Text style={styles.title}>
-        {'Music&Color '}<Text style={styles.maker}>· TSkyes</Text>
+        {Platform.OS === 'web' ? 'Music and Color ' : 'Music&Color '}<Text style={styles.maker}>· TSkyes</Text>
       </Text>
       {!!instrument && <Text style={styles.instr}>♪ {instrument}</Text>}
       <View style={styles.levels}>

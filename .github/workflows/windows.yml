@@ -1,0 +1,51 @@
+name: Windows EXE
+
+# Programul Windows „Music and Color.exe” (portabil, un singur fișier), construit din ramura `windows`.
+on:
+  push:
+    branches: [windows]
+  workflow_dispatch:
+
+concurrency:
+  group: windows-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Instalare dependențe
+        run: npm install --no-audit --no-fund
+
+      - name: Verificare tipuri
+        run: npx tsc --noEmit
+
+      - name: Teste core
+        run: npm test
+
+      - name: Construire Music and Color.exe
+        run: node scripts/build-desktop.js
+
+      - name: Autotest pe executabil
+        shell: pwsh
+        run: |
+          $t = Join-Path $env:RUNNER_TEMP 'selftest'
+          New-Item -ItemType Directory $t | Out-Null
+          $env:MUSICCOLOR_SELFTEST = $t
+          $p = Start-Process -FilePath 'desktop\release\Music and Color.exe' -PassThru
+          if (-not $p.WaitForExit(240000)) { $p.Kill(); throw 'Autotestul nu s-a terminat' }
+          Get-Content "$t\_selftest.txt"
+          if ((Get-ChildItem $t -Exclude _*).Count -lt 6) { throw 'Nu s-au salvat toate cele 6 fișiere' }
+
+      - uses: actions/upload-artifact@v5
+        with:
+          name: Music-and-Color-windows
+          path: desktop/release/Music and Color.exe
+          if-no-files-found: error

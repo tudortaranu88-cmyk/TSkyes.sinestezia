@@ -15,6 +15,13 @@
       "bundleIdentifier": "com.tskyes.musiccolor"
     },
     "scheme": "musiccolor",
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "name": "Music and Color",
+      "shortName": "Music and Color",
+      "backgroundColor": "#0e0e12"
+    },
     "plugins": [
       [
         "expo-media-library",
