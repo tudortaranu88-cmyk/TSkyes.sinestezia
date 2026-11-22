@@ -1,0 +1,8 @@
+/sdcard/DCIM:
+total 0
+
+/sdcard/Music:
+total 0
+
+/sdcard/Pictures:
+total 0
