@@ -9,13 +9,13 @@ import type { MelodyNote } from './imageMelody';
 
 export const PAGE_W = 1240;
 export const PAGE_H = 1754;
-const MARGIN = 100;
-const GAP = 14;                 // distanța dintre liniile portativului
-const SYSTEM_H = 178;
-const BARS_PER_SYSTEM = 4;
-const BEATS_PER_BAR = 4;
-const FIRST_TOP = 330;          // primul portativ de pe pagina 1 (sub titlu)
-const OTHER_TOP = 150;
+export const MARGIN = 100;
+export const GAP = 14;                 // distanța dintre liniile portativului
+export const SYSTEM_H = 178;
+export const BARS_PER_SYSTEM = 4;
+export const BEATS_PER_BAR = 4;
+export const FIRST_TOP = 330;          // primul portativ de pe pagina 1 (sub titlu)
+export const OTHER_TOP = 150;
 const FOOTER_TOP = PAGE_H - 150;
 export const STRIP_Y = PAGE_H - 125;
 export const STRIP_H = 22;

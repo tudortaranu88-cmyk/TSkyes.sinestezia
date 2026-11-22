@@ -3,11 +3,13 @@
 // Orice buton vizibil cântă direct: apăsare = noteOn, eliberare = noteOff.
 
 import React, { useMemo, useRef, useState } from 'react';
-import { View, Text, Pressable, ScrollView, StyleSheet, LayoutChangeEvent } from 'react-native';
+import { View, Text, Pressable, ScrollView, StyleSheet, LayoutChangeEvent, Platform } from 'react-native';
 import { NOTES, ROW_MIN, ROW_MAX, cellColor, rgbToCss, textColorFor, noteLabel, type PaletteId } from '../core/golden';
 
-const VISIBLE_ROWS = 7;
-const TOP_VISIBLE_ROW = 3; // la pornire, primul rând vizibil este +3
+// Pe calculator tastele au jumătate din înălțime: se văd 14 rânduri (+7…−6) în loc de 7.
+const DESKTOP = Platform.OS === 'web';
+const VISIBLE_ROWS = DESKTOP ? 14 : 7;
+const TOP_VISIBLE_ROW = DESKTOP ? 7 : 3; // la pornire, primul rând vizibil
 
 interface Props {
   onPressIn: (col: number, row: number) => void;

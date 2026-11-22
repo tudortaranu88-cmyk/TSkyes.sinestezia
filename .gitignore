@@ -15,3 +15,4 @@ npm-debug.*
 # Windows (desktop)
 dist-web/
 public/canvaskit.wasm
+public/pdfjs/

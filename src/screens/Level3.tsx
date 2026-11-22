@@ -1,5 +1,6 @@
-// NIVEL 3 – încarci una sau mai multe partituri generate de aplicație (PNG/JPEG); aplicația le
-// citește banda de culori, reconstruiește melodia și reface tabloul, pe care îl poți salva
+// NIVEL 3 – încarci una sau mai multe partituri generate de aplicație (PNG/JPEG/PDF – exportate,
+// tipărite și scanate sau fotografiate; pe calculator și prin drag and drop); aplicația le
+// citește banda de culori și portativul (scanDecode.ts), reconstruiește melodia și reface tabloul, pe care îl poți salva
 // (PNG/JPEG/TIFF) și, opțional, asculta. Tabloul are două stiluri, la alegere: floarea-soarelui
 // (toate notele ca puncte de culoare) sau spirala de aur. Toggle-ul schimbă și previzualizarea.
 
@@ -7,7 +8,7 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { View, Text, Pressable, StyleSheet, ActivityIndicator, LayoutChangeEvent } from 'react-native';
 import { Canvas, Circle, Path, Skia } from '@shopify/react-native-skia';
 import { SaveSheet, type ExportedFile } from '../components/SaveSheet';
-import { decodeScores, type ScorePixels } from '../core/scoreDecode';
+import { decodeScores, lastDecodeInfo, type ScorePixels } from '../core/scoreDecode';
 import { melodyToEvents, melodyBeats, type MelodyNote } from '../core/imageMelody';
 import { sunflowerDots, DOT_OPACITY } from '../core/tablou';
 import { buildScene } from '../core/scene';
@@ -16,7 +17,8 @@ import { renderLevel2Mix } from '../core/level2Mix';
 import { exportTablouImage, TABLOU_STYLES, type ImageKind, type TablouStyle } from '../render/exportImage';
 import { exportMixFile, type AudioKind } from '../io/exportComposition';
 import { stampName, writeBase64 } from '../io/files';
-import { pickScoreImages, type ImageSource } from '../io/imageSource';
+import { pickScoreImages, scoresFromFiles, type ImageSource } from '../io/imageSource';
+import { DropZone } from '../components/DropZone';
 import type { AudioEngine } from '../audio/AudioEngine';
 
 const KINDS = [{ id: 'png', label: 'PNG' }, { id: 'jpeg', label: 'JPEG' }, { id: 'tiff', label: 'TIFF' }];
@@ -30,6 +32,7 @@ interface Props {
 export function Level3({ engine, injected }: Props) {
   const [melody, setMelody] = useState<MelodyNote[]>([]);
   const [pageCount, setPageCount] = useState(0);
+  const [grayPages, setGrayPages] = useState(0);
   const [loading, setLoading] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -44,6 +47,9 @@ export function Level3({ engine, injected }: Props) {
       const m = decodeScores(pages);
       setMelody(m);
       setPageCount(pages.length);
+      setGrayPages(lastDecodeInfo.gray);
+      (globalThis as any).__mcMelody = m.map(n => [n.col, n.row, n.beats]);   // pentru autotestul desktop
+      (globalThis as any).__mcDecodeDebug = lastDecodeInfo.debug;
     } catch (e: any) {
       setMelody([]);
       setError(e?.message ?? String(e));
@@ -52,11 +58,13 @@ export function Level3({ engine, injected }: Props) {
 
   React.useEffect(() => { if (injected?.length) decode(injected); }, [injected, decode]);
 
-  const choose = useCallback(async () => {
+  // aceeași cale pentru butonul „Alege partituri” și pentru drag and drop (imagini sau PDF)
+  const load = useCallback(async (get: () => Promise<ImageSource[]>) => {
     setLoading(true);
     setError(null);
     try {
-      const imgs = await pickScoreImages();
+      const imgs = await get();
+      await new Promise(r => setTimeout(r, 0));   // lasă indicatorul să apară înainte de citire
       if (imgs.length) decode(imgs.map((s: ImageSource) => ({ rgba: s.rgba, width: s.width, height: s.height, name: s.name })));
     } catch (e: any) {
       setError(e?.message ?? String(e));
@@ -64,6 +72,8 @@ export function Level3({ engine, injected }: Props) {
       setLoading(false);
     }
   }, [decode]);
+  const choose = useCallback(() => load(pickScoreImages), [load]);
+  const onDropFiles = useCallback((files: any[]) => load(() => scoresFromFiles(files)), [load]);
 
   const events = useMemo(() => melodyToEvents(melody, PLAY_BPM, 'pian', 0), [melody]);
 
@@ -109,7 +119,7 @@ export function Level3({ engine, injected }: Props) {
   const beats = melodyBeats(melody);
 
   return (
-    <>
+    <DropZone onFiles={onDropFiles} label="Eliberează aici partiturile (JPEG, PNG sau PDF)">
       <View style={styles.top} onLayout={onLayout}>
         {melody.length ? (
           <Canvas style={StyleSheet.absoluteFill}>
@@ -133,8 +143,8 @@ export function Level3({ engine, injected }: Props) {
             {loading ? <ActivityIndicator color="#ffd700" /> : (
               <>
                 <Text style={styles.emptyIcon}>＋</Text>
-                <Text style={styles.emptyTxt}>Încarcă una sau mai multe partituri</Text>
-                <Text style={styles.emptySub}>Partituri generate de Music&Color (Nivelul 2). Din banda lor de culori se reface tabloul.</Text>
+                <Text style={styles.emptyTxt}>Încarcă sau trage aici una sau mai multe partituri</Text>
+                <Text style={styles.emptySub}>Partituri Music&Color (Nivelul 2) ca JPEG, PNG sau PDF – exportate, tipărite și scanate sau fotografiate. Din banda de culori și de pe portativ se reface tabloul.</Text>
               </>
             )}
           </Pressable>
@@ -158,9 +168,10 @@ export function Level3({ engine, injected }: Props) {
           <Btn label="Salvează tabloul" onPress={() => { stop(); setSaveOpen(true); }} disabled={!melody.length} main />
         </View>
         <Text style={styles.info}>
-          {melody.length
+          {loading ? 'Se citesc partiturile…' : melody.length
             ? `${pageCount} ${pageCount === 1 ? 'pagină' : 'pagini'} → ${melody.length} note (${beats} pătrimi) reconstruite`
-            : 'Alege partituri generate de aplicație pentru a reface tabloul.'}
+              + (grayPages ? ` · ${grayPages === pageCount ? 'scanare alb-negru' : `${grayPages} pagini alb-negru`}: notele citite de pe portativ, nuanțele aproximate după luminozitate` : '')
+            : 'Alege sau trage aici partituri (JPEG, PNG, PDF) pentru a reface tabloul.'}
         </Text>
         {error && <Text style={styles.error}>{error}</Text>}
       </View>
@@ -178,7 +189,7 @@ export function Level3({ engine, injected }: Props) {
         exportAudio={exportAudio}
         onClose={() => setSaveOpen(false)}
       />
-    </>
+    </DropZone>
   );
 }
 

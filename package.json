@@ -9,7 +9,7 @@
     "ios": "expo run:ios",
     "typecheck": "tsc --noEmit",
     "desktop": "node scripts/build-desktop.js",
-    "test": "tsx --test test/core.test.ts test/encoders.test.ts test/level2.test.ts test/level3.test.ts test/audio.test.ts"
+    "test": "tsx --test test/core.test.ts test/encoders.test.ts test/level2.test.ts test/level3.test.ts test/audio.test.ts test/scan.test.ts"
   },
   "dependencies": {
     "@breezystack/lamejs": "^1.2.7",
@@ -26,6 +26,7 @@
     "expo-sharing": "~14.0.7",
     "expo-status-bar": "~3.0.8",
     "mp4-muxer": "^5.2.1",
+    "pdfjs-dist": "^4.10.38",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-native": "0.81.4",

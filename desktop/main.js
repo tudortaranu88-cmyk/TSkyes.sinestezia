@@ -9,19 +9,22 @@ const fs = require('fs');
 const { pathToFileURL } = require('url');
 
 const APP_DIR = path.join(__dirname, 'app');
+const MIME = { '.mjs': 'text/javascript', '.js': 'text/javascript', '.wasm': 'application/wasm', '.json': 'application/json' };
 const WIN_FONTS = new Set(['segoeui.ttf', 'segoeuib.ttf', 'seguisym.ttf']);
 const TITLE = 'Music and Color';
 // Autotest: folderul în care se scriu fișierele fără fereastra „Salvează ca” (vezi selftest.js).
 const SELFTEST = process.env.MUSICCOLOR_SELFTEST || '';
 
 app.setName(TITLE);
+// autotestul rulează separat (date proprii), chiar dacă programul e deschis de utilizator
+if (SELFTEST) app.setPath('userData', path.join(SELFTEST, '_userdata'));
 // Datele interne ale Chromium (cache etc.) stau în %APPDATA%\Music and Color; fișierele utilizatorului nu.
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { standard: true, secure: true, supportFetchAPI: true, corsEnabled: true, stream: true } },
 ]);
 
 // O singură fereastră: al doilea dublu click aduce fereastra existentă în față.
-if (!app.requestSingleInstanceLock()) {
+if (!SELFTEST && !app.requestSingleInstanceLock()) {
   app.quit();
 } else {
   let win = null;
@@ -44,7 +47,14 @@ if (!app.requestSingleInstanceLock()) {
       }
       const file = path.normalize(path.join(APP_DIR, rel));
       if (!file.startsWith(APP_DIR)) return new Response('Interzis', { status: 403 });
-      if (!fs.existsSync(file)) return net.fetch(pathToFileURL(path.join(APP_DIR, 'index.html')).toString());
+      if (!fs.existsSync(file)) {
+        // un fișier lipsă (ex. un font pdf.js) primește 404; doar navigarea cade pe index.html
+        if (/\.[a-z0-9]+$/i.test(rel)) return new Response('', { status: 404 });
+        return net.fetch(pathToFileURL(path.join(APP_DIR, 'index.html')).toString());
+      }
+      // modulele JS (pdf.js) cer tipul MIME corect ca să poată fi importate
+      const type = MIME[path.extname(file).toLowerCase()];
+      if (type) return new Response(fs.readFileSync(file), { headers: { 'content-type': type } });
       return net.fetch(pathToFileURL(file).toString());
     });
 

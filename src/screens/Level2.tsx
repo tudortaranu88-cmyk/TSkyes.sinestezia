@@ -18,7 +18,8 @@ import { renderLevel2Mix } from '../core/level2Mix';
 import { renderScorePage, type ScoreKind } from '../render/scoreImage';
 import { exportMixFile, type AudioKind } from '../io/exportComposition';
 import { stampName, writeBase64 } from '../io/files';
-import { pickImage, type ImageSource } from '../io/imageSource';
+import { pickImage, imageFromFiles, type ImageSource } from '../io/imageSource';
+import { DropZone } from '../components/DropZone';
 import type { AudioEngine } from '../audio/AudioEngine';
 
 const TEMPOS = [85, 105, 158, 160];
@@ -117,6 +118,21 @@ export function Level2({ engine, instrument, onInstrumentChange, injected, palet
     }
   }, [stop]);
 
+  // drag and drop (calculator): aceeași cale ca butonul „Alege imagine”
+  const onDropFiles = useCallback(async (files: any[]) => {
+    stop();
+    setError(null);
+    setLoading(true);
+    try {
+      const s = await imageFromFiles(files);
+      if (s) setSrc(s);
+    } catch (e: any) {
+      setError(e?.message ?? String(e));
+    } finally {
+      setLoading(false);
+    }
+  }, [stop]);
+
   // ----- export: partitura și audio, din același mix ca redarea -----
   const meta = () => ({
     title: 'Music&Color',
@@ -170,7 +186,7 @@ export function Level2({ engine, instrument, onInstrumentChange, injected, palet
   }
 
   return (
-    <>
+    <DropZone onFiles={onDropFiles} label="Eliberează aici imaginea (JPEG sau PNG)">
       <View style={styles.top} onLayout={onLayout}>
         {src && fit ? (
           <Canvas style={StyleSheet.absoluteFill}>
@@ -190,7 +206,7 @@ export function Level2({ engine, instrument, onInstrumentChange, injected, palet
             {loading ? <ActivityIndicator color="#ffd700" /> : (
               <>
                 <Text style={styles.emptyIcon}>＋</Text>
-                <Text style={styles.emptyTxt}>Încarcă o imagine (JPEG sau PNG)</Text>
+                <Text style={styles.emptyTxt}>Încarcă sau trage aici o imagine (JPEG sau PNG)</Text>
                 <Text style={styles.emptySub}>Culorile ei, citite pe spirală din centru spre margini, devin melodie.</Text>
               </>
             )}
@@ -260,7 +276,7 @@ export function Level2({ engine, instrument, onInstrumentChange, injected, palet
         exportAudio={exportAudio}
         onClose={() => setSaveOpen(false)}
       />
-    </>
+    </DropZone>
   );
 }
 

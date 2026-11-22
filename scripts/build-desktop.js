@@ -15,6 +15,15 @@ fs.copyFileSync(
   path.join(root, 'node_modules/canvaskit-wasm/bin/full/canvaskit.wasm'),
   path.join(root, 'public/canvaskit.wasm'),
 );
+// pdf.js (citirea partiturilor PDF la Nivelul 3): modulul, worker-ul și fonturile standard
+const pdfSrc = path.join(root, 'node_modules/pdfjs-dist');
+const pdfDst = path.join(root, 'public/pdfjs');
+fs.rmSync(pdfDst, { recursive: true, force: true });
+fs.mkdirSync(path.join(pdfDst, 'standard_fonts'), { recursive: true });
+for (const f of ['pdf.min.mjs', 'pdf.worker.min.mjs']) fs.copyFileSync(path.join(pdfSrc, 'build', f), path.join(pdfDst, f));
+for (const f of fs.readdirSync(path.join(pdfSrc, 'standard_fonts'))) {
+  fs.copyFileSync(path.join(pdfSrc, 'standard_fonts', f), path.join(pdfDst, 'standard_fonts', f));
+}
 
 const appDir = path.join(root, 'desktop/app');
 fs.rmSync(appDir, { recursive: true, force: true });

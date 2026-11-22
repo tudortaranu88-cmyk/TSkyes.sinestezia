@@ -6,6 +6,7 @@
 import { cellColor, type RGB } from './golden';
 import { buildMelody, nearestCell, type MelodyNote } from './imageMelody';
 import { PAGE_W, PAGE_H, STRIP_X0, STRIP_X1, STRIP_Y, STRIP_H } from './scoreLayout';
+import { decodeScanPage, scanDebug } from './scanDecode';
 
 export interface DecodedRun { col: number; row: number; beats: number }
 
@@ -74,15 +75,37 @@ export function readScoreStrip(rgba: Uint8Array, w: number, h: number): RGB[] {
 
 export interface ScorePixels { rgba: Uint8Array; width: number; height: number; name?: string }
 
-/** Decodează una sau mai multe pagini (în ordine) în melodia completă. */
+/** Cum a fost citită ultima serie de pagini (pentru mesajul din Nivelul 3). */
+export const lastDecodeInfo: { pages: number; gray: number; debug: any[] } = { pages: 0, gray: 0, debug: [] };
+
+/**
+ * Decodează una sau mai multe pagini (în ordine) în melodia completă.
+ * Întâi cititorul pentru pagini scanate/fotografiate/PDF (scanDecode.ts: găsește banda oriunde în imagine,
+ * corectează culorile, citește și portativul); dacă nu reușește, citirea directă a paginii exportate.
+ */
 export function decodeScores(pages: ScorePixels[]): MelodyNote[] {
   const perBeat: RGB[] = [];
-  let found = 0;
-  for (const p of pages) {
-    const notes = decodeStrip(readScoreStrip(p.rgba, p.width, p.height));
-    found += notes.length;
-    for (const nt of notes) for (let k = 0; k < nt.beats; k++) perBeat.push(cellColor(nt.col, nt.row));
-  }
+  let found = 0, gray = 0;
+  lastDecodeInfo.debug = [];
+  pages.forEach((p, i) => {
+    let cells: { col: number; row: number }[];
+    try {
+      const r = decodeScanPage(p, i === pages.length - 1);
+      cells = r.cells;
+      lastDecodeInfo.debug[i] = { ...scanDebug, meas: undefined, cells: r.cells.map(c => [c.col, c.row]) };
+      if (r.mode === 'gray') gray++;
+    } catch (scanErr: any) {
+      try {
+        cells = decodeStrip(readScoreStrip(p.rgba, p.width, p.height)).flatMap(n => Array.from({ length: n.beats }, () => ({ col: n.col, row: n.row })));
+      } catch {
+        const who = pages.length > 1 ? `Pagina ${i + 1}${p.name ? ` (${p.name})` : ''}: ` : '';
+        throw new Error(who + (scanErr?.message ?? String(scanErr)));
+      }
+    }
+    found += cells.length;
+    for (const c of cells) perBeat.push(cellColor(c.col, c.row));
+  });
   if (!found) throw new Error('Nicio notă citită din partitură');
+  lastDecodeInfo.pages = pages.length; lastDecodeInfo.gray = gray;
   return buildMelody(perBeat);   // re-împarte pe măsuri exact ca la generare
 }
