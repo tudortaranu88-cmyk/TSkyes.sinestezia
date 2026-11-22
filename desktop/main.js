@@ -69,6 +69,7 @@ if (!SELFTEST && !app.requestSingleInstanceLock()) {
     win = new BrowserWindow({
       width: 1400, height: 880, minWidth: 1000, minHeight: 640,
       title: TITLE, backgroundColor: '#0e0e12', show: false, autoHideMenuBar: true,
+      icon: path.join(__dirname, 'build', 'icon.png'),   // discul TSkyes (bara de titlu și bara de activități)
       webPreferences: {
         preload: path.join(__dirname, 'preload.js'),
         contextIsolation: true, nodeIntegration: false, sandbox: true, spellcheck: false,
