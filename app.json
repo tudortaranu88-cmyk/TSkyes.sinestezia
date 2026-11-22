@@ -9,7 +9,11 @@
     "backgroundColor": "#0e0e12",
     "android": {
       "package": "com.tskyes.musiccolor",
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0e0e12"
+      }
     },
     "ios": {
       "bundleIdentifier": "com.tskyes.musiccolor"
@@ -38,6 +42,7 @@
       ],
       "./plugins/withConfigChanges",
       "./plugins/withTrimPermissions"
-    ]
+    ],
+    "icon": "./assets/icon.png"
   }
 }
